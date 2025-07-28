@@ -175,8 +175,9 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            max-height: 200px; /* Adjusted max-height to ensure scrolling is visible */
-            overflow-y: auto; /* Enable vertical scroll if content overflows */
+            /* REMOVED: max-height and overflow-y for flexible height */
+            /* max-height: 200px; */
+            /* overflow-y: auto; */
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
         }
@@ -497,11 +498,11 @@
             .edit-btn { padding: 6px 10px; font-size: 0.8rem; }
             .edit-icon { width: 12px; height: 12px; }
             #editDescriptionBtn { top: 120px; right: 30px; } /* Adjusted position for smaller screens */
-            #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 8px; }
+            #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 10px; }
             .whatsapp-action-group, .coc-action-group { margin-top: 15px; }
-            #editWhatsappLinkBtn, #editCocLinkBtn { padding: 7px 12px; font-size: 0.85rem; }
+            #editWhatsappLinkBtn, #editCocLinkBtn { padding: 8px 15px; font-size: 0.9rem; }
             .admin-toggle-wrapper { bottom: 15px; right: 15px; }
-            .admin-toggle-button { padding: 8px 12px; font-size: 0.8rem; }
+            .admin-toggle-button { padding: 8px 12px; font-size: 0.85rem; }
             .admin-icon { width: 16px; height: 16px; }
             .copyright { margin-top: 30px; font-size: 0.85rem; }
         }
@@ -582,7 +583,7 @@
                     Gabung Grup WhatsApp
                 </a>
                 <button id="editWhatsappLinkBtn" class="edit-btn">
-                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="btn-icon">
                     Edit Link WhatsApp
                 </button>
             </div>
