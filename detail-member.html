@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Member Clan Indo Ghost</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc; /* Light gray background */
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 16px; /* More rounded corners */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08); /* Softer, larger shadow */
+            padding: 40px;
+        }
+        h1, h2, h3 {
+            color: #1e3a8a; /* Darker blue heading */
+            font-weight: 700;
+        }
+        .section-heading {
+            border-bottom: 2px solid #e2e8f0; /* Lighter border */
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        .org-structure-box {
+            background-color: #e0f2fe; /* Lighter blue */
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.05);
+        }
+        .org-position-title {
+            font-weight: 600;
+            color: #1c4a8a; /* Darker blue for titles */
+            margin-bottom: 12px;
+            font-size: 1.25rem;
+        }
+        .org-member-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .org-member-list li {
+            background-color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 25px; /* Pill shape */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-size: 0.98rem;
+            color: #4a5568; /* Slightly darker text */
+            font-weight: 500;
+            border: 1px solid #ebf8ff; /* Subtle border */
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: separate; /* For rounded corners on cells */
+            border-spacing: 0;
+            margin-top: 20px;
+            border-radius: 12px; /* Overall table rounded corners */
+            overflow: hidden; /* Ensures content respects border-radius */
+        }
+        .data-table th, .data-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0; /* Lighter border */
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f0f4f8; /* Light blueish gray */
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+        .data-table tbody tr:hover {
+            background-color: #f5faff; /* Very light blue on hover */
+        }
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .data-table thead tr:first-child th:first-child { border-top-left-radius: 12px; }
+        .data-table thead tr:first-child th:last-child { border-top-right-radius: 12px; }
+        .data-table tbody tr:last-child td:first-child { border-bottom-left-radius: 12px; }
+        .data-table tbody tr:last-child td:last-child { border-bottom-right-radius: 12px; }
+
+        /* TH Level Icon Visualisation */
+        .th-level-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space between icon and text */
+        }
+        .th-level-icon {
+            width: 28px; /* Adjust size as needed */
+            height: 28px;
+            object-fit: contain;
+        }
+
+        /* Card-based Member List Styles */
+        .member-cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center; /* Center cards horizontally */
+        }
+        .member-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            width: 100%; /* Default to full width on small screens */
+            max-width: 320px; /* Max width for each card */
+            min-width: 280px; /* Min width for each card */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .member-card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .member-card p {
+            font-size: 0.95rem;
+            color: #4a5568;
+            margin-bottom: 6px;
+        }
+        .member-card strong {
+            color: #2d3748;
+        }
+
+        /* Responsive adjustments for member cards */
+        @media (min-width: 768px) {
+            .member-cards-container {
+                justify-content: flex-start; /* Align to start on larger screens */
+            }
+        }
+        @media (min-width: 1024px) {
+            .member-card {
+                width: calc(33.33% - 14px); /* Three cards per row, accounting for gap */
+            }
+        }
+        @media (min-width: 1280px) {
+            .member-card {
+                width: calc(25% - 15px); /* Four cards per row */
+            }
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            position: relative;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .chart-container canvas {
+            max-height: 100%;
+            max-width: 100%;
+        }
+        .chart-toggle-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+        .utility-btn {
+            background-color: #17a2b8; /* Info blue for view toggle */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            white-space: nowrap;
+        }
+        .utility-btn:hover {
+            background-color: #138496;
+            transform: translateY(-1px);
+        }
+        .utility-btn.chart-toggle { background-color: #6f42c1; }
+        .utility-btn.chart-toggle:hover { background-color: #5a35a0; }
+        .utility-btn.add-member-btn { background-color: #28a745; } /* Green for add member button */
+        .utility-btn.add-member-btn:hover { background-color: #218838; }
+
+
+        /* Search and Sort */
+        .sort-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .sort-dropdown-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: #fff;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 10px 40px 10px 15px;
+            font-size: 1rem;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236B7280'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 1.2em;
+        }
+        .sort-dropdown-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+        }
+        .search-input {
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 300px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .search-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+            outline: none;
+        }
+        @media (max-width: 767px) {
+            .filter-sort-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .search-input {
+                margin-bottom: 15px;
+            }
+            .sort-dropdown-wrapper {
+                width: 100%;
+            }
+            .sort-dropdown-select {
+                width: 100%;
+            }
+            .utility-buttons {
+                justify-content: center;
+            }
+            .utility-buttons button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .chart-toggle-btn-container {
+                position: static;
+                margin-bottom: 15px;
+                text-align: right;
+            }
+            .container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+        }
+        @media (min-width: 768px) {
+            .filter-sort-section {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        /* Hide specific elements that are only for editing/admin */
+        .hide-for-view-only {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container">
+        <h1 class="text-4xl text-center mb-10 section-heading">Detail Member Indo Ghost - Data Anggota Klan</h1>
+
+        <div class="mb-12 flex justify-end">
+            <a href="admin.html" class="utility-btn add-member-btn">Tambah Member</a>
+        </div>
+
+        <div class="mb-12">
+            <h2 class="text-2xl mb-8 section-heading">Struktur Organisasi</h2>
+            <div class="org-structure-box">
+                <div class="mb-6">
+                    <p class="org-position-title">Leader:</p>
+                    <ul class="org-member-list" id="leaderList">
+                        <li id="defaultLeader" class="text-gray-500 italic">Belum ada Leader.</li>
+                    </ul>
+                </div>
+                <div class="mb-6">
+                    <p class="org-position-title">Co-Leader:</p>
+                    <ul class="org-member-list" id="coLeaderList">
+                    </ul>
+                </div>
+                <div class="mb-6">
+                    <p class="org-position-title">Elder:</p>
+                    <ul class="org-member-list" id="elderList">
+                    </ul>
+                </div>
+                <div>
+                    <p class="org-position-title">Member:</p>
+                    <ul class="org-member-list" id="memberList">
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-10 border-gray-200">
+
+        <div class="mb-12">
+            <h2 class="text-2xl mb-8 section-heading">Visualisasi Data Klan</h2>
+            <div class="chart-container">
+                <div class="chart-toggle-btn-container">
+                    <button id="toggleChartTypeBtn" class="utility-btn chart-toggle">Lihat Pie Chart</button>
+                </div>
+                <canvas id="thLevelChart"></canvas>
+                <p id="noChartDataMessage" class="text-center text-gray-500 py-4 hidden">Tidak ada data anggota untuk divisualisasikan.</p>
+            </div>
+        </div>
+
+        <hr class="my-10 border-gray-200">
+
+        <div id="memberListView">
+            <h2 class="text-2xl mb-8 section-heading">Daftar Anggota Klan</h2>
+            <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 filter-sort-section">
+                <div class="flex-grow flex flex-col md:flex-row gap-3">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Cari Nickname atau Nama Asli..." onkeyup="renderMembers()">
+                    <div class="sort-dropdown-wrapper w-full md:w-auto">
+                        <select id="sortDropdown" class="sort-dropdown-select" onchange="renderMembers()">
+                            <option value="">Urutkan Berdasarkan...</option>
+                            <option value="nickname-asc">Nama (A-Z)</option>
+                            <option value="nickname-desc">Nama (Z-A)</option>
+                            <option value="age-asc">Umur (Termuda)</option>
+                            <option value="age-desc">Umur (Tertua)</option>
+                            <option value="thLevel-asc">TH Level (Terendah)</option>
+                            <option value="thLevel-desc">TH Level (Tertinggi)</option>
+                            <option value="position-asc">Posisi Jabatan (A-Z)</option>
+                            <option value="position-desc">Posisi Jabatan (Z-A)</option>
+                            <option value="joinTime-asc">Waktu Join (Terlama)</option>
+                            <option value="joinTime-desc">Waktu Join (Terbaru)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="utility-buttons flex-col md:flex-row items-stretch md:items-center">
+                    <button id="toggleViewBtn" class="utility-btn view-toggle">Lihat sebagai Tabel</button>
+                </div>
+            </div>
+
+            <div id="cardView" class="block">
+                <div class="mb-8" id="coLeaderCardsContainer">
+                    <h3 class="org-position-title mb-4">Co-Leader:</h3>
+                    <div class="member-cards-container" id="coLeaderCards">
+                        </div>
+                    <p id="noCoLeadersMessage" class="text-center text-gray-500 py-4 hidden">Belum ada Co-Leader yang terdaftar.</p>
+                </div>
+
+                <div class="mb-8" id="elderCardsContainer">
+                    <h3 class="org-position-title mb-4">Elder:</h3>
+                    <div class="member-cards-container" id="elderCards">
+                        </div>
+                    <p id="noEldersMessage" class="text-center text-gray-500 py-4 hidden">Belum ada Elder yang terdaftar.</p>
+                </div>
+
+                <div class="mb-8" id="memberCardsContainer">
+                    <h3 class="org-position-title mb-4">Member:</h3>
+                    <div class="member-cards-container" id="memberCards">
+                        </div>
+                    <p id="noMembersInGroupMessage" class="text-center text-gray-500 py-4 hidden">Belum ada Member yang terdaftar.</p>
+                </div>
+            </div>
+
+            <div id="tableView" class="hidden overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nickname</th>
+                            <th>Nama Asli</th>
+                            <th>Asal</th>
+                            <th>Umur</th>
+                            <th>TH Level</th>
+                            <th>Posisi</th>
+                            <th>Waktu Join</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memberTableBody">
+                        </tbody>
+                </table>
+            </div>
+            
+            <p id="noAnyMembersMessage" class="text-center text-gray-500 py-6 hidden">Tidak ada anggota yang ditemukan sesuai kriteria.</p>
+
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let members = JSON.parse(localStorage.getItem('familyOfIndoGhostMembers')) || [];
+        let currentViewMode = localStorage.getItem('familyOfIndoGhostViewMode') || 'card'; // 'card' or 'table'
+        let currentChartType = localStorage.getItem('familyOfIndoGhostChartType') || 'bar'; // 'bar' or 'pie'
+        let thChartInstance = null; // To store the Chart.js instance
+
+        // DOM Elements
+        const leaderList = document.getElementById('leaderList');
+        const defaultLeaderMessage = document.getElementById('defaultLeader');
+        const coLeaderListOrg = document.getElementById('coLeaderList');
+        const elderListOrg = document.getElementById('elderList');
+        const memberListOrg = document.getElementById('memberList');
+        const sortDropdown = document.getElementById('sortDropdown');
+        const searchInput = document.getElementById('searchInput');
+
+        // Card containers
+        const cardView = document.getElementById('cardView');
+        const coLeaderCards = document.getElementById('coLeaderCards');
+        const elderCards = document.getElementById('elderCards');
+        const memberCards = document.getElementById('memberCards');
+
+        // Table container
+        const tableView = document.getElementById('tableView');
+        const memberTableBody = document.getElementById('memberTableBody');
+
+        // "No members" messages
+        const noCoLeadersMessage = document.getElementById('noCoLeadersMessage');
+        const noEldersMessage = document.getElementById('noEldersMessage');
+        const noMembersInGroupMessage = document.getElementById('noMembersInGroupMessage');
+        const noAnyMembersMessage = document.getElementById('noAnyMembersMessage');
+
+        // Utility buttons
+        const toggleViewBtn = document.getElementById('toggleViewBtn');
+        const toggleChartTypeBtn = document.getElementById('toggleChartTypeBtn');
+
+        // DOM Elements - Chart
+        const thLevelChartCanvas = document.getElementById('thLevelChart');
+        const noChartDataMessage = document.getElementById('noChartDataMessage');
+
+
+        // --- Initialize App ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAllContent(); // Initial render for all dynamic parts
+        });
+
+        // --- Core Functions ---
+
+        // Function to get TH image URL
+        function getThImage(thLevel) {
+            if (!thLevel) return '';
+            return `https://raw.githubusercontent.com/Clash-of-Clans-API/clash-of-clans-assets/main/other/townhall/townhall_${thLevel}.png`;
+        }
+
+        // Function to apply sorting to an array of members
+        function applySort(arr, sortValue) {
+            if (!sortValue) return [...arr];
+
+            const [sortBy, order] = sortValue.split('-');
+
+            return [...arr].sort((a, b) => {
+                let valA = a[sortBy];
+                let valB = b[sortBy];
+
+                if (valA === null || valA === undefined || valA === '') valA = order === 'asc' ? -Infinity : Infinity;
+                if (valB === null || valB === undefined || valB === '') valB = order === 'asc' ? -Infinity : Infinity; // Fixed to also handle empty/null for 'desc'
+
+                if (sortBy === 'joinTime') {
+                    const dateA = new Date(valA);
+                    const dateB = new Date(valB);
+                    // Handle invalid dates from null/empty strings
+                    if (isNaN(dateA.getTime())) valA = order === 'asc' ? -Infinity : Infinity;
+                    else valA = dateA.getFullYear() * 12 + dateA.getMonth();
+
+                    if (isNaN(dateB.getTime())) valB = order === 'asc' ? -Infinity : Infinity;
+                    else valB = dateB.getFullYear() * 12 + dateB.getMonth();
+
+                    if (valA < valB) return order === 'asc' ? -1 : 1;
+                    if (valA > valB) return order === 'asc' ? 1 : -1;
+                    return 0;
+                }
+
+                if (typeof valA === 'number' && typeof valB === 'number') {
+                    if (valA < valB) return order === 'asc' ? -1 : 1;
+                    if (valA > valB) return order === 'asc' ? 1 : -1;
+                    return 0;
+                }
+
+                // Handle cases where values might be numbers or strings and need consistent comparison
+                const stringValA = String(valA).toLowerCase();
+                const stringValB = String(valB).toLowerCase();
+
+                if (stringValA < stringValB) return order === 'asc' ? -1 : 1;
+                if (stringValA > stringValB) return order === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+
+
+        // --- Render Functions (Main) ---
+
+        function renderAllContent() {
+            members = JSON.parse(localStorage.getItem('familyOfIndoGhostMembers')) || []; // Refresh members data
+            renderOrganizationStructure();
+            renderThLevelChart();
+            renderMembers();
+            updateViewToggleButton();
+            updateChartToggleButton();
+        }
+
+        // --- Member Management ---
+
+        // Renders members in the Organization Structure (pills)
+        function renderOrganizationStructure() {
+            leaderList.innerHTML = '';
+            coLeaderListOrg.innerHTML = '';
+            elderListOrg.innerHTML = '';
+            memberListOrg.innerHTML = '';
+
+            let hasLeader = false;
+
+            // Sort members by position and then alphabetically for consistent display
+            const sortedMembersForOrg = [...members].sort((a, b) => {
+                const positionOrder = { 'Leader': 1, 'Co Leader': 2, 'Elder': 3, 'Member': 4 };
+                const posA = positionOrder[a.position] || 99;
+                const posB = positionOrder[b.position] || 99;
+
+                if (posA !== posB) {
+                    return posA - posB;
+                }
+                return a.nickname.localeCompare(b.nickname);
+            });
+
+            sortedMembersForOrg.forEach(member => {
+                const li = document.createElement('li');
+                li.textContent = member.nickname;
+                if (member.position === 'Leader') {
+                    leaderList.appendChild(li);
+                    hasLeader = true;
+                } else if (member.position === 'Co Leader') {
+                    coLeaderListOrg.appendChild(li);
+                } else if (member.position === 'Elder') {
+                    elderListOrg.appendChild(li);
+                } else if (member.position === 'Member') {
+                    memberListOrg.appendChild(li);
+                }
+            });
+
+            if (hasLeader) {
+                defaultLeaderMessage.classList.add('hidden');
+            } else {
+                defaultLeaderMessage.classList.remove('hidden');
+                // Ensure the message is only appended if there's no leader and it's not already there
+                if (!leaderList.contains(defaultLeaderMessage)) {
+                    leaderList.appendChild(defaultLeaderMessage);
+                }
+            }
+        }
+
+        // Renders members based on current view mode (cards or table)
+        function renderMembers() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const filteredMembers = members.filter(member => {
+                const nicknameMatch = member.nickname ? member.nickname.toLowerCase().includes(searchTerm) : false;
+                const realnameMatch = member.realname ? member.realname.toLowerCase().includes(searchTerm) : false;
+                return nicknameMatch || realnameMatch;
+            });
+            const sortedMembers = applySort(filteredMembers, sortDropdown.value);
+
+            if (currentViewMode === 'card') {
+                renderMembersInCards(sortedMembers);
+            } else {
+                renderMembersInTable(sortedMembers);
+            }
+
+            if (members.length === 0) {
+                noAnyMembersMessage.textContent = 'Belum ada anggota yang terdaftar di klan ini.';
+                noAnyMembersMessage.classList.remove('hidden');
+            } else if (filteredMembers.length === 0) {
+                noAnyMembersMessage.textContent = 'Tidak ada anggota yang ditemukan sesuai kriteria.';
+                noAnyMembersMessage.classList.remove('hidden');
+            } else {
+                noAnyMembersMessage.classList.add('hidden');
+            }
+        }
+
+        // Renders members in the Card View (grouped by position)
+        function renderMembersInCards(membersToRender) {
+            cardView.classList.remove('hidden');
+            tableView.classList.add('hidden');
+
+            coLeaderCards.innerHTML = '';
+            elderCards.innerHTML = '';
+            memberCards.innerHTML = '';
+
+            let hasCoLeaders = false;
+            let hasElders = false;
+            let hasMembersInGroup = false;
+
+            // Filter out Leader for card view
+            const membersForCards = membersToRender.filter(member => member.position !== 'Leader');
+
+            membersForCards.forEach(member => {
+                const memberCard = createMemberCard(member);
+                if (member.position === 'Co Leader') {
+                    coLeaderCards.appendChild(memberCard);
+                    hasCoLeaders = true;
+                } else if (member.position === 'Elder') {
+                    elderCards.appendChild(memberCard);
+                    hasElders = true;
+                } else if (member.position === 'Member') {
+                    memberCards.appendChild(memberCard);
+                    hasMembersInGroup = true;
+                }
+            });
+
+            noCoLeadersMessage.classList.toggle('hidden', hasCoLeaders);
+            noEldersMessage.classList.toggle('hidden', hasElders);
+            noMembersInGroupMessage.classList.toggle('hidden', hasMembersInGroup);
+
+            // Hide containers if no members in that group and no message
+            document.getElementById('coLeaderCardsContainer').classList.toggle('hidden', !hasCoLeaders && noCoLeadersMessage.classList.contains('hidden'));
+            document.getElementById('elderCardsContainer').classList.toggle('hidden', !hasElders && noEldersMessage.classList.contains('hidden'));
+            document.getElementById('memberCardsContainer').classList.toggle('hidden', !hasMembersInGroup && noMembersInGroupMessage.classList.contains('hidden'));
+        }
+
+        // Renders members in the Table View
+        function renderMembersInTable(membersToRender) {
+            cardView.classList.add('hidden');
+            tableView.classList.remove('hidden');
+
+            memberTableBody.innerHTML = '';
+
+            if (membersToRender.length === 0) {
+                return;
+            }
+
+            membersToRender.forEach(member => {
+                const row = document.createElement('tr');
+                const joinDateFormatted = member.joinTime ? new Date(member.joinTime).toLocaleString('id-ID', { year: 'numeric', month: 'long' }) : '-';
+                row.innerHTML = `
+                    <td>${member.nickname || '-'}</td>
+                    <td>${member.realname || '-'}</td>
+                    <td>${member.origin || '-'}</td>
+                    <td>${member.age || '-'}</td>
+                    <td class="th-level-cell">
+                        ${member.thLevel ? `<img src="${getThImage(member.thLevel)}" alt="TH ${member.thLevel}" class="th-level-icon" onerror="this.onerror=null;this.src='https://via.placeholder.com/28/cccccc/888888?text=TH';"> TH ${member.thLevel}` : '-'}
+                    </td>
+                    <td>${member.position || '-'}</td>
+                    <td>${joinDateFormatted}</td>
+                `;
+                memberTableBody.appendChild(row);
+            });
+        }
+
+        // Creates a single member card HTML element
+        function createMemberCard(member) {
+            const card = document.createElement('div');
+            card.className = 'member-card';
+            const joinDateFormatted = member.joinTime ? new Date(member.joinTime).toLocaleString('id-ID', { year: 'numeric', month: 'long' }) : '-';
+
+            card.innerHTML = `
+                <div class="card-content">
+                    <h3 class="member-card-title">
+                        ${member.thLevel ? `<img src="${getThImage(member.thLevel)}" alt="TH ${member.thLevel}" class="th-level-icon" onerror="this.onerror=null;this.src='https://via.placeholder.com/28/cccccc/888888?text=TH';">` : ''}
+                        ${member.nickname}
+                    </h3>
+                    <p><strong>Nama Asli:</strong> ${member.realname || '-'}</p>
+                    <p><strong>Asal:</strong> ${member.origin || '-'}</p>
+                    <p><strong>Umur:</strong> ${member.age || '-'}</p>
+                    <p><strong>Posisi:</strong> ${member.position || '-'}</p>
+                    <p><strong>Waktu Join:</strong> ${joinDateFormatted}</p>
+                </div>
+            `;
+            return card;
+        }
+
+        // --- Data Visualization (Chart.js) ---
+
+        function renderThLevelChart() {
+            if (thChartInstance) {
+                thChartInstance.destroy();
+            }
+
+            const thLevels = members.map(m => m.thLevel).filter(th => th !== null && th !== undefined && th !== '');
+            const thCounts = {};
+            thLevels.forEach(th => {
+                thCounts[th] = (thCounts[th] || 0) + 1;
+            });
+
+            const uniqueThLevels = Object.keys(thCounts).map(Number).sort((a, b) => a - b);
+            const labels = uniqueThLevels.map(th => `TH ${th}`);
+            const data = uniqueThLevels.map(th => thCounts[th]);
+
+            const backgroundColors = [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED',
+                '#A3E635', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#84CC16', '#EF4444',
+                '#3B82F6', '#F97316', '#A855F7'
+            ];
+            const borderColors = [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED',
+                '#A3E635', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#84CC16', '#EF4444',
+                '#3B82F6', '#F97316', '#A855F7'
+            ];
+
+            if (members.length === 0 || uniqueThLevels.length === 0) {
+                thLevelChartCanvas.style.display = 'none';
+                noChartDataMessage.classList.remove('hidden');
+                return;
+            } else {
+                thLevelChartCanvas.style.display = 'block';
+                noChartDataMessage.classList.add('hidden');
+            }
+
+            const ctx = thLevelChartCanvas.getContext('2d');
+            
+            if (currentChartType === 'bar') {
+                thChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels.sort((a, b) => parseInt(b.replace('TH ', '')) - parseInt(a.replace('TH ', ''))),
+                        datasets: [{
+                            label: 'Jumlah Anggota',
+                            data: labels.sort((a, b) => parseInt(b.replace('TH ', '')) - parseInt(a.replace('TH ', ''))).map(label => thCounts[parseInt(label.replace('TH ', ''))] || 0),
+                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        aspectRatio: 1.5,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: { precision: 0 },
+                                title: { display: true, text: 'Jumlah Anggota', font: { size: 14, weight: 'bold' } }
+                            },
+                            y: {
+                                title: { display: true, text: 'Level Town Hall (TH)', font: { size: 14, weight: 'bold' } }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: 'Distribusi Level Town Hall Klan',
+                                font: { size: 18, weight: 'bold' },
+                                color: '#1e3a8a'
+                            }
+                        }
+                    }
+                });
+            } else if (currentChartType === 'pie') {
+                thChartInstance = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: backgroundColors.slice(0, labels.length),
+                            borderColor: borderColors.slice(0, labels.length),
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        aspectRatio: 1,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    font: {
+                                        size: 14
+                                    },
+                                    generateLabels: function(chart) {
+                                        const data = chart.data;
+                                        if (data.labels.length && data.datasets.length) {
+                                            const total = data.datasets[0].data.reduce((sum, value) => sum + value, 0);
+                                            return data.labels.map((label, i) => {
+                                                const value = data.datasets[0].data[i];
+                                                const percentage = total > 0 ? ((value / total) * 100).toFixed(1) + '%' : '0%';
+                                                return {
+                                                    text: `${label}: ${value} (${percentage})`,
+                                                    fillStyle: data.datasets[0].backgroundColor[i],
+                                                    strokeStyle: data.datasets[0].borderColor[i],
+                                                    lineWidth: data.datasets[0].borderWidth,
+                                                    hidden: !chart.isDatasetVisible(0) || chart.getDatasetMeta(0).data[i].hidden,
+                                                    index: i
+                                                };
+                                            });
+                                        }
+                                        return [];
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            const total = context.dataset.data.reduce((sum, current) => sum + current, 0);
+                                            const currentValue = context.parsed;
+                                            const percentage = ((currentValue / total) * 100).toFixed(1) + '%';
+                                            label += `${currentValue} (${percentage})`;
+                                        }
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Persentase Distribusi Level Town Hall Klan',
+                                font: { size: 18, weight: 'bold' },
+                                color: '#1e3a8a'
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Toggle View Mode (Card vs Table)
+        toggleViewBtn.addEventListener('click', () => {
+            currentViewMode = currentViewMode === 'card' ? 'table' : 'card';
+            localStorage.setItem('familyOfIndoGhostViewMode', currentViewMode); // Save view mode for consistency
+            renderMembers();
+            updateViewToggleButton();
+        });
+
+        function updateViewToggleButton() {
+            if (currentViewMode === 'card') {
+                toggleViewBtn.textContent = 'Lihat sebagai Tabel';
+            } else {
+                toggleViewBtn.textContent = 'Lihat sebagai Kartu';
+            }
+        }
+
+        // Toggle Chart Type (Bar vs Pie)
+        toggleChartTypeBtn.addEventListener('click', () => {
+            currentChartType = currentChartType === 'bar' ? 'pie' : 'bar';
+            localStorage.setItem('familyOfIndoGhostChartType', currentChartType); // Save chart type for consistency
+            renderThLevelChart();
+            updateChartToggleButton();
+        });
+
+        function updateChartToggleButton() {
+            if (currentChartType === 'bar') {
+                toggleChartTypeBtn.textContent = 'Lihat Pie Chart'
+            } else {
+                toggleChartTypeBtn.textContent = 'Lihat Bar Chart';
+            }
+        }
+
+    </script>
+</body>
+</html>

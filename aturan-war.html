@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indo Ghost Clan - Aturan War</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc; /* Light gray background */
+            color: #333;
+            display: flex; /* Changed from display:flex for main content centering */
+            flex-direction: column; /* Allow content to stack vertically */
+            justify-content: flex-start; /* Align content from top */
+            align-items: center; /* Center horizontally */
+            min-height: 100vh;
+            overflow-y: auto; /* Allow vertical scrolling */
+            position: relative;
+            padding-bottom: 80px; /* Space for admin toggle at the bottom */
+        }
+
+        /* Particles container for background */
+        #particles-js {
+            position: fixed; /* Use fixed to stay in place during scroll */
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind other content */
+        }
+
+        .container {
+            max-width: 900px; /* Wider container for rules */
+            width: 95%; /* Make it more responsive */
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 16px; /* More rounded corners */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08); /* Softer, larger shadow */
+            padding: 50px; /* More padding */
+            text-align: center;
+            animation: fadeInScale 1s ease-out forwards;
+            position: relative;
+            z-index: 1; /* Above particles */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0; /* Prevent shrinking if content is large */
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3.5rem; /* Larger, consistent with index.html */
+            font-weight: 700;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+            color: #1e3a8a; /* Darker blue heading */
+            line-height: 1.2;
+        }
+
+        .section-title {
+            font-size: 2rem; /* Consistent with sub-headings in index.html concept */
+            font-weight: 600;
+            color: #2a69b9; /* A shade of blue */
+            margin-top: 40px; /* More space */
+            margin-bottom: 20px; /* More space */
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 10px;
+            width: 100%;
+            text-align: left;
+            position: relative; /* For potential future icons */
+        }
+
+        .rules-content {
+            font-size: 1.15rem; /* Slightly larger for readability */
+            line-height: 1.7; /* Slightly tighter line height */
+            color: #4a5568;
+            text-align: left;
+            width: 100%;
+            min-height: 100px; /* Allow content to dictate height, less fixed */
+            padding-bottom: 20px; /* Space at bottom of content */
+        }
+
+        .rules-content p {
+            margin-bottom: 1.2em; /* More space between paragraphs */
+        }
+
+        .rules-content ul {
+            list-style-type: disc;
+            margin-left: 30px; /* More indent */
+            margin-bottom: 1.2em;
+        }
+
+        .rules-content ol {
+            list-style-type: decimal;
+            margin-left: 30px; /* More indent */
+            margin-bottom: 1.2em;
+        }
+
+        /* Edit button styles */
+        .edit-btn {
+            background-color: #ffc107; /* Warning yellow */
+            color: #333;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease; /* Smoother transition */
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            opacity: 0; /* Hidden by default */
+            visibility: hidden; /* Hidden by default */
+            transform: translateY(5px); /* Slightly off-set */
+            pointer-events: none; /* Make it unclickable when hidden */
+            position: absolute; /* Position relative to parent container */
+            top: 15px;
+            right: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Softer shadow */
+        }
+
+        .edit-btn.is-visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px); /* Slight lift */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15); /* Enhanced shadow on hover */
+        }
+
+        .edit-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Admin Mode Toggle Button */
+        .admin-toggle-wrapper {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            opacity: 0.005; /* EXTREMELY Transparent - almost invisible */
+            transition: opacity 0.4s ease; /* Slower transition for subtle fade-in */
+        }
+
+        .admin-toggle-wrapper:hover {
+            opacity: 1; /* Fully visible on hover */
+        }
+
+        .admin-toggle-button {
+            background-color: #6c757d; /* Dark gray */
+            color: white;
+            border: none;
+            padding: 12px 18px; /* Consistent with index.html */
+            border-radius: 10px; /* Consistent with index.html */
+            cursor: pointer;
+            font-size: 0.9rem; /* Consistent with index.html */
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Consistent with index.html */
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Consistent with index.html */
+            transition: background-color 0.2s ease;
+        }
+
+        .admin-toggle-button:hover {
+            background-color: #5a6268;
+        }
+
+        .admin-icon {
+            width: 20px; /* Consistent with index.html */
+            height: 20px; /* Consistent with index.html */
+            filter: invert(100%); /* Make icon white */
+        }
+
+        .back-button-wrapper {
+            margin-top: 50px; /* More space from content */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 15px 30px; /* Larger padding */
+            border-radius: 12px; /* More rounded */
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem; /* Slightly larger font */
+            font-weight: 600;
+            color: #ffffff;
+            background-color: #3b82f6; /* Tailwind blue-500, consistent with primary button */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2); /* Softer shadow */
+        }
+
+        .back-button:hover {
+            background-color: #2563eb; /* Tailwind blue-600 */
+            transform: translateY(-3px); /* Lighter lift effect */
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.3); /* Enhanced shadow on hover */
+        }
+
+        .back-button-icon {
+            width: 24px; /* Larger icon */
+            height: 24px;
+            margin-right: 12px;
+            filter: invert(100%);
+        }
+
+        /* Copyright text style */
+        .copyright {
+            margin-top: 60px; /* Space from the back button or content above */
+            font-size: 0.95rem;
+            color: #718096; /* Slightly darker gray for better readability */
+            text-align: center;
+            width: 100%; /* Ensure it spans the full width of its parent */
+        }
+
+        /* --- Modal Styles --- */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1001; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7); /* Darker overlay for better focus */
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: #ffffff; /* White background */
+            margin: auto;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 800px;
+            animation: slideIn 0.3s ease-out forwards;
+            position: relative;
+            border: 1px solid #e2e8f0;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #edf2f7;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .modal-header h2 {
+            font-size: 2.2rem;
+            color: #1a202c;
+            font-weight: 700;
+        }
+
+        .close-button {
+            color: #718096;
+            font-size: 36px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #4a5568;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 1.1rem;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #cbd5e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            resize: vertical;
+            min-height: 180px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background-color: #f8fafc;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+            background-color: #ffffff;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .modal-button {
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .modal-button.save-btn {
+            background-color: #48bb78; /* Tailwind green-500 */
+            color: white;
+        }
+
+        .modal-button.save-btn:hover {
+            background-color: #38a169; /* Tailwind green-600 */
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(72, 187, 120, 0.3);
+        }
+
+        .modal-button.cancel-btn {
+            background-color: #ef4444; /* Tailwind red-500 */
+            color: white;
+        }
+
+        .modal-button.cancel-btn:hover {
+            background-color: #dc2626; /* Tailwind red-600 */
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            h1 { font-size: 3rem; }
+            .section-title { font-size: 1.8rem; }
+            .rules-content { font-size: 1.05rem; }
+            .container { padding: 40px; }
+            .edit-btn { padding: 7px 12px; font-size: 0.85rem; top: 10px; right: 10px; }
+            .edit-icon { width: 14px; height: 14px; }
+            .admin-toggle-button { padding: 10px 15px; font-size: 0.85rem; }
+            .admin-icon { width: 18px; height: 18px; }
+            .back-button { padding: 12px 25px; font-size: 1rem; }
+            .back-button-icon { width: 20px; height: 20px; }
+            
+            .modal-content { padding: 30px; max-width: 700px; }
+            .modal-header h2 { font-size: 2rem; }
+            .close-button { font-size: 32px; }
+            .form-group label { font-size: 1rem; }
+            .form-group textarea { min-height: 150px; padding: 12px; }
+            .modal-button { padding: 12px 25px; font-size: 1rem; }
+            .copyright { margin-top: 40px; font-size: 0.9rem; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+                margin: 20px auto;
+                border-radius: 12px;
+            }
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+            }
+            .section-title { font-size: 1.6rem; margin-top: 30px; margin-bottom: 15px; }
+            .rules-content { font-size: 1rem; }
+            .edit-btn { padding: 6px 10px; font-size: 0.8rem; top: 8px; right: 8px; }
+            .edit-icon { width: 12px; height: 12px; }
+            .admin-toggle-wrapper { bottom: 15px; right: 15px; }
+            .admin-toggle-button { padding: 8px 12px; font-size: 0.8rem; }
+            .admin-icon { width: 16px; height: 16px; }
+            .back-button { padding: 10px 20px; font-size: 0.95rem; }
+            .back-button-icon { width: 18px; height: 18px; }
+
+            .modal-content { padding: 25px; width: 95%; }
+            .modal-header h2 { font-size: 1.8rem; }
+            .close-button { font-size: 28px; }
+            .form-group label { font-size: 0.95rem; }
+            .form-group textarea { min-height: 120px; padding: 10px; }
+            .modal-button { padding: 10px 20px; font-size: 0.95rem; }
+            .modal-footer { gap: 10px; }
+            .copyright { margin-top: 30px; font-size: 0.85rem; }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+                border-radius: 10px;
+            }
+            h1 {
+                font-size: 2rem;
+                letter-spacing: 0.5px;
+            }
+            .section-title { font-size: 1.4rem; margin-top: 25px; margin-bottom: 10px; }
+            .rules-content { font-size: 0.9rem; }
+            .edit-btn { padding: 5px 8px; font-size: 0.75rem; top: 5px; right: 5px; }
+            .edit-icon { width: 10px; height: 10px; }
+            .admin-toggle-wrapper { bottom: 10px; right: 10px; }
+            .admin-toggle-button { padding: 7px 10px; font-size: 0.75rem; }
+            .admin-icon { width: 14px; height: 14px; }
+            .back-button { padding: 8px 15px; font-size: 0.9rem; }
+            .back-button-icon { width: 16px; height: 16px; margin-right: 8px; }
+
+            .modal-content { padding: 20px; }
+            .modal-header h2 { font-size: 1.5rem; }
+            .close-button { font-size: 24px; }
+            .form-group label { font-size: 0.9rem; }
+            .form-group textarea { min-height: 100px; padding: 8px; font-size: 0.9rem; }
+            .modal-button { padding: 8px 15px; font-size: 0.85rem; }
+            .modal-footer { flex-direction: column; }
+            .modal-button { width: 100%; }
+            .copyright { margin-top: 25px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="particles-js"></div>
+    <div class="container">
+        <h1>Aturan War Klan</h1>
+        
+        <button id="editWarRulesBtn" class="edit-btn">
+            <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
+            Edit Aturan War
+        </button>
+
+        <h2 class="section-title">Strategi Umum</h2>
+        <div id="generalRulesContent" class="rules-content">
+            <p><strong>Sebelum War:</strong></p>
+            <ul>
+                <li>Pastikan hero aktif.</li>
+                <li>Request troops sesuai war base.</li>
+                <li>Koordinasi serangan dengan co-leader atau teman.</li>
+            </ul>
+            <p><strong>Saat War:</strong></p>
+            <ol>
+                <li>Serang sesuai nomor atau target yang diinstruksikan.</li>
+                <li>Gunakan kedua serangan.</li>
+                <li>Prioritaskan 3 bintang.</li>
+            </ol>
+            <p><strong>Setelah War:</strong></p>
+            <ul>
+                <li>Kirim replay serangan terbaik.</li>
+                <li>Evaluasi serangan yang gagal untuk perbaikan.</li>
+                <li>Selalu belajar dari kesalahan dan pengalaman.</li>
+            </ul>
+        </div>
+
+        <h2 class="section-title">Aturan Tambahan</h2>
+        <div id="additionalRulesContent" class="rules-content">
+            <p>War adalah prioritas utama. Pemain yang tidak aktif atau sering melanggar aturan akan dikeluarkan dari war.</p>
+            <p>Setiap anggota wajib berpartisipasi dalam diskusi strategi war di grup WhatsApp.</p>
+            <p>Selalu berikan dukungan troops kepada teman klan.</p>
+            <p>Jaga kekompakan dan sportifitas dalam klan.</p>
+        </div>
+
+        <div class="back-button-wrapper">
+            <a href="index.html" class="back-button">
+                <img src="https://www.svgrepo.com/show/476839/arrow-back-ios.svg" alt="Back Icon" class="back-button-icon">
+                Kembali ke Beranda
+            </a>
+        </div>
+
+        <div class="copyright">
+            <p>Copyright © 2025 Indo Ghost Clan.</p>
+        </div>
+    </div>
+
+    <div class="admin-toggle-wrapper">
+        <button id="adminModeToggle" class="admin-toggle-button">
+            <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Admin Icon" class="admin-icon">
+            Admin Mode
+        </button>
+    </div>
+
+    <div id="editRulesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Aturan War Clan</h2>
+                <span class="close-button">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="editGeneralRules">Strategi Umum (Gunakan enter untuk paragraf baru. Untuk daftar, gunakan tanda bintang (*) atau angka (1.) di awal baris.)</label>
+                    <textarea id="editGeneralRules" rows="10"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editAdditionalRules">Aturan Tambahan (Gunakan enter untuk paragraf baru. Untuk daftar, gunakan tanda bintang (*) atau angka (1.) di awal baris.)</label>
+                    <textarea id="editAdditionalRules" rows="10"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveRulesBtn" class="modal-button save-btn">Simpan Perubahan</button>
+                <button id="cancelRulesBtn" class="modal-button cancel-btn">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const generalRulesContentElement = document.getElementById('generalRulesContent');
+            const additionalRulesContentElement = document.getElementById('additionalRulesContent');
+            const editWarRulesBtn = document.getElementById('editWarRulesBtn');
+            const adminModeToggle = document.getElementById('adminModeToggle');
+
+            const editRulesModal = document.getElementById('editRulesModal');
+            const closeButton = editRulesModal.querySelector('.close-button');
+            const editGeneralRulesTextarea = document.getElementById('editGeneralRules');
+            const editAdditionalRulesTextarea = document.getElementById('editAdditionalRules');
+            const saveRulesBtn = document.getElementById('saveRulesBtn');
+            const cancelRulesBtn = document.getElementById('cancelRulesBtn');
+
+            let isAdminMode = false; // Initial state
+
+            // --- Conversion Functions (Text to HTML and HTML to Text) ---
+
+            // Converts plain text (with newlines, * for ul, 1. for ol) to basic HTML
+            function convertTextToHtml(text) {
+                let html = [];
+                const lines = text.split('\n');
+                let inUl = false;
+                let inOl = false;
+
+                lines.forEach(line => {
+                    line = line.trim();
+                    if (line.length === 0) { // Handle empty lines as paragraph breaks
+                        if (inUl) { html.push('</ul>'); inUl = false; }
+                        if (inOl) { html.push('</ol>'); inOl = false; }
+                        // Ensure we don't add multiple empty paragraphs for consecutive blank lines
+                        if (html.length > 0 && html[html.length - 1] !== '<p></p>') {
+                            html.push('<p></p>'); // Add empty paragraph for spacing
+                        }
+                        return;
+                    }
+
+                    if (line.startsWith('* ')) {
+                        if (inOl) { html.push('</ol>'); inOl = false; }
+                        if (!inUl) { html.push('<ul>'); inUl = true; }
+                        html.push(`<li>${line.substring(2)}</li>`);
+                    } else if (line.match(/^\d+\.\s/)) {
+                        if (inUl) { html.push('</ul>'); inUl = false; }
+                        if (!inOl) { html.push('<ol>'); inOl = true; }
+                        html.push(`<li>${line.substring(line.indexOf('.') + 1).trim()}</li>`);
+                    } else {
+                        if (inUl) { html.push('</ul>'); inUl = false; }
+                        if (inOl) { html.push('</ol>'); inOl = false; }
+                        html.push(`<p>${line}</p>`);
+                    }
+                });
+
+                // Close any open lists at the end
+                if (inUl) { html.push('</ul>'); }
+                if (inOl) { html.push('</ol>'); }
+
+                // Remove consecutive empty paragraphs
+                return html.join('\n').replace(/<p><\/p>\n<p><\/p>/g, '<p></p>');
+            }
+
+            // Converts HTML content to plain text for textarea editing
+            function convertHtmlToText(html) {
+                // Create a temporary div to parse HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                let textContent = '';
+
+                Array.from(tempDiv.childNodes).forEach(node => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        if (node.tagName === 'P') {
+                            // If the paragraph has content, add it with two newlines
+                            if (node.textContent.trim().length > 0) {
+                                textContent += node.textContent.trim() + '\n\n';
+                            } else {
+                                // If it's an empty paragraph, add one newline for spacing
+                                textContent += '\n';
+                            }
+                        } else if (node.tagName === 'UL' || node.tagName === 'OL') {
+                            Array.from(node.children).forEach((li, index) => {
+                                if (node.tagName === 'UL') {
+                                    textContent += `* ${li.textContent.trim()}\n`;
+                                } else if (node.tagName === 'OL') {
+                                    textContent += `${index + 1}. ${li.textContent.trim()}\n`; // Preserve numbering
+                                }
+                            });
+                            textContent += '\n'; // Add a newline after each list
+                        } else if (node.tagName === 'STRONG' || node.tagName === 'B') {
+                             textContent += node.textContent.trim(); // Just add the text, strip bolding for editor
+                        }
+                    } else if (node.nodeType === Node.TEXT_NODE) {
+                        const trimmedText = node.textContent.trim();
+                        if (trimmedText.length > 0) {
+                             textContent += trimmedText + '\n\n';
+                        }
+                    }
+                });
+
+                // Clean up multiple newlines and trim final result
+                return textContent.replace(/\n\n+/g, '\n\n').trim();
+            }
+
+
+            // --- Function to load data from Local Storage ---
+            function loadWarRules() {
+                const savedGeneralRules = localStorage.getItem('indoGhostGeneralWarRules');
+                const savedAdditionalRules = localStorage.getItem('indoGhostAdditionalWarRules');
+
+                // Default content if nothing is saved
+                const defaultGeneralRulesHtml = `
+                    <p><strong>Sebelum War:</strong></p>
+                    <ul>
+                        <li>Pastikan hero aktif.</li>
+                        <li>Request troops sesuai war base.</li>
+                        <li>Koordinasi serangan dengan co-leader atau teman.</li>
+                    </ul>
+                    <p><strong>Saat War:</strong></p>
+                    <ol>
+                        <li>Serang sesuai nomor atau target yang diinstruksikan.</li>
+                        <li>Gunakan kedua serangan.</li>
+                        <li>Prioritaskan 3 bintang.</li>
+                    </ol>
+                    <p><strong>Setelah War:</strong></p>
+                    <ul>
+                        <li>Kirim replay serangan terbaik.</li>
+                        <li>Evaluasi serangan yang gagal untuk perbaikan.</li>
+                        <li>Selalu belajar dari kesalahan dan pengalaman.</li>
+                    </ul>
+                `;
+
+                const defaultAdditionalRulesHtml = `
+                    <p>War adalah prioritas utama. Pemain yang tidak aktif atau sering melanggar aturan akan dikeluarkan dari war.</p>
+                    <p>Setiap anggota wajib berpartisipasi dalam diskusi strategi war di grup WhatsApp.</p>
+                    <p>Selalu berikan dukungan troops kepada teman klan.</p>
+                    <p>Jaga kekompakan dan sportifitas dalam klan.</p>
+                `;
+
+                generalRulesContentElement.innerHTML = savedGeneralRules || defaultGeneralRulesHtml;
+                additionalRulesContentElement.innerHTML = savedAdditionalRules || defaultAdditionalRulesHtml;
+            }
+
+            // --- Function to save war rules ---
+            function saveWarRules(generalContentHtml, additionalContentHtml) {
+                localStorage.setItem('indoGhostGeneralWarRules', generalContentHtml);
+                localStorage.setItem('indoGhostAdditionalWarRules', additionalContentHtml);
+                generalRulesContentElement.innerHTML = generalContentHtml;
+                additionalRulesContentElement.innerHTML = additionalContentHtml;
+            }
+
+            // --- Function to toggle admin mode ---
+            function toggleAdminMode() {
+                isAdminMode = !isAdminMode;
+                if (isAdminMode) {
+                    editWarRulesBtn.classList.add('is-visible');
+                    adminModeToggle.textContent = 'Exit Admin Mode';
+                    adminModeToggle.style.backgroundColor = '#dc3545'; // Red for exit
+                } else {
+                    editWarRulesBtn.classList.remove('is-visible');
+                    adminModeToggle.textContent = 'Admin Mode';
+                    adminModeToggle.style.backgroundColor = '#6c757d'; // Gray for normal
+                }
+            }
+
+            // --- Open Modal Function ---
+            function openEditModal() {
+                // Convert current HTML content to plain text before loading into textarea
+                editGeneralRulesTextarea.value = convertHtmlToText(generalRulesContentElement.innerHTML);
+                editAdditionalRulesTextarea.value = convertHtmlToText(additionalRulesContentElement.innerHTML);
+                editRulesModal.style.display = 'flex'; // Use flex to center content
+            }
+
+            // --- Close Modal Function ---
+            function closeEditModal() {
+                editRulesModal.style.display = 'none';
+            }
+
+            // --- Event listener for editing war rules (open modal) ---
+            editWarRulesBtn.addEventListener('click', openEditModal);
+
+            // --- Event listeners for modal buttons ---
+            closeButton.addEventListener('click', closeEditModal);
+            cancelRulesBtn.addEventListener('click', closeEditModal);
+
+            saveRulesBtn.addEventListener('click', () => {
+                const newGeneralRulesText = editGeneralRulesTextarea.value;
+                const newAdditionalRulesText = editAdditionalRulesTextarea.value;
+                
+                // Convert text from textarea back to HTML for display and storage
+                const newGeneralRulesHtml = convertTextToHtml(newGeneralRulesText);
+                const newAdditionalRulesHtml = convertTextToHtml(newAdditionalRulesText);
+
+                saveWarRules(newGeneralRulesHtml, newAdditionalRulesHtml);
+                closeEditModal();
+            });
+
+            // Close modal if clicked outside modal content
+            editRulesModal.addEventListener('click', (e) => {
+                if (e.target === editRulesModal) {
+                    closeEditModal();
+                }
+            });
+
+            // --- Event listener for Admin Mode Toggle Button ---
+            adminModeToggle.addEventListener('click', toggleAdminMode);
+
+            // --- Particles.js Initialization ---
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#cccccc"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#bbbbbb",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+
+            // --- Initial load ---
+            loadWarRules();
+        });
+    </script>
+</body>
+</html>
