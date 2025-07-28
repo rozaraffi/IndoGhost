@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indo Ghost</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.com/jspdf/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc; /* Light gray background */
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 16px; /* More rounded corners */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08); /* Softer, larger shadow */
+            padding: 40px;
+        }
+        h1, h2 {
+            color: #1e3a8a; /* Darker blue heading */
+            font-weight: 700;
+        }
+        .section-heading {
+            border-bottom: 2px solid #e2e8f0; /* Lighter border */
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        .org-structure-box {
+            background-color: #e0f2fe; /* Lighter blue */
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.05);
+        }
+        .org-position-title {
+            font-weight: 600;
+            color: #1c4a8a; /* Darker blue for titles */
+            margin-bottom: 12px;
+            font-size: 1.25rem;
+        }
+        .org-member-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .org-member-list li {
+            background-color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 25px; /* Pill shape */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-size: 0.98rem;
+            color: #4a5568; /* Slightly darker text */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-weight: 500;
+            border: 1px solid #ebf8ff; /* Subtle border */
+        }
+        .org-member-list li:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+        .form-group label {
+            font-weight: 500;
+            color: #2d3748; /* Darker label text */
+        }
+        .form-input, .form-select {
+            border: 1px solid #cbd5e0; /* Softer border color */
+            border-radius: 8px; /* More rounded inputs */
+            padding: 12px 18px;
+            width: 100%;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background-color: #fbfdfe;
+        }
+        .form-input:focus, .form-select:focus {
+            border-color: #3b82f6; /* Blue focus border */
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25); /* Blue glow */
+            outline: none;
+        }
+        .btn-primary {
+            background-color: #3b82f6; /* Blue button */
+            color: white;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: #2563eb; /* Darker blue on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+        .btn-edit, .btn-delete {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            margin-left: 10px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            font-weight: 500;
+        }
+        .btn-edit {
+            background-color: #f59e0b; /* Amber */
+            color: white;
+        }
+        .btn-edit:hover {
+            background-color: #d97706;
+            transform: translateY(-1px);
+        }
+        .btn-delete {
+            background-color: #ef4444; /* Red */
+            color: white;
+        }
+        .btn-delete:hover {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: separate; /* For rounded corners on cells */
+            border-spacing: 0;
+            margin-top: 20px;
+            border-radius: 12px; /* Overall table rounded corners */
+            overflow: hidden; /* Ensures content respects border-radius */
+        }
+        .data-table th, .data-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0; /* Lighter border */
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f0f4f8; /* Light blueish gray */
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+        .data-table tbody tr:hover {
+            background-color: #f5faff; /* Very light blue on hover */
+        }
+        /* Style for the last row's border to match overall border-radius */
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .data-table thead tr:first-child th:first-child { border-top-left-radius: 12px; }
+        .data-table thead tr:first-child th:last-child { border-top-right-radius: 12px; }
+        .data-table tbody tr:last-child td:first-child { border-bottom-left-radius: 12px; }
+        .data-table tbody tr:last-child td:last-child { border-bottom-right-radius: 12px; }
+
+
+        .sort-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .sort-dropdown-select {
+            appearance: none; /* Remove default arrow */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: #fff;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 10px 40px 10px 15px;
+            font-size: 1rem;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236B7280'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 1.2em;
+        }
+        .sort-dropdown-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+        }
+
+        /* Notification Toast */
+        .toast-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #28a745; /* Green for success */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+            z-index: 1001;
+        }
+        .toast-notification.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .toast-notification.error {
+            background-color: #dc3545; /* Red for error */
+        }
+        .toast-notification.info {
+            background-color: #17a2b8; /* Blue for info */
+        }
+
+        /* TH Level Icon Visualisation */
+        .th-level-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space between icon and text */
+        }
+        .th-level-icon {
+            width: 28px; /* Adjust size as needed */
+            height: 28px;
+            object-fit: contain;
+        }
+
+        /* Card-based Member List Styles */
+        .member-cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center; /* Center cards horizontally */
+        }
+        .member-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            width: 100%; /* Default to full width on small screens */
+            max-width: 320px; /* Max width for each card */
+            min-width: 280px; /* Min width for each card */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+        .member-card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .member-card p {
+            font-size: 0.95rem;
+            color: #4a5568;
+            margin-bottom: 6px;
+        }
+        .member-card strong {
+            color: #2d3748;
+        }
+        .member-card .card-actions {
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Responsive adjustments for member cards */
+        @media (min-width: 768px) {
+            .member-cards-container {
+                justify-content: flex-start; /* Align to start on larger screens */
+            }
+        }
+        @media (min-width: 1024px) {
+            .member-card {
+                width: calc(33.33% - 14px); /* Three cards per row, accounting for gap */
+            }
+        }
+        @media (min-width: 1280px) {
+            .member-card {
+                width: calc(25% - 15px); /* Four cards per row */
+            }
+        }
+
+        /* Styles for utility buttons (Export/Import/PDF) */
+        .utility-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+        .utility-btn {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+        .utility-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-1px);
+        }
+        .utility-btn.export { background-color: #007bff; } /* Blue */
+        .utility-btn.export:hover { background-color: #0056b3; }
+        .utility-btn.import { background-color: #ffc107; color: #333; } /* Yellow */
+        .utility-btn.import:hover { background-color: #e0a800; }
+        .utility-btn.pdf { background-color: #dc3545; } /* Red */
+        .utility-btn.pdf:hover { background-color: #c82333; }
+        .utility-btn.reset { background-color: #6c757d; } /* Gray for reset */
+        .utility-btn.reset:hover { background-color: #5a6268; }
+        .utility-btn.view-toggle { background-color: #17a2b8; } /* Info blue for view toggle */
+        .utility-btn.view-toggle:hover { background-color: #138496; }
+        .utility-btn.chart-toggle { background-color: #6f42c1; } /* Purple */
+        .utility-btn.chart-toggle:hover { background-color: #5a35a0; }
+
+
+        /* Search Input Styling */
+        .search-input {
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            width: 100%; /* Full width on small screens */
+            max-width: 300px; /* Max width on larger screens */
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .search-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+            outline: none;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            position: relative; /* For position chart toggle button */
+            height: 350px; /* Batasi tinggi grafik agar tidak terlalu besar */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically if message is displayed */
+            align-items: center; /* Center content horizontally */
+        }
+        .chart-container canvas {
+            max-height: 100%; /* Ensure canvas doesn't overflow */
+            max-width: 100%; /* Ensure canvas doesn't overflow */
+        }
+        .chart-toggle-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10; /* Ensure it's above the canvas */
+        }
+
+
+        /* Change Log Styles */
+        .change-log-entry {
+            background-color: #f8fafc; /* Light gray */
+            border-left: 4px solid #3b82f6; /* Blue border */
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+        }
+        .change-log-entry.add {
+            border-color: #28a745; /* Green */
+        }
+        .change-log-entry.update {
+            border-color: #f59e0b; /* Amber */
+        }
+        .change-log-entry.delete {
+            border-color: #dc3545; /* Red */
+        }
+        .change-log-entry strong {
+            color: #1e3a8a;
+        }
+        .change-log-entry span.timestamp {
+            font-size: 0.8em;
+            color: #64748b;
+            display: block;
+            margin-top: 5px;
+        }
+        .change-log-entry ul {
+            list-style: disc;
+            margin-left: 20px;
+            margin-top: 5px;
+            color: #4a5568;
+        }
+
+        /* Custom styles for month/year dropdowns */
+        .month-year-select-group {
+            display: flex;
+            gap: 10px;
+        }
+        .month-year-select-group select {
+            flex: 1; /* Make both select elements take equal width */
+            margin-bottom: 0 !important; /* Override default margin if any */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 767px) {
+            .filter-sort-section {
+                flex-direction: column; /* Stack search and sort vertically */
+                align-items: flex-start;
+            }
+            .search-input {
+                margin-bottom: 15px; /* Add space below search input */
+            }
+            .sort-dropdown-wrapper {
+                width: 100%; /* Full width for sort dropdown */
+            }
+            .sort-dropdown-select {
+                width: 100%;
+            }
+            .utility-buttons {
+                justify-content: center; /* Center utility buttons on small screens */
+            }
+            .utility-buttons button {
+                width: 100%; /* Full width buttons */
+                margin-bottom: 10px; /* Space between stacked buttons */
+            }
+            .chart-toggle-btn-container {
+                position: static; /* Remove absolute positioning */
+                margin-bottom: 15px; /* Add space below button */
+                text-align: right;
+            }
+            /* Adjust container padding for smaller screens */
+            .container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            .form-group.month-year-select-group {
+                flex-direction: column; /* Stack month/year dropdowns vertically on small screens */
+                gap: 15px;
+            }
+            .form-group.month-year-select-group select {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .filter-sort-section {
+                flex-direction: row; /* Keep search and sort in a row */
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container">
+        <h1 class="text-4xl text-center mb-10 section-heading">Detail Member Indo Ghost</h1>
+
+        <div class="mb-12">
+            <h2 class="text-2xl mb-8 section-heading">Struktur Organisasi</h2>
+            <div class="org-structure-box">
+                <div class="mb-6">
+                    <p class="org-position-title">Leader:</p>
+                    <ul class="org-member-list" id="leaderList">
+                        <li id="defaultLeader" class="text-gray-500 italic">Belum ada Leader.</li>
+                    </ul>
+                </div>
+                <div class="mb-6">
+                    <p class="org-position-title">Co-Leader:</p>
+                    <ul class="org-member-list" id="coLeaderList">
+                    </ul>
+                </div>
+                <div class="mb-6">
+                    <p class="org-position-title">Elder:</p>
+                    <ul class="org-member-list" id="elderList">
+                    </ul>
+                </div>
+                <div>
+                    <p class="org-position-title">Member:</p>
+                    <ul class="org-member-list" id="memberList">
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-10 border-gray-200">
+
+        <div class="mb-12">
+            <h2 class="text-2xl mb-8 section-heading">Visualisasi Data Klan</h2>
+            <div class="chart-container">
+                <div class="chart-toggle-btn-container">
+                    <button id="toggleChartTypeBtn" class="utility-btn chart-toggle">Lihat Pie Chart</button>
+                </div>
+                <canvas id="thLevelChart"></canvas>
+                <p id="noChartDataMessage" class="text-center text-gray-500 py-4 hidden">Tidak ada data anggota untuk divisualisasikan.</p>
+            </div>
+        </div>
+
+        <hr class="my-10 border-gray-200">
+
+        <div class="mb-12">
+            <h2 class="text-2xl mb-8 section-heading">Input Data Anggota Baru</h2>
+            <form id="memberForm" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="form-group">
+                    <label for="nickname" class="block text-sm mb-2">Nickname <span class="text-red-500">*</span>:</label>
+                    <input type="text" id="nickname" name="nickname" class="form-input" placeholder="Masukkan nickname" required>
+                </div>
+                <div class="form-group">
+                    <label for="realname" class="block text-sm mb-2">Nama Asli:</label>
+                    <input type="text" id="realname" name="realname" class="form-input" placeholder="Masukkan nama asli">
+                </div>
+                <div class="form-group">
+                    <label for="origin" class="block text-sm mb-2">Asal:</label>
+                    <input type="text" id="origin" name="origin" class="form-input" placeholder="Masukkan asal kota/daerah">
+                </div>
+                <div class="form-group">
+                    <label for="age" class="block text-sm mb-2">Umur:</label>
+                    <input type="number" id="age" name="age" class="form-input" placeholder="Masukkan umur" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="thLevel" class="block text-sm mb-2">Level Town Hall (TH) <span class="text-red-500">*</span>:</label>
+                    <select id="thLevel" name="thLevel" class="form-select" required>
+                        <option value="">Pilih TH Level</option>
+                        </select>
+                </div>
+                <div class="form-group">
+                    <label for="position" class="block text-sm mb-2">Posisi Jabatan <span class="text-red-500">*</span>:</label>
+                    <select id="position" name="position" class="form-select" required>
+                        <option value="">Pilih Posisi</option>
+                        <option value="Leader" id="leaderPositionOption">Leader</option>
+                        <option value="Co Leader">Co Leader</option>
+                        <option value="Elder">Elder</option>
+                        <option value="Member">Member</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="joinTime" class="block text-sm mb-2">Waktu Join Klan (Bulan & Tahun) <span class="text-red-500">*</span>:</label>
+                    <div class="month-year-select-group">
+                        <select id="joinMonth" name="joinMonth" class="form-select" required>
+                            </select>
+                        <select id="joinYear" name="joinYear" class="form-select" required>
+                            </select>
+                    </div>
+                </div>
+                <div class="md:col-span-2 flex justify-end">
+                    <button type="submit" class="btn-primary">Tambah Anggota</button>
+                </div>
+            </form>
+        </div>
+
+        <hr class="my-10 border-gray-200">
+
+        <div id="memberListView">
+            <h2 class="text-2xl mb-8 section-heading">Daftar Anggota Klan</h2>
+            <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 filter-sort-section">
+                <div class="flex-grow flex flex-col md:flex-row gap-3">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Cari Nickname atau Nama Asli..." onkeyup="renderMembers()">
+                    <div class="sort-dropdown-wrapper w-full md:w-auto">
+                        <select id="sortDropdown" class="sort-dropdown-select" onchange="renderMembers()">
+                            <option value="">Urutkan Berdasarkan...</option>
+                            <option value="nickname-asc">Nama (A-Z)</option>
+                            <option value="nickname-desc">Nama (Z-A)</option>
+                            <option value="age-asc">Umur (Termuda)</option>
+                            <option value="age-desc">Umur (Tertua)</option>
+                            <option value="thLevel-asc">TH Level (Terendah)</option>
+                            <option value="thLevel-desc">TH Level (Tertinggi)</option>
+                            <option value="position-asc">Posisi Jabatan (A-Z)</option>
+                            <option value="position-desc">Posisi Jabatan (Z-A)</option>
+                            <option value="joinTime-asc">Waktu Join (Terlama)</option>
+                            <option value="joinTime-desc">Waktu Join (Terbaru)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="utility-buttons flex-col md:flex-row items-stretch md:items-center">
+                    <button id="exportJsonBtn" class="utility-btn export">Export</button>
+                    <input type="file" id="importJsonInput" accept=".json" class="hidden">
+                    <button id="importJsonBtn" class="utility-btn import">Import</button>
+                    <button id="downloadPdfBtn" class="utility-btn pdf">Download PDF</button>
+                    <button id="resetDataBtn" class="utility-btn reset">Reset Data</button>
+                    <button id="toggleViewBtn" class="utility-btn view-toggle">Lihat sebagai Tabel</button>
+                </div>
+            </div>
+
+            <div id="cardView" class="block">
+                <div class="mb-8" id="coLeaderCardsContainer">
+                    <h3 class="org-position-title mb-4">Co-Leader:</h3>
+                    <div class="member-cards-container" id="coLeaderCards">
+                        </div>
+                    <p id="noCoLeadersMessage" class="text-center text-gray-500 py-4 hidden">Belum ada Co-Leader yang terdaftar.</p>
+                </div>
+
+                <div class="mb-8" id="elderCardsContainer">
+                    <h3 class="org-position-title mb-4">Elder:</h3>
+                    <div class="member-cards-container" id="elderCards">
+                        </div>
+                    <p id="noEldersMessage" class="text-center text-gray-500 py-4 hidden">Belum ada Elder yang terdaftar.</p>
+                </div>
+
+                <div class="mb-8" id="memberCardsContainer">
+                    <h3 class="org-position-title mb-4">Member:</h3>
+                    <div class="member-cards-container" id="memberCards">
+                        </div>
+                    <p id="noMembersInGroupMessage" class="text-center text-gray-500 py-4 hidden">Belum ada Member yang terdaftar.</p>
+                </div>
+            </div>
+
+            <div id="tableView" class="hidden overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nickname</th>
+                            <th>Nama Asli</th>
+                            <th>Asal</th>
+                            <th>Umur</th>
+                            <th>TH Level</th>
+                            <th>Posisi</th>
+                            <th>Waktu Join</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memberTableBody">
+                        </tbody>
+                </table>
+            </div>
+            
+            <p id="noAnyMembersMessage" class="text-center text-gray-500 py-6 hidden">Tidak ada anggota yang ditemukan sesuai kriteria.</p>
+
+        </div>
+
+        <hr class="my-10 border-gray-200">
+
+        <div class="mb-12">
+            <h2 class="text-2xl mb-8 section-heading">Riwayat Perubahan Data</h2>
+            <div id="changeLogContainer">
+                <p id="noChangeLogMessage" class="text-center text-gray-500 py-4 hidden">Belum ada perubahan data yang tercatat.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="toastNotification" class="toast-notification">
+        Data berhasil disimpan!
+    </div>
+
+    <script>
+        // Global variables
+        let members = JSON.parse(localStorage.getItem('familyOfIndoGhostMembers')) || [];
+        let changeLog = JSON.parse(localStorage.getItem('familyOfIndoGhostChangeLog')) || [];
+        let currentViewMode = localStorage.getItem('familyOfIndoGhostViewMode') || 'card'; // 'card' or 'table'
+        let currentChartType = localStorage.getItem('familyOfIndoGhostChartType') || 'bar'; // 'bar' or 'pie'
+        let thChartInstance = null; // To store the Chart.js instance
+
+        // DOM Elements - Members
+        const leaderList = document.getElementById('leaderList');
+        const defaultLeaderMessage = document.getElementById('defaultLeader'); // New: for initial leader message
+        const coLeaderListOrg = document.getElementById('coLeaderList');
+        const elderListOrg = document.getElementById('elderList');
+        const memberListOrg = document.getElementById('memberList');
+        const memberForm = document.getElementById('memberForm');
+        const sortDropdown = document.getElementById('sortDropdown');
+        const toastNotification = document.getElementById('toastNotification');
+        const thLevelSelect = document.getElementById('thLevel');
+        const positionSelect = document.getElementById('position'); // New: for position dropdown
+        const leaderPositionOption = document.getElementById('leaderPositionOption'); // New: for Leader option
+        const searchInput = document.getElementById('searchInput');
+
+        // New DOM elements for join time dropdowns
+        const joinMonthSelect = document.getElementById('joinMonth');
+        const joinYearSelect = document.getElementById('joinYear');
+
+
+        // Card containers
+        const cardView = document.getElementById('cardView');
+        const coLeaderCards = document.getElementById('coLeaderCards');
+        const elderCards = document.getElementById('elderCards');
+        const memberCards = document.getElementById('memberCards');
+
+        // Table container
+        const tableView = document.getElementById('tableView');
+        const memberTableBody = document.getElementById('memberTableBody');
+
+        // "No members" messages
+        const noCoLeadersMessage = document.getElementById('noCoLeadersMessage');
+        const noEldersMessage = document.getElementById('noEldersMessage');
+        const noMembersInGroupMessage = document.getElementById('noMembersInGroupMessage');
+        const noAnyMembersMessage = document.getElementById('noAnyMembersMessage');
+
+        // Utility buttons
+        const exportJsonBtn = document.getElementById('exportJsonBtn');
+        const importJsonInput = document.getElementById('importJsonInput');
+        const importJsonBtn = document.getElementById('importJsonBtn');
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        const resetDataBtn = document.getElementById('resetDataBtn');
+        const toggleViewBtn = document.getElementById('toggleViewBtn');
+        const toggleChartTypeBtn = document.getElementById('toggleChartTypeBtn');
+
+
+        // DOM Elements - Chart
+        const thLevelChartCanvas = document.getElementById('thLevelChart');
+        const noChartDataMessage = document.getElementById('noChartDataMessage');
+
+        // DOM Elements - Change Log
+        const changeLogContainer = document.getElementById('changeLogContainer');
+        const noChangeLogMessage = document.getElementById('noChangeLogMessage');
+
+
+        // --- Initialize App ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Populate TH Level dropdown (1-17)
+            for (let i = 1; i <= 17; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `TH ${i}`;
+                thLevelSelect.appendChild(option);
+            }
+            populateMonthYearDropdowns(); // Populate month and year dropdowns
+            renderAllContent(); // Initial render for all dynamic parts
+            updateLeaderPositionOption(); // Initial check for leader status
+        });
+
+        // --- Core Functions ---
+
+        // Function to save data to localStorage
+        function saveMembers() {
+            localStorage.setItem('familyOfIndoGhostMembers', JSON.stringify(members));
+        }
+
+        function saveChangeLog() {
+            // Keep log size manageable, e.g., last 100 entries
+            const maxLogEntries = 100;
+            if (changeLog.length > maxLogEntries) {
+                changeLog = changeLog.slice(changeLog.length - maxLogEntries);
+            }
+            localStorage.setItem('familyOfIndoGhostChangeLog', JSON.stringify(changeLog));
+        }
+
+        function saveViewMode() {
+            localStorage.setItem('familyOfIndoGhostViewMode', currentViewMode);
+        }
+
+        function saveChartType() {
+            localStorage.setItem('familyOfIndoGhostChartType', currentChartType);
+        }
+
+        // Function to show a toast notification
+        function showToast(message, type = 'success') {
+            toastNotification.textContent = message;
+            toastNotification.classList.remove('success', 'error', 'info'); // Reset classes
+            toastNotification.classList.add(type);
+            toastNotification.classList.add('show');
+
+            setTimeout(() => {
+                toastNotification.classList.remove('show');
+            }, 3000); // Hide after 3 seconds
+        }
+
+        // Function to get TH image URL
+        function getThImage(thLevel) {
+            if (!thLevel) return '';
+            return `https://raw.githubusercontent.com/Clash-of-Clans-API/clash-of-clans-assets/main/other/townhall/townhall_${thLevel}.png`;
+        }
+
+        // Function to apply sorting to an array of members
+        function applySort(arr, sortValue) {
+            if (!sortValue) return [...arr];
+
+            const [sortBy, order] = sortValue.split('-');
+
+            return [...arr].sort((a, b) => {
+                let valA = a[sortBy];
+                let valB = b[sortBy];
+
+                // Handle null/undefined values for sorting consistency
+                if (valA === null || valA === undefined || valA === '') valA = order === 'asc' ? -Infinity : Infinity;
+                if (valB === null || valB === undefined || valB === '') valB = order === 'asc' ? 1 : -Infinity; // Changed for desc to put nulls at end
+
+                // Specific handling for joinTime as Date objects (only compare year and month)
+                if (sortBy === 'joinTime') {
+                    const dateA = new Date(valA);
+                    const dateB = new Date(valB);
+                    // Compare only year and month
+                    const yearMonthA = dateA.getFullYear() * 12 + dateA.getMonth();
+                    const yearMonthB = dateB.getFullYear() * 12 + dateB.getMonth();
+
+                    if (yearMonthA < yearMonthB) return order === 'asc' ? -1 : 1;
+                    if (yearMonthA > yearMonthB) return order === 'asc' ? 1 : -1;
+                    return 0;
+                }
+
+                if (typeof valA === 'number' && typeof valB === 'number') {
+                    if (valA < valB) return order === 'asc' ? -1 : 1;
+                    if (valA > valB) return order === 'asc' ? 1 : -1;
+                    return 0;
+                }
+
+                // Fallback to string comparison for others
+                valA = String(valA).toLowerCase();
+                valB = String(valB).toLowerCase();
+
+                if (valA < valB) return order === 'asc' ? -1 : 1;
+                if (valA > valB) return order === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+
+        // --- Change Log Function ---
+        function addChangeLogEntry(type, memberNickname, details) {
+            const timestamp = new Date().toLocaleString('id-ID', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            changeLog.unshift({ // Add to the beginning to show newest first
+                timestamp: timestamp,
+                type: type,
+                nickname: memberNickname,
+                details: details
+            });
+            saveChangeLog();
+            renderChangeLog();
+        }
+
+        function renderChangeLog() {
+            changeLogContainer.innerHTML = '';
+            if (changeLog.length === 0) {
+                noChangeLogMessage.classList.remove('hidden');
+            } else {
+                noChangeLogMessage.classList.add('hidden');
+                changeLog.forEach(entry => {
+                    const logItem = document.createElement('div');
+                    logItem.className = `change-log-entry ${entry.type}`;
+                    let detailsHtml = '';
+
+                    if (entry.type === 'add') {
+                        detailsHtml = `Anggota baru <strong>${entry.nickname}</strong> ditambahkan.`;
+                    } else if (entry.type === 'update') {
+                        detailsHtml = `Data anggota <strong>${entry.nickname}</strong> diperbarui:`;
+                        detailsHtml += '<ul>';
+                        entry.details.forEach(detail => {
+                             // Format joinTime for display in log
+                            let oldValueDisplay = detail.oldValue;
+                            let newValueDisplay = detail.newValue;
+                            if (detail.field === 'Waktu Join' && oldValueDisplay !== 'kosong') {
+                                oldValueDisplay = new Date(oldValueDisplay).toLocaleString('id-ID', { year: 'numeric', month: 'long' });
+                            }
+                            if (detail.field === 'Waktu Join' && newValueDisplay !== 'kosong') {
+                                newValueDisplay = new Date(newValueDisplay).toLocaleString('id-ID', { year: 'numeric', month: 'long' });
+                            }
+                            detailsHtml += `<li><strong>${detail.field}</strong>: dari "${oldValueDisplay}" menjadi "${newValueDisplay}"</li>`;
+                        });
+                        detailsHtml += '</ul>';
+                    } else if (entry.type === 'delete') {
+                        detailsHtml = `Anggota <strong>${entry.nickname}</strong> dihapus.`;
+                    } else if (entry.type === 'import_overwrite') {
+                        detailsHtml = `Semua data anggota ditimpa dari impor ${entry.nickname.includes('(JSON)') ? 'JSON' : 'data'}.`;
+                    } else if (entry.type === 'import_merge') {
+                        detailsHtml = `Data anggota digabungkan dari impor ${entry.nickname.includes('(JSON)') ? 'JSON' : 'data'}.`;
+                        if (Array.isArray(entry.details)) {
+                            detailsHtml += '<ul>';
+                            entry.details.forEach(detail => {
+                                if (detail.type === 'add') {
+                                    detailsHtml += `<li>Menambahkan anggota: <strong>${detail.nickname}</strong></li>`;
+                                } else if (detail.type === 'update') {
+                                    detailsHtml += `<li>Memperbarui anggota: <strong>${detail.nickname}</strong>`;
+                                    detailsHtml += '<ul>';
+                                    detail.details.forEach(subDetail => {
+                                        let oldValueDisplay = subDetail.oldValue;
+                                        let newValueDisplay = subDetail.newValue;
+                                        if (subDetail.field === 'Waktu Join' && oldValueDisplay !== 'kosong') {
+                                            oldValueDisplay = new Date(oldValueDisplay).toLocaleString('id-ID', { year: 'numeric', month: 'long' });
+                                        }
+                                        if (subDetail.field === 'Waktu Join' && newValueDisplay !== 'kosong') {
+                                            newValueDisplay = new Date(newValueDisplay).toLocaleString('id-ID', { year: 'numeric', month: 'long' });
+                                        }
+                                        detailsHtml += `<li><strong>${subDetail.field}</strong>: dari "${oldValueDisplay}" menjadi "${newValueDisplay}"</li>`;
+                                    });
+                                    detailsHtml += '</ul></li>';
+                                }
+                            });
+                            detailsHtml += '</ul>';
+                        } else {
+                            detailsHtml += `<br>${entry.details}`; // Fallback for simple string messages
+                        }
+                    }
+
+
+                    logItem.innerHTML = `
+                        <span class="timestamp">${entry.timestamp}</span>
+                        ${detailsHtml}
+                    `;
+                    changeLogContainer.appendChild(logItem);
+                });
+            }
+        }
+
+        // --- Render Functions (Main) ---
+
+        function renderAllContent() {
+            renderOrganizationStructure();
+            renderThLevelChart(); // This will now render based on currentChartType
+            renderMembers(); // This function handles both card and table view
+            renderChangeLog(); // Render the change log
+            updateViewToggleButton(); // Set initial button text
+            updateChartToggleButton(); // Set initial chart button text
+            updateLeaderPositionOption(); // Re-check leader status after any data changes
+        }
+
+        // --- Member Management ---
+
+        // Renders members in the Organization Structure (pills)
+        function renderOrganizationStructure() {
+            leaderList.innerHTML = '';
+            coLeaderListOrg.innerHTML = '';
+            elderListOrg.innerHTML = '';
+            memberListOrg.innerHTML = '';
+
+            let hasLeader = false;
+
+            members.forEach(member => {
+                const li = document.createElement('li');
+                li.textContent = member.nickname;
+                if (member.position === 'Leader') {
+                    leaderList.appendChild(li);
+                    hasLeader = true;
+                } else if (member.position === 'Co Leader') {
+                    coLeaderListOrg.appendChild(li);
+                } else if (member.position === 'Elder') {
+                    elderListOrg.appendChild(li);
+                } else if (member.position === 'Member') {
+                    memberListOrg.appendChild(li);
+                }
+            });
+
+            // Show/hide default leader message
+            if (hasLeader) {
+                defaultLeaderMessage.classList.add('hidden');
+            } else {
+                defaultLeaderMessage.classList.remove('hidden');
+                leaderList.appendChild(defaultLeaderMessage); // Ensure it's in the list
+            }
+        }
+
+        // Function to manage Leader option in Position dropdown
+        function updateLeaderPositionOption() {
+            const hasLeader = members.some(member => member.position === 'Leader');
+            
+            // Get current member ID if in edit mode
+            const memberIdInput = document.getElementById('memberId');
+            const editingMemberId = memberIdInput ? memberIdInput.value : null;
+            const memberBeingEditedIsLeader = editingMemberId && members.find(m => m.id === editingMemberId && m.position === 'Leader');
+
+            if (hasLeader && !memberBeingEditedIsLeader) {
+                leaderPositionOption.disabled = true; // Disable "Leader" option if leader exists AND we're not editing that leader
+                // If currently "Leader" is selected in add mode, reset it
+                if (!editingMemberId && positionSelect.value === 'Leader') {
+                    positionSelect.value = '';
+                    showToast('Role Leader sudah terisi. Anda tidak bisa menambah Leader lagi.', 'info');
+                }
+            } else {
+                leaderPositionOption.disabled = false; // Enable "Leader" option if no leader exists or if editing the current leader
+            }
+        }
+        
+        // Renders members based on current view mode (cards or table)
+        function renderMembers() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const filteredMembers = members.filter(member => {
+                const nicknameMatch = member.nickname ? member.nickname.toLowerCase().includes(searchTerm) : false;
+                const realnameMatch = member.realname ? member.realname.toLowerCase().includes(searchTerm) : false;
+                return nicknameMatch || realnameMatch;
+            });
+            const sortedMembers = applySort(filteredMembers, sortDropdown.value);
+
+            if (currentViewMode === 'card') {
+                renderMembersInCards(sortedMembers);
+            } else {
+                renderMembersInTable(sortedMembers);
+            }
+
+            // Update general "No members" message
+            if (members.length === 0) {
+                noAnyMembersMessage.textContent = 'Belum ada anggota yang terdaftar di klan ini.';
+                noAnyMembersMessage.classList.remove('hidden');
+            } else if (filteredMembers.length === 0) {
+                noAnyMembersMessage.textContent = 'Tidak ada anggota yang ditemukan sesuai kriteria.';
+                noAnyMembersMessage.classList.remove('hidden');
+            } else {
+                noAnyMembersMessage.classList.add('hidden');
+            }
+
+            // Ensure event listeners are attached after rendering
+            addMemberActionListeners();
+        }
+
+        // Renders members in the Card View (grouped by position)
+        function renderMembersInCards(membersToRender) {
+            cardView.classList.remove('hidden');
+            tableView.classList.add('hidden');
+
+            coLeaderCards.innerHTML = '';
+            elderCards.innerHTML = '';
+            memberCards.innerHTML = '';
+
+            let hasCoLeaders = false;
+            let hasElders = false;
+            let hasMembersInGroup = false;
+
+            membersToRender.forEach(member => {
+                // Exclude Leader from cards as they are already displayed at the top
+                if (member.position === 'Leader') return; 
+
+                const memberCard = createMemberCard(member);
+                if (member.position === 'Co Leader') {
+                    coLeaderCards.appendChild(memberCard);
+                    hasCoLeaders = true;
+                } else if (member.position === 'Elder') {
+                    elderCards.appendChild(memberCard);
+                    hasElders = true;
+                } else if (member.position === 'Member') {
+                    memberCards.appendChild(memberCard);
+                    hasMembersInGroup = true;
+                }
+            });
+
+            noCoLeadersMessage.classList.toggle('hidden', hasCoLeaders);
+            noEldersMessage.classList.toggle('hidden', hasElders);
+            noMembersInGroupMessage.classList.toggle('hidden', hasMembersInGroup);
+        }
+
+        // Renders members in the Table View
+        function renderMembersInTable(membersToRender) {
+            cardView.classList.add('hidden');
+            tableView.classList.remove('hidden');
+
+            memberTableBody.innerHTML = ''; // Clear existing rows
+
+            if (membersToRender.length === 0) {
+                // The general noAnyMembersMessage will handle this.
+                return;
+            }
+
+            membersToRender.forEach(member => {
+                const row = document.createElement('tr');
+                const joinDateFormatted = member.joinTime ? new Date(member.joinTime).toLocaleString('id-ID', { year: 'numeric', month: 'long' }) : '-';
+                row.innerHTML = `
+                    <td>${member.nickname || '-'}</td>
+                    <td>${member.realname || '-'}</td>
+                    <td>${member.origin || '-'}</td>
+                    <td>${member.age || '-'}</td>
+                    <td class="th-level-cell">
+                        ${member.thLevel ? `<img src="${getThImage(member.thLevel)}" alt="TH ${member.thLevel}" class="th-level-icon" onerror="this.onerror=null;this.src='https://via.placeholder.com/28/cccccc/888888?text=TH';"> TH ${member.thLevel}` : '-'}
+                    </td>
+                    <td>${member.position || '-'}</td>
+                    <td>${joinDateFormatted}</td>
+                    <td>
+                        <button class="btn-edit text-sm px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded" data-id="${member.id}">Edit</button>
+                        <button class="btn-delete text-sm px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded" data-id="${member.id}">Hapus</button>
+                    </td>
+                `;
+                memberTableBody.appendChild(row);
+            });
+        }
+
+        // Creates a single member card HTML element
+        function createMemberCard(member) {
+            const card = document.createElement('div');
+            card.className = 'member-card';
+            const joinDateFormatted = member.joinTime ? new Date(member.joinTime).toLocaleString('id-ID', { year: 'numeric', month: 'long' }) : '-';
+
+            card.innerHTML = `
+                <div class="card-content">
+                    <h3 class="member-card-title">
+                        ${member.thLevel ? `<img src="${getThImage(member.thLevel)}" alt="TH ${member.thLevel}" class="th-level-icon" onerror="this.onerror=null;this.src='https://via.placeholder.com/28/cccccc/888888?text=TH';">` : ''}
+                        ${member.nickname}
+                    </h3>
+                    <p><strong>Nama Asli:</strong> ${member.realname || '-'}</p>
+                    <p><strong>Asal:</strong> ${member.origin || '-'}</p>
+                    <p><strong>Umur:</strong> ${member.age || '-'}</p>
+                    <p><strong>Posisi:</strong> ${member.position || '-'}</p>
+                    <p><strong>Waktu Join:</strong> ${joinDateFormatted}</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-edit" data-id="${member.id}">Edit</button>
+                    <button class="btn-delete" data-id="${member.id}">Hapus</button>
+                </div>
+            `;
+            return card;
+        }
+
+        // Add event listeners to Edit and Delete buttons on member cards/table rows
+        function addMemberActionListeners() {
+            document.querySelectorAll('.btn-edit').forEach(button => {
+                button.onclick = (e) => editMember(e.target.dataset.id);
+            });
+            document.querySelectorAll('.btn-delete').forEach(button => {
+                button.onclick = (e) => deleteMember(e.target.dataset.id);
+            });
+        }
+        
+        // Function to populate month and year dropdowns for joinTime
+        function populateMonthYearDropdowns() {
+            const months = [
+                { value: '01', text: 'Januari' }, { value: '02', text: 'Februari' }, { value: '03', text: 'Maret' },
+                { value: '04', text: 'April' }, { value: '05', text: 'Mei' }, { value: '06', text: 'Juni' },
+                { value: '07', text: 'Juli' }, { value: '08', text: 'Agustus' }, { value: '09', text: 'September' },
+                { value: '10', text: 'Oktober' }, { value: '11', text: 'November' }, { value: '12', text: 'Desember' }
+            ];
+            const currentYear = new Date().getFullYear();
+            const yearLimit = currentYear + 78; // Calculate the year 78 years from now
+
+            // Clear existing options
+            joinMonthSelect.innerHTML = '<option value="">Pilih Bulan</option>';
+            joinYearSelect.innerHTML = '<option value="">Pilih Tahun</option>';
+
+            months.forEach((month, index) => {
+                const option = document.createElement('option');
+                option.value = month.value;
+                option.textContent = month.text;
+                joinMonthSelect.appendChild(option);
+            });
+
+            // Populate years from 5 years ago to 78 years from now
+            for (let i = currentYear - 5; i <= yearLimit; i++) { // MODIFIED LINE
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                joinYearSelect.appendChild(option);
+            }
+        }
+
+        // Form submission (Add/Update member)
+        memberForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Client-side validation for required fields
+            const nicknameInput = document.getElementById('nickname');
+            const thLevelInput = document.getElementById('thLevel');
+            const positionInput = document.getElementById('position');
+            const selectedMonth = joinMonthSelect.value;
+            const selectedYear = joinYearSelect.value;
+
+            if (!nicknameInput.value.trim()) {
+                showToast('Nickname wajib diisi!', 'error');
+                return;
+            }
+            if (!thLevelInput.value) {
+                showToast('Level Town Hall wajib diisi!', 'error');
+                return;
+            }
+            if (!positionInput.value) {
+                showToast('Posisi Jabatan wajib diisi!', 'error');
+                return;
+            }
+            if (!selectedMonth || !selectedYear) {
+                showToast('Bulan dan Tahun Join Klan wajib diisi!', 'error');
+                return;
+            }
+
+            // Construct joinTime string as "YYYY-MM-01T00:00" for consistency
+            // This allows Date objects to be created properly while only using month and year from input
+            const joinTimeValue = `${selectedYear}-${selectedMonth}-01T00:00`;
+
+            const currentMemberData = {
+                id: document.getElementById('memberId')?.value,
+                nickname: nicknameInput.value.trim(),
+                realname: document.getElementById('realname').value.trim() || null,
+                origin: document.getElementById('origin').value.trim() || null,
+                age: document.getElementById('age').value ? parseInt(document.getElementById('age').value) : null,
+                thLevel: thLevelInput.value ? parseInt(thLevelInput.value) : null,
+                position: positionInput.value || null,
+                joinTime: joinTimeValue
+            };
+
+            const isEdit = members.findIndex(m => m.id === currentMemberData.id) > -1;
+
+            if (isEdit) {
+                const oldMember = members.find(m => m.id === currentMemberData.id);
+
+                // Check for duplicate nickname during edit (excluding current member)
+                if (members.some(m => m.nickname.toLowerCase() === currentMemberData.nickname.toLowerCase() && m.id !== currentMemberData.id)) {
+                    showToast('Nickname sudah ada. Harap gunakan nickname lain!', 'error');
+                    return;
+                }
+
+                // Leader role handling during edit
+                // If trying to change a Leader's role to something else, disallow
+                if (oldMember.position === 'Leader' && currentMemberData.position !== 'Leader') {
+                    showToast('Role Leader tidak bisa diubah. Harap hapus Leader saat ini dan tambahkan yang baru jika perlu.', 'error');
+                    return;
+                } 
+                // If trying to assign Leader role to a non-leader, but a leader already exists
+                else if (currentMemberData.position === 'Leader' && oldMember.position !== 'Leader') {
+                     const existingLeader = members.find(m => m.position === 'Leader');
+                     if (existingLeader && existingLeader.id !== currentMemberData.id) { // Ensure it's not the same person if ID somehow changed
+                        showToast('Sudah ada Leader terdaftar. Hanya bisa ada satu Leader.', 'error');
+                        return;
+                    }
+                }
+
+                const changes = [];
+                const fieldsToCompare = ["nickname", "realname", "origin", "age", "thLevel", "position", "joinTime"];
+
+                fieldsToCompare.forEach(field => {
+                    // Normalize null/undefined/empty string to null for consistent comparison
+                    const oldValue = (oldMember[field] === null || oldMember[field] === undefined || String(oldMember[field]).trim() === '') ? null : oldMember[field];
+                    const newValue = (currentMemberData[field] === null || currentMemberData[field] === undefined || String(currentMemberData[field]).trim() === '') ? null : currentMemberData[field];
+                    
+                    if ((field === 'age' || field === 'thLevel')) {
+                        // Compare numbers directly, handling null as distinct
+                        if (oldValue !== newValue) {
+                            changes.push({
+                                field: field === 'age' ? "Umur" : "TH Level",
+                                oldValue: oldValue === null ? 'kosong' : String(oldValue),
+                                newValue: newValue === null ? 'kosong' : String(newValue)
+                            });
+                        }
+                    } else if (oldValue === null && newValue === null) {
+                        return; // Both null, no change
+                    } else if (oldValue === null && newValue !== null) {
+                        changes.push({
+                            field: field === 'nickname' ? "Nickname" : field === 'realname' ? "Nama Asli" : field === 'origin' ? "Asal" : field === 'position' ? "Posisi Jabatan" : field === 'joinTime' ? "Waktu Join" : field,
+                            oldValue: 'kosong',
+                            newValue: String(newValue)
+                        });
+                        return;
+                    } else if (oldValue !== null && newValue === null) {
+                        changes.push({
+                            field: field === 'nickname' ? "Nickname" : field === 'realname' ? "Nama Asli" : field === 'origin' ? "Asal" : field === 'position' ? "Posisi Jabatan" : field === 'joinTime' ? "Waktu Join" : field,
+                            oldValue: String(oldValue),
+                            newValue: 'kosong'
+                        });
+                        return;
+                    } else if (String(oldValue) !== String(newValue)) { // Fallback to string comparison
+                        changes.push({
+                            field: field === 'nickname' ? "Nickname" : field === 'realname' ? "Nama Asli" : field === 'origin' ? "Asal" : field === 'position' ? "Posisi Jabatan" : field === 'joinTime' ? "Waktu Join" : field,
+                            oldValue: String(oldValue),
+                            newValue: String(newValue)
+                        });
+                    }
+                });
+
+                members = members.map(m => m.id === currentMemberData.id ? currentMemberData : m);
+                if (changes.length > 0) {
+                    addChangeLogEntry('update', currentMemberData.nickname, changes);
+                    showToast('Data anggota berhasil diperbarui!', 'success');
+                } else {
+                    showToast('Tidak ada perubahan data yang terdeteksi.', 'info');
+                }
+                
+            } else { // Adding new member
+                // Check for duplicate nickname when adding new member
+                if (members.some(m => m.nickname.toLowerCase() === currentMemberData.nickname.toLowerCase())) {
+                    showToast('Nickname sudah ada. Harap gunakan nickname lain!', 'error');
+                    return;
+                }
+                // Check for Leader role when adding new member
+                if (currentMemberData.position === 'Leader') {
+                    const existingLeader = members.find(m => m.position === 'Leader');
+                    if (existingLeader) {
+                        showToast('Sudah ada Leader terdaftar. Hanya bisa ada satu Leader.', 'error');
+                        return;
+                    }
+                }
+
+                currentMemberData.id = Date.now().toString() + Math.random().toString(16).slice(2); // Assign a new unique ID
+                members.push(currentMemberData);
+                addChangeLogEntry('add', currentMemberData.nickname, currentMemberData);
+                showToast('Anggota baru berhasil ditambahkan!', 'success');
+            }
+
+            saveMembers();
+            renderAllContent(); // Re-render all parts after member change
+            memberForm.reset();
+            thLevelSelect.value = ''; // Reset TH level dropdown
+            positionSelect.value = ''; // Reset position dropdown
+            // Reset join time dropdowns to default (current month/year)
+            const today = new Date();
+            joinMonthSelect.value = (today.getMonth() + 1).toString().padStart(2, '0');
+            joinYearSelect.value = today.getFullYear();
+            
+            document.querySelector('.btn-primary').textContent = 'Tambah Anggota';
+            const memberIdInput = document.getElementById('memberId');
+            if (memberIdInput) memberIdInput.remove(); // Remove hidden ID input after successful add/update
+        });
+
+        function editMember(id) {
+            const memberToEdit = members.find(member => member.id === id);
+            if (memberToEdit) {
+                document.getElementById('nickname').value = memberToEdit.nickname;
+                document.getElementById('realname').value = memberToEdit.realname || '';
+                document.getElementById('origin').value = memberToEdit.origin || '';
+                document.getElementById('age').value = memberToEdit.age || '';
+                document.getElementById('thLevel').value = memberToEdit.thLevel || '';
+                document.getElementById('position').value = memberToEdit.position || '';
+
+                // Populate join month and year dropdowns
+                if (memberToEdit.joinTime) {
+                    const joinDate = new Date(memberToEdit.joinTime);
+                    joinMonthSelect.value = (joinDate.getMonth() + 1).toString().padStart(2, '0');
+                    joinYearSelect.value = joinDate.getFullYear();
+                } else {
+                    joinMonthSelect.value = '';
+                    joinYearSelect.value = '';
+                }
+
+                let memberIdInput = document.getElementById('memberId');
+                if (!memberIdInput) {
+                    memberIdInput = document.createElement('input');
+                    memberIdInput.type = 'hidden';
+                    memberIdInput.id = 'memberId';
+                    memberIdInput.name = 'memberId';
+                    memberForm.appendChild(memberIdInput);
+                }
+                memberIdInput.value = memberToEdit.id;
+
+                // Call this to enable/disable leader option correctly for editing
+                updateLeaderPositionOption(); 
+
+                document.querySelector('.btn-primary').textContent = 'Update Anggota';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function deleteMember(id) {
+            const memberToDelete = members.find(member => member.id === id);
+            if (memberToDelete && confirm(`Apakah Anda yakin ingin menghapus anggota ${memberToDelete.nickname}? Aksi ini tidak bisa dibatalkan.`)) {
+                members = members.filter(member => member.id !== id);
+                saveMembers();
+                addChangeLogEntry('delete', memberToDelete.nickname, memberToDelete);
+                renderAllContent(); // Re-render all parts after member change
+                showToast('Anggota berhasil dihapus!', 'success');
+                // If the form was in edit mode for this member, reset it
+                const memberIdInput = document.getElementById('memberId');
+                if (memberIdInput && memberIdInput.value === id) {
+                    memberForm.reset();
+                    thLevelSelect.value = '';
+                    positionSelect.value = '';
+                    const today = new Date();
+                    joinMonthSelect.value = (today.getMonth() + 1).toString().padStart(2, '0');
+                    joinYearSelect.value = today.getFullYear();
+                    document.querySelector('.btn-primary').textContent = 'Tambah Anggota';
+                    memberIdInput.remove();
+                }
+            }
+        }
+
+        // --- Data Visualization (Chart.js) ---
+
+        function renderThLevelChart() {
+            if (thChartInstance) {
+                thChartInstance.destroy(); // Destroy previous chart instance
+            }
+
+            const thLevels = members.map(m => m.thLevel).filter(th => th !== null);
+            const thCounts = {};
+            thLevels.forEach(th => {
+                thCounts[th] = (thCounts[th] || 0) + 1;
+            });
+
+            const uniqueThLevels = Object.keys(thCounts).map(Number).sort((a, b) => a - b);
+            const labels = uniqueThLevels.map(th => `TH ${th}`);
+            const data = uniqueThLevels.map(th => thCounts[th]);
+
+            // Define a palette of colors for the chart segments
+            const backgroundColors = [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED',
+                '#A3E635', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#84CC16', '#EF4444',
+                '#3B82F6', '#F97316', '#A855F7'
+            ];
+            const borderColors = [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED',
+                '#A3E635', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#84CC16', '#EF4444',
+                '#3B82F6', '#F97316', '#A855F7'
+            ];
+
+
+            if (members.length === 0 || uniqueThLevels.length === 0) {
+                thLevelChartCanvas.style.display = 'none';
+                noChartDataMessage.classList.remove('hidden');
+                return;
+            } else {
+                thLevelChartCanvas.style.display = 'block';
+                noChartDataMessage.classList.add('hidden');
+            }
+
+            const ctx = thLevelChartCanvas.getContext('2d');
+            
+            if (currentChartType === 'bar') {
+                thChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels.sort((a, b) => parseInt(b.replace('TH ', '')) - parseInt(a.replace('TH ', ''))), // Descending for bar
+                        datasets: [{
+                            label: 'Jumlah Anggota',
+                            data: labels.sort((a, b) => parseInt(b.replace('TH ', '')) - parseInt(a.replace('TH ', ''))).map(label => thCounts[parseInt(label.replace('TH ', ''))] || 0),
+                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // Makes it a horizontal bar chart, better for mobile portrait
+                        responsive: true,
+                        maintainAspectRatio: false, // Allows height to adjust
+                        aspectRatio: 1.5, // Adjust this for better portrait fit (e.g., 1.5 for wider than tall)
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: { precision: 0 },
+                                title: { display: true, text: 'Jumlah Anggota', font: { size: 14, weight: 'bold' } }
+                            },
+                            y: {
+                                title: { display: true, text: 'Level Town Hall (TH)', font: { size: 14, weight: 'bold' } }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: 'Distribusi Level Town Hall Klan',
+                                font: { size: 18, weight: 'bold' },
+                                color: '#1e3a8a'
+                            }
+                        }
+                    }
+                });
+            } else if (currentChartType === 'pie') {
+                thChartInstance = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: backgroundColors.slice(0, labels.length),
+                            borderColor: borderColors.slice(0, labels.length),
+                            borderWidth: 2 // Make borders slightly thicker for a "defined" look
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        aspectRatio: 1, // Keep it square for good pie chart shape
+                        plugins: {
+                            legend: {
+                                position: 'right', // Position legend to the right
+                                labels: {
+                                    font: {
+                                        size: 14
+                                    },
+                                    // Custom label generation to include percentage
+                                    generateLabels: function(chart) {
+                                        const data = chart.data;
+                                        if (data.labels.length && data.datasets.length) {
+                                            const total = data.datasets[0].data.reduce((sum, value) => sum + value, 0);
+                                            return data.labels.map((label, i) => {
+                                                const value = data.datasets[0].data[i];
+                                                const percentage = total > 0 ? ((value / total) * 100).toFixed(1) + '%' : '0%';
+                                                return {
+                                                    text: `${label}: ${value} (${percentage})`, // Label with count and percentage
+                                                    fillStyle: data.datasets[0].backgroundColor[i],
+                                                    strokeStyle: data.datasets[0].borderColor[i],
+                                                    lineWidth: data.datasets[0].borderWidth,
+                                                    hidden: !chart.isDatasetVisible(0) || chart.getDatasetMeta(0).data[i].hidden,
+                                                    index: i
+                                                };
+                                            });
+                                        }
+                                        return [];
+                                    }
+                                }
+                            },
+                            tooltip: { // Show percentage in tooltip
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            const total = context.dataset.data.reduce((sum, current) => sum + current, 0);
+                                            const currentValue = context.parsed;
+                                            const percentage = ((currentValue / total) * 100).toFixed(1) + '%';
+                                            label += `${currentValue} (${percentage})`;
+                                        }
+                                        return label;
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Persentase Distribusi Level Town Hall Klan',
+                                font: { size: 18, weight: 'bold' },
+                                color: '#1e3a8a'
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // --- Utility Button Functions (JSON for export/import) ---
+
+        // Export data to JSON
+        exportJsonBtn.addEventListener('click', () => {
+            if (members.length === 0) {
+                showToast('Tidak ada data anggota untuk diekspor!', 'error');
+                return;
+            }
+
+            const jsonString = JSON.stringify(members, null, 2); // null, 2 for pretty-printing
+            const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', 'data_member_coc.json');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('Data berhasil diekspor!', 'success');
+        });
+
+        // Trigger hidden file input for Import JSON
+        importJsonBtn.addEventListener('click', () => {
+            importJsonInput.click();
+        });
+
+        // Import data from JSON
+        importJsonInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                try {
+                    const importedMembers = JSON.parse(text);
+
+                    if (!Array.isArray(importedMembers) || importedMembers.length === 0) {
+                        showToast('File JSON kosong atau format tidak sesuai. Pastikan berisi array data anggota.', 'error');
+                        return;
+                    }
+
+                    // Optional: Basic validation to check if imported data looks like member data
+                    const isValidData = importedMembers.every(m => m.id && m.nickname);
+                    if (!isValidData) {
+                        showToast('Format data JSON tidak valid. Pastikan setiap anggota memiliki ID dan Nickname.', 'error');
+                        return;
+                    }
+
+                    if (confirm('Apakah Anda ingin menimpa data anggota yang ada dengan data dari file ini? Klik OK untuk menimpa, atau Cancel untuk menggabungkan (data baru akan ditambahkan, data lama dengan ID/Nickname sama akan diupdate).')) {
+                        // Clear change log before overwriting to avoid confusion
+                        changeLog = []; // Clear log for full overwrite
+                        members = importedMembers; // Overwrite
+                        addChangeLogEntry('import_overwrite', 'Data anggota (JSON)', 'Semua data anggota ditimpa dari impor.'); // Log this action
+                    } else {
+                        // Merge logic
+                        const changesDuringMerge = [];
+                        importedMembers.forEach(importedMember => {
+                            // Find existing member by ID first, then by nickname if ID not found
+                            const existingIndex = members.findIndex(m => m.id === importedMember.id);
+                            let memberToUpdateIndex = existingIndex;
+
+                            // If not found by ID, try finding by nickname
+                            if (memberToUpdateIndex === -1 && importedMember.nickname) {
+                                memberToUpdateIndex = members.findIndex(m => m.nickname && m.nickname.toLowerCase() === importedMember.nickname.toLowerCase());
+                            }
+
+                            if (memberToUpdateIndex > -1) {
+                                // Update existing member and log changes
+                                const oldMember = members[memberToUpdateIndex];
+                                const currentChanges = [];
+                                const fieldsToCompare = ["nickname", "realname", "origin", "age", "thLevel", "position", "joinTime"]; 
+
+                                fieldsToCompare.forEach(field => {
+                                    const oldValue = oldMember[field] === undefined || oldMember[field] === null || String(oldMember[field]).trim() === '' ? null : oldMember[field];
+                                    const newValue = importedMember[field] === undefined || importedMember[field] === null || String(importedMember[field]).trim() === '' ? null : importedMember[field];
+                                    
+                                    // Compare values, being careful with null/undefined vs empty string
+                                    if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
+                                        currentChanges.push({
+                                            field: field === 'nickname' ? "Nickname" : field === 'realname' ? "Nama Asli" : field === 'origin' ? "Asal" : field === 'position' ? "Posisi Jabatan" : field === 'joinTime' ? "Waktu Join" : field,
+                                            oldValue: oldValue === null ? 'kosong' : String(oldValue),
+                                            newValue: newValue === null ? 'kosong' : String(newValue)
+                                        });
+                                    }
+                                });
+                                members[memberToUpdateIndex] = { ...oldMember, ...importedMember }; // Merge properties, prioritizing imported
+                                if (currentChanges.length > 0) {
+                                    changesDuringMerge.push({
+                                        type: 'update',
+                                        nickname: importedMember.nickname || oldMember.nickname,
+                                        details: currentChanges
+                                    });
+                                }
+                            } else {
+                                // Add new member and log
+                                if (!importedMember.id || members.some(m => m.id === importedMember.id)) {
+                                     importedMember.id = Date.now().toString() + Math.random().toString(16).slice(2); // Generate a unique ID if missing or duplicate
+                                }
+                                members.push(importedMember);
+                                changesDuringMerge.push({
+                                    type: 'add',
+                                    nickname: importedMember.nickname,
+                                    details: importedMember
+                                });
+                            }
+                        });
+                         if (changesDuringMerge.length > 0) {
+                            addChangeLogEntry('import_merge', 'Data anggota (JSON)', changesDuringMerge);
+                        } else if (members.length > 0) {
+                            addChangeLogEntry('import_merge', 'Data anggota (JSON)', 'File diimpor, tidak ada data baru atau perubahan yang terdeteksi.');
+                        } else {
+                             addChangeLogEntry('import_merge', 'Data anggota (JSON)', 'File diimpor, tidak ada anggota ditemukan dalam file.');
+                        }
+                    }
+
+                    saveMembers();
+                    renderAllContent();
+                    showToast('Data berhasil diimpor!', 'success');
+                } catch (error) {
+                    console.error("Error importing JSON:", error);
+                    showToast('Gagal mengimpor. Pastikan format file benar dan tidak rusak.', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // Clear file input
+        });
+
+        // Download PDF
+        downloadPdfBtn.addEventListener('click', async () => {
+            const element = document.getElementById('memberListView');
+
+            // Temporarily hide elements not desired in PDF
+            document.querySelectorAll('.member-card .card-actions, .btn-edit, .btn-delete, #searchInput, #sortDropdown, .utility-buttons, #toggleChartTypeBtn').forEach(el => el.style.visibility = 'hidden');
+
+
+            // If in table view, ensure table headers and cells have background for PDF
+            const tableHeaders = document.querySelectorAll('.data-table th');
+            const originalThBgColors = Array.from(tableHeaders).map(th => th.style.backgroundColor);
+            tableHeaders.forEach(th => th.style.backgroundColor = '#f0f4f8'); // Ensure background is applied
+
+            try {
+                // Ensure the chart is rendered for PDF if it's currently hidden
+                const chartContainer = document.querySelector('.chart-container');
+                const chartCanvas = document.getElementById('thLevelChart');
+                const noChartMsg = document.getElementById('noChartDataMessage');
+
+                let chartWasHidden = false;
+                if (chartCanvas.style.display === 'none' && members.length > 0) { // Only force render if there's data
+                    chartWasHidden = true;
+                    chartCanvas.style.display = 'block'; // Show canvas
+                    noChartMsg.classList.add('hidden'); // Hide no data message
+                    renderThLevelChart(); // Re-render the chart
+                    // Wait a moment for chart to render fully
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                // Capture both main content and chart
+                const elementsToCapture = [document.querySelector('.container h1'), document.querySelector('.container .mb-12:first-of-type'), document.querySelector('.chart-container'), document.getElementById('memberListView'), document.querySelector('.change-log-section')];
+                 
+                // Create a temporary div to hold all elements for capture
+                const tempDiv = document.createElement('div');
+                tempDiv.style.width = '210mm'; // A4 width
+                tempDiv.style.padding = '20mm'; // Add some padding for margins
+                tempDiv.style.backgroundColor = '#ffffff'; // Ensure white background
+                tempDiv.style.position = 'absolute';
+                tempDiv.style.left = '-9999px'; // Move off-screen
+                document.body.appendChild(tempDiv);
+
+                // Clone relevant sections and append to tempDiv
+                const sections = ['h1', '.mb-12:nth-of-type(1)', '.chart-container', '#memberListView', '.mb-12:nth-of-type(5)']; // Select by type or specific classes
+                sections.forEach(selector => {
+                    const el = document.querySelector(selector);
+                    if (el) {
+                        const clonedEl = el.cloneNode(true);
+                        // Remove action buttons from cloned member cards
+                        clonedEl.querySelectorAll('.member-card .card-actions, .btn-edit, .btn-delete, #searchInput, #sortDropdown, .utility-buttons, #toggleChartTypeBtn').forEach(btn => btn.remove());
+                        // Ensure table headers have background
+                        clonedEl.querySelectorAll('.data-table th').forEach(th => th.style.backgroundColor = '#f0f4f8');
+                        tempDiv.appendChild(clonedEl);
+                    }
+                });
+
+                // Re-render chart inside the cloned chart container if needed
+                const clonedChartCanvas = tempDiv.querySelector('#thLevelChart');
+                if (clonedChartCanvas) {
+                    const clonedChartCtx = clonedChartCanvas.getContext('2d');
+                    // Need to create a new Chart instance for the cloned canvas
+                    // This is simplified, in a real app you'd rebuild the chart data/options
+                    // For now, it will simply be a blank canvas or just the last rendered one.
+                    // To actually render it, you'd need to re-run the renderThLevelChart logic
+                    // on the *cloned* canvas. This is complex for html2canvas and chart.js interaction.
+                    // A simpler approach for charts in PDF is to convert chart to image separately.
+                    // For this example, it might appear blank or less detailed for PDF.
+                    // Let's ensure it's visible though.
+                    clonedChartCanvas.style.display = 'block';
+                    tempDiv.querySelector('#noChartDataMessage')?.classList.add('hidden');
+
+                    // If a chart instance exists, try to re-draw it on the cloned canvas for PDF
+                    if (thChartInstance) {
+                        const originalChartConfig = thChartInstance.config;
+                        // Create a new chart instance for the cloned canvas, reusing config
+                        new Chart(clonedChartCtx, originalChartConfig);
+                    }
+                }
+
+
+                const canvas = await html2canvas(tempDiv, { scale: 2, logging: false, useCORS: true, backgroundColor: '#ffffff' });
+                document.body.removeChild(tempDiv); // Remove temp div after capture
+
+                const imgData = canvas.toDataURL('image/png');
+                
+                const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
+                const imgWidth = 210;
+                const pageHeight = 297;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save('data_member_coc.pdf');
+                showToast('Data berhasil diekspor ke PDF!', 'success');
+            } catch (error) {
+                console.error("Error generating PDF:", error);
+                showToast('Gagal membuat PDF. Coba lagi!', 'error');
+            } finally {
+                // Restore visibility and original styles
+                document.querySelectorAll('.member-card .card-actions, .btn-edit, .btn-delete, #searchInput, #sortDropdown, .utility-buttons, #toggleChartTypeBtn').forEach(el => el.style.visibility = 'visible');
+                tableHeaders.forEach((th, index) => th.style.backgroundColor = originalThBgColors[index]);
+                if (thChartInstance) {
+                    thChartInstance.destroy(); // Destroy the chart instance created for PDF
+                }
+                renderThLevelChart(); // Re-render the original chart
+            }
+        });
+
+        // Reset Data Function
+        resetDataBtn.addEventListener('click', () => {
+            if (confirm('Apakah Anda yakin ingin menghapus SEMUA data anggota dan riwayat perubahan? Aksi ini tidak bisa dibatalkan.')) {
+                members = [];
+                changeLog = [];
+                saveMembers();
+                saveChangeLog();
+                renderAllContent();
+                showToast('Semua data telah direset!', 'success');
+            }
+        });
+
+        // Toggle View Mode (Card vs Table)
+        toggleViewBtn.addEventListener('click', () => {
+            currentViewMode = currentViewMode === 'card' ? 'table' : 'card';
+            saveViewMode();
+            renderMembers(); // Re-render members based on the new mode
+            updateViewToggleButton();
+        });
+
+        function updateViewToggleButton() {
+            if (currentViewMode === 'card') {
+                toggleViewBtn.textContent = 'Lihat sebagai Tabel';
+            } else {
+                toggleViewBtn.textContent = 'Lihat sebagai Kartu';
+            }
+        }
+
+        // Toggle Chart Type (Bar vs Pie)
+        toggleChartTypeBtn.addEventListener('click', () => {
+            currentChartType = currentChartType === 'bar' ? 'pie' : 'bar';
+            saveChartType();
+            renderThLevelChart(); // Re-render chart based on new type
+            updateChartToggleButton();
+        });
+
+        function updateChartToggleButton() {
+            if (currentChartType === 'bar') {
+                toggleChartTypeBtn.textContent = 'Lihat Pie Chart';
+            } else {
+                toggleChartTypeBtn.textContent = 'Lihat Bar Chart';
+            }
+        }
+
+    </script>
+</body>
+</html>
