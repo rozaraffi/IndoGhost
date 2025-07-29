@@ -131,6 +131,14 @@
             background-color: #e66b00;
         }
 
+        /* New button style for Supercell Store */
+        .btn-supercell-store {
+            background-color: #4CAF50; /* Green for Supercell Store */
+        }
+        .btn-supercell-store:hover {
+            background-color: #45a049;
+        }
+
 
         .btn-whatsapp {
             background-color: #28a745; /* Green for WhatsApp */
@@ -319,18 +327,18 @@
         }
 
 
-        /* WhatsApp edit button container */
-        .whatsapp-action-group {
+        /* Action group for buttons and their edit buttons */
+        .button-action-group {
             display: flex;
             flex-direction: column; /* Stack button and edit below it */
-            gap: 10px; /* Gap between whatsapp button and its edit button */
+            gap: 10px; /* Gap between button and its edit button */
             align-items: center; /* Center horizontally */
             width: 100%; /* Take full width */
-            margin-top: 20px; /* Space from other buttons, adjust as needed */
+            margin-bottom: 10px; /* Space between groups, adjusted for aesthetics */
         }
 
-        /* Specific style for WhatsApp edit button (make it smaller) */
-        #editWhatsappLinkBtn {
+        /* Specific style for edit buttons within action groups (make them smaller) */
+        .button-action-group .edit-btn-small {
             padding: 10px 20px; /* Smaller padding */
             font-size: 1rem; /* Smaller font size */
             background-color: #ffc107; /* Same as other edit buttons */
@@ -342,7 +350,7 @@
             transform: translateY(5px); /* Slightly off-set */
             pointer-events: none; /* Make it unclickable when hidden */
         }
-        #editWhatsappLinkBtn.is-visible {
+        .button-action-group .edit-btn-small.is-visible {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
@@ -350,47 +358,12 @@
             transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
         }
 
-        #editWhatsappLinkBtn:hover {
+        .button-action-group .edit-btn-small:hover {
             background-color: #e0a800;
             transform: translateY(-2px); /* Slight lift on hover */
             box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
 
-        /* COC Link edit button container (similar to whatsapp-action-group) */
-        .coc-action-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-            width: 100%;
-            margin-top: 20px; /* Space from other buttons */
-        }
-
-        /* Specific style for COC edit button (make it smaller) */
-        #editCocLinkBtn {
-            padding: 10px 20px;
-            font-size: 1rem;
-            background-color: #ffc107;
-            color: #333;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            opacity: 0; /* Hidden by default */
-            visibility: hidden; /* Hidden by default */
-            transform: translateY(5px); /* Slightly off-set */
-            pointer-events: none; /* Make it unclickable when hidden */
-        }
-        #editCocLinkBtn.is-visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-            pointer-events: auto;
-            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-        }
-        #editCocLinkBtn:hover {
-            background-color: #e0a800;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-        }
 
         /* Admin Mode Toggle Button */
         .admin-toggle-wrapper {
@@ -457,7 +430,7 @@
             .edit-icon { width: 14px; height: 14px; }
             #editDescriptionBtn { top: 140px; right: 40px; } /* Adjusted position for smaller screens */
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 10px; }
-            #editWhatsappLinkBtn, #editCocLinkBtn { padding: 8px 15px; font-size: 0.9rem; }
+            .button-action-group .edit-btn-small { padding: 8px 15px; font-size: 0.9rem; }
             .admin-toggle-button { padding: 10px 15px; font-size: 0.85rem; }
             .admin-icon { width: 18px; height: 18px; }
             .copyright { margin-top: 40px; font-size: 0.9rem; }
@@ -499,8 +472,8 @@
             .edit-icon { width: 12px; height: 12px; }
             #editDescriptionBtn { top: 120px; right: 30px; } /* Adjusted position for smaller screens */
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 10px; }
-            .whatsapp-action-group, .coc-action-group { margin-top: 15px; }
-            #editWhatsappLinkBtn, #editCocLinkBtn { padding: 8px 15px; font-size: 0.9rem; }
+            .button-action-group { margin-top: 15px; }
+            .button-action-group .edit-btn-small { padding: 8px 15px; font-size: 0.9rem; }
             .admin-toggle-wrapper { bottom: 15px; right: 15px; }
             .admin-toggle-button { padding: 8px 12px; font-size: 0.85rem; }
             .admin-icon { width: 16px; height: 16px; }
@@ -538,7 +511,7 @@
             .edit-icon { width: 10px; height: 10px; }
             #editDescriptionBtn { top: 100px; right: 20px; } /* Adjusted position for smaller screens */
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 5px; }
-            #editWhatsappLinkBtn, #editCocLinkBtn { padding: 6px 10px; font-size: 0.8rem; }
+            .button-action-group .edit-btn-small { padding: 6px 10px; font-size: 0.8rem; }
             .admin-toggle-wrapper { bottom: 10px; right: 10px; }
             .admin-toggle-button { padding: 7px 10px; font-size: 0.75rem; }
             .admin-icon { width: 14px; height: 14px; }
@@ -566,25 +539,36 @@
                 Aturan War Clan
             </a>
             
-            <div class="coc-action-group">
+            <div class="button-action-group">
                 <a id="cocProfileButton" href="#" target="_blank" class="utility-btn btn-coc">
                     <img src="https://raw.githubusercontent.com/Clash-of-Clans-API/clash-of-clans-assets/main/other/builderbase/builderbase_1.png" alt="CoC Icon" class="btn-icon">
                     Lihat Profil Clan CoC
                 </a>
-                <button id="editCocLinkBtn" class="edit-btn">
+                <button id="editCocLinkBtn" class="edit-btn-small">
                     <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
                     Edit Tag Clan CoC
                 </button>
             </div>
 
-            <div class="whatsapp-action-group">
+            <div class="button-action-group">
                 <a id="whatsappButton" href="#" target="_blank" class="utility-btn btn-whatsapp">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Icon" class="btn-icon">
                     Gabung Grup WhatsApp
                 </a>
-                <button id="editWhatsappLinkBtn" class="edit-btn">
-                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="btn-icon">
+                <button id="editWhatsappLinkBtn" class="edit-btn-small">
+                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
                     Edit Link WhatsApp
+                </button>
+            </div>
+
+            <div class="button-action-group">
+                <a id="supercellStoreButton" href="#" target="_blank" class="utility-btn btn-supercell-store">
+                    <img src="https://png.pngtree.com/png-vector/20230918/ourmid/pngtree-shopping-basket-icon-png-image_10123596.png" alt="Store Icon" class="btn-icon">
+                    Kunjungi Supercell Store
+                </a>
+                <button id="editSupercellStoreLinkBtn" class="edit-btn-small">
+                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
+                    Edit Link Supercell Store
                 </button>
             </div>
         </div>
@@ -631,6 +615,8 @@
             const editWhatsappLinkBtn = document.getElementById('editWhatsappLinkBtn');
             const cocProfileButton = document.getElementById('cocProfileButton');
             const editCocLinkBtn = document.getElementById('editCocLinkBtn');
+            const supercellStoreButton = document.getElementById('supercellStoreButton'); // New element
+            const editSupercellStoreLinkBtn = document.getElementById('editSupercellStoreLinkBtn'); // New element
             const adminModeToggle = document.getElementById('adminModeToggle');
 
             let isAdminMode = false;
@@ -730,6 +716,7 @@
                 const savedMainDescription = localStorage.getItem('indoGhostMainDescription');
                 const savedWhatsappLink = localStorage.getItem('indoGhostWhatsappLink');
                 const savedCocTag = localStorage.getItem('indoGhostCocTag');
+                const savedSupercellStoreLink = localStorage.getItem('indoGhostSupercellStoreLink'); // New data
                 const savedAnnouncements = localStorage.getItem('indoGhostAnnouncements');
 
                 if (savedMainDescription) {
@@ -747,6 +734,11 @@
                     cocProfileButton.href = `https://link.clashofclans.com/id?action=OpenClanProfile&tag=%23${formattedTag}`;
                 } else {
                     cocProfileButton.href = `https://link.clashofclans.com/id?action=OpenClanProfile&tag=%23YOUR_CLAN_TAG`;
+                }
+                if (savedSupercellStoreLink) { // Load Supercell Store link
+                    supercellStoreButton.href = savedSupercellStoreLink;
+                } else {
+                    supercellStoreButton.href = 'https://store.supercell.com/'; // Default link
                 }
                 
                 if (savedAnnouncements) {
@@ -789,6 +781,12 @@
                 cocProfileButton.href = `https://link.clashofclans.com/id?action=OpenClanProfile&tag=%23${formattedTag}`;
             }
 
+            // --- Function to save Supercell Store Link ---
+            function saveSupercellStoreLink(newLink) {
+                localStorage.setItem('indoGhostSupercellStoreLink', newLink);
+                supercellStoreButton.href = newLink;
+            }
+
             // --- Function to toggle admin mode ---
             function toggleAdminMode() {
                 isAdminMode = !isAdminMode;
@@ -798,6 +796,7 @@
                     clearAnnouncementsBtn.classList.add('is-visible');
                     editWhatsappLinkBtn.classList.add('is-visible');
                     editCocLinkBtn.classList.add('is-visible');
+                    editSupercellStoreLinkBtn.classList.add('is-visible'); // Show Supercell Store edit button
                     adminModeToggle.textContent = 'Keluar Admin Mode';
                     adminModeToggle.style.backgroundColor = '#dc3545';
                 } else {
@@ -806,6 +805,7 @@
                     clearAnnouncementsBtn.classList.remove('is-visible');
                     editWhatsappLinkBtn.classList.remove('is-visible');
                     editCocLinkBtn.classList.remove('is-visible');
+                    editSupercellStoreLinkBtn.classList.remove('is-visible'); // Hide Supercell Store edit button
                     adminModeToggle.textContent = 'Admin Mode';
                     adminModeToggle.style.backgroundColor = '#6c757d';
                 }
@@ -876,6 +876,21 @@
                         cocProfileButton.href = `https://link.clashofclans.com/id?action=OpenClanProfile&tag=%23YOUR_CLAN_TAG`;
                     } else {
                         saveCocTag(newCocTag.trim());
+                    }
+                }
+            });
+
+            // --- Event listener for editing Supercell Store link ---
+            editSupercellStoreLinkBtn.addEventListener('click', () => {
+                const currentSupercellStoreLink = localStorage.getItem('indoGhostSupercellStoreLink') || 'https://store.supercell.com/';
+                const newSupercellStoreLink = prompt("Masukkan link Supercell Store:", currentSupercellStoreLink);
+
+                if (newSupercellStoreLink !== null) {
+                    if (newSupercellStoreLink.trim() === "") {
+                        localStorage.removeItem('indoGhostSupercellStoreLink');
+                        supercellStoreButton.href = 'https://store.supercell.com/';
+                    } else {
+                        saveSupercellStoreLink(newSupercellStoreLink.trim());
                     }
                 }
             });
