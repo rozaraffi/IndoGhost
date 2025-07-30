@@ -20,7 +20,6 @@
             justify-content: flex-start; /* Align content to the top */
             align-items: center;
             min-height: 100vh;
-            /* overflow: hidden; */ /* HAPUS INI */
             position: relative;
             padding-bottom: 80px; /* Add padding for the copyright at the bottom */
         }
@@ -139,7 +138,6 @@
             background-color: #45a049;
         }
 
-
         .btn-whatsapp {
             background-color: #28a745; /* Green for WhatsApp */
             display: flex; /* Ensure it's a flex container for inner alignment */
@@ -183,9 +181,6 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            /* REMOVED: max-height and overflow-y for flexible height */
-            /* max-height: 200px; */
-            /* overflow-y: auto; */
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
         }
@@ -311,7 +306,6 @@
             height: 12px;
         }
 
-
         /* Specific positioning for announcement section buttons */
         #addAnnouncementBtn, #clearAnnouncementsBtn {
             position: relative; /* Make relative for proper button styling */
@@ -320,51 +314,6 @@
             margin-right: 10px; /* Space between add and clear button */
         }
         
-        #editDescriptionBtn {
-            position: absolute;
-            top: 160px; /* Adjusted top for better alignment */
-            right: 50px;
-        }
-
-
-        /* Action group for buttons and their edit buttons */
-        .button-action-group {
-            display: flex;
-            flex-direction: column; /* Stack button and edit below it */
-            gap: 10px; /* Gap between button and its edit button */
-            align-items: center; /* Center horizontally */
-            width: 100%; /* Take full width */
-            margin-bottom: 10px; /* Space between groups, adjusted for aesthetics */
-        }
-
-        /* Specific style for edit buttons within action groups (make them smaller) */
-        .button-action-group .edit-btn-small {
-            padding: 10px 20px; /* Smaller padding */
-            font-size: 1rem; /* Smaller font size */
-            background-color: #ffc107; /* Same as other edit buttons */
-            color: #333;
-            border-radius: 10px; /* Slightly more rounded */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* Soft shadow */
-            opacity: 0; /* Hidden by default */
-            visibility: hidden; /* Hidden by default */
-            transform: translateY(5px); /* Slightly off-set */
-            pointer-events: none; /* Make it unclickable when hidden */
-        }
-        .button-action-group .edit-btn-small.is-visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-            pointer-events: auto;
-            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-        }
-
-        .button-action-group .edit-btn-small:hover {
-            background-color: #e0a800;
-            transform: translateY(-2px); /* Slight lift on hover */
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-        }
-
-
         /* Admin Mode Toggle Button */
         .admin-toggle-wrapper {
             position: fixed;
@@ -414,6 +363,80 @@
             width: 100%; /* Ensure it spans the full width of its parent */
         }
 
+        /* New: Peraturan Section */
+        .peraturan-section {
+            background-color: #fffbe6; /* Light yellow background */
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 40px; /* Space from buttons or other sections */
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.05);
+            text-align: left;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+            position: relative; /* For inner positioning */
+        }
+
+        .peraturan-section.is-visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .peraturan-section h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #a0522d; /* Sienna-like color */
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center; /* Center the heading */
+        }
+
+        .peraturan-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Space out title and button */
+            margin-bottom: 15px;
+            background-color: #fffde7; /* Lighter yellow for items */
+            border-radius: 8px;
+            padding: 12px 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 5px solid #ffbf00; /* Accent border */
+        }
+        
+        .peraturan-item:last-child {
+            margin-bottom: 0; /* No margin for the last item */
+        }
+
+        .peraturan-item span {
+            font-weight: 500;
+            color: #8B4513; /* SaddleBrown */
+            flex-grow: 1; /* Allow text to take space */
+            margin-right: 15px; /* Space between text and button */
+        }
+
+        .peraturan-item .edit-btn-small { /* Reusing the smaller edit button style */
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            background-color: #ffc107;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            opacity: 1; /* Always visible within this section */
+            visibility: visible;
+            transform: none; /* No initial transform needed */
+            pointer-events: auto;
+        }
+
+        .peraturan-item .edit-btn-small:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
         /* Responsive adjustments */
         @media (max-width: 1024px) {
             h1 { font-size: 3rem; }
@@ -428,12 +451,16 @@
             .announcement-item .announcement-date { font-size: 0.75rem; }
             .edit-btn { padding: 7px 12px; font-size: 0.85rem; }
             .edit-icon { width: 14px; height: 14px; }
-            #editDescriptionBtn { top: 140px; right: 40px; } /* Adjusted position for smaller screens */
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 10px; }
-            .button-action-group .edit-btn-small { padding: 8px 15px; font-size: 0.9rem; }
             .admin-toggle-button { padding: 10px 15px; font-size: 0.85rem; }
             .admin-icon { width: 18px; height: 18px; }
             .copyright { margin-top: 40px; font-size: 0.9rem; }
+            /* Peraturan Section adjustments */
+            .peraturan-section { padding: 18px; margin-top: 30px; }
+            .peraturan-section h3 { font-size: 1.1rem; margin-bottom: 15px; }
+            .peraturan-item { padding: 10px 12px; margin-bottom: 10px; }
+            .peraturan-item span { font-size: 0.95rem; }
+            .peraturan-item .edit-btn-small { padding: 7px 12px; font-size: 0.85rem; }
         }
 
         @media (max-width: 768px) {
@@ -470,14 +497,17 @@
             .announcement-item .announcement-date { font-size: 0.7rem; }
             .edit-btn { padding: 6px 10px; font-size: 0.8rem; }
             .edit-icon { width: 12px; height: 12px; }
-            #editDescriptionBtn { top: 120px; right: 30px; } /* Adjusted position for smaller screens */
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 10px; }
-            .button-action-group { margin-top: 15px; }
-            .button-action-group .edit-btn-small { padding: 8px 15px; font-size: 0.9rem; }
             .admin-toggle-wrapper { bottom: 15px; right: 15px; }
             .admin-toggle-button { padding: 8px 12px; font-size: 0.85rem; }
             .admin-icon { width: 16px; height: 16px; }
             .copyright { margin-top: 30px; font-size: 0.85rem; }
+            /* Peraturan Section adjustments */
+            .peraturan-section { padding: 15px; margin-top: 25px; }
+            .peraturan-section h3 { font-size: 1rem; margin-bottom: 12px; }
+            .peraturan-item { padding: 8px 10px; margin-bottom: 8px; }
+            .peraturan-item span { font-size: 0.9rem; }
+            .peraturan-item .edit-btn-small { padding: 6px 10px; font-size: 0.8rem; }
         }
 
         @media (max-width: 480px) {
@@ -509,26 +539,25 @@
             .announcement-item .announcement-date { font-size: 0.65rem; }
             .edit-btn { padding: 5px 8px; font-size: 0.75rem; }
             .edit-icon { width: 10px; height: 10px; }
-            #editDescriptionBtn { top: 100px; right: 20px; } /* Adjusted position for smaller screens */
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 5px; }
-            .button-action-group .edit-btn-small { padding: 6px 10px; font-size: 0.8rem; }
             .admin-toggle-wrapper { bottom: 10px; right: 10px; }
             .admin-toggle-button { padding: 7px 10px; font-size: 0.75rem; }
             .admin-icon { width: 14px; height: 14px; }
             .copyright { margin-top: 25px; font-size: 0.8rem; }
-        }
-    </style>
+            /* Peraturan Section adjustments */
+            .peraturan-section { padding: 12px; margin-top: 20px; }
+            .peraturan-section h3 { font-size: 0.95rem; margin-bottom: 10px; }
+            .peraturan-item { padding: 6px 8px; margin-bottom: 6px; }
+            .peraturan-item span { font-size: 0.85rem; }
+            .peraturan-item .edit-btn-small { padding: 5px 8px; font-size: 0.75rem; }
+        </style>
 </head>
 <body class="bg-gray-50">
     <div id="particles-js"></div> 
     <div class="container">
         <h1>Selamat Datang di <br>Klan Indo Ghost</h1>
         <p id="mainDescription">Jelajahi detail anggota perkasa kami dan kuasai strategi kemenangan War!</p>
-        <button id="editDescriptionBtn" class="edit-btn">
-            <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
-            Edit Deskripsi
-        </button>
-
+        
         <div class="button-group">
             <a href="detail-member.html" class="utility-btn btn-primary">
                 <img src="https://raw.githubusercontent.com/Clash-of-Clans-API/clash-of-clans-assets/main/other/armycamp/armycamp_1.png" alt="Member Icon" class="btn-icon">
@@ -539,38 +568,20 @@
                 Aturan War Clan
             </a>
             
-            <div class="button-action-group">
-                <a id="cocProfileButton" href="#" target="_blank" class="utility-btn btn-coc">
-                    <img src="https://raw.githubusercontent.com/Clash-of-Clans-API/clash-of-clans-assets/main/other/builderbase/builderbase_1.png" alt="CoC Icon" class="btn-icon">
-                    Lihat Profil Clan CoC
-                </a>
-                <button id="editCocLinkBtn" class="edit-btn-small">
-                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
-                    Edit Tag Clan CoC
-                </button>
-            </div>
+            <a id="cocProfileButton" href="#" target="_blank" class="utility-btn btn-coc">
+                <img src="https://raw.githubusercontent.com/Clash-of-Clans-API/clash-of-clans-assets/main/other/builderbase/builderbase_1.png" alt="CoC Icon" class="btn-icon">
+                Lihat Profil Clan CoC
+            </a>
 
-            <div class="button-action-group">
-                <a id="whatsappButton" href="#" target="_blank" class="utility-btn btn-whatsapp">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Icon" class="btn-icon">
-                    Gabung Grup WhatsApp
-                </a>
-                <button id="editWhatsappLinkBtn" class="edit-btn-small">
-                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
-                    Edit Link WhatsApp
-                </button>
-            </div>
+            <a id="whatsappButton" href="#" target="_blank" class="utility-btn btn-whatsapp">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Icon" class="btn-icon">
+                Gabung Grup WhatsApp
+            </a>
 
-            <div class="button-action-group">
-                <a id="supercellStoreButton" href="#" target="_blank" class="utility-btn btn-supercell-store">
-                    <img src="https://png.pngtree.com/png-vector/20230918/ourmid/pngtree-shopping-basket-icon-png-image_10123596.png" alt="Store Icon" class="btn-icon">
-                    Kunjungi Supercell Store
-                </a>
-                <button id="editSupercellStoreLinkBtn" class="edit-btn-small">
-                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
-                    Edit Link Supercell Store
-                </button>
-            </div>
+            <a id="supercellStoreButton" href="#" target="_blank" class="utility-btn btn-supercell-store">
+                <img src="https://png.pngtree.com/png-vector/20230918/ourmid/pngtree-shopping-basket-icon-png-image_10123596.png" alt="Store Icon" class="btn-icon">
+                Kunjungi Supercell Store
+            </a>
         </div>
 
         <div class="announcement-section">
@@ -590,6 +601,41 @@
             </button>
         </div>
 
+        <div id="peraturanSection" class="peraturan-section">
+            <h3>
+                <img src="https://cdn-icons-png.flaticon.com/512/3592/3592881.png" alt="Rules Icon" class="edit-icon">
+                Pengaturan Situs
+            </h3>
+            <div class="peraturan-item">
+                <span>Deskripsi Utama Situs</span>
+                <button id="editDescriptionBtn" class="edit-btn-small">
+                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
+                    Edit
+                </button>
+            </div>
+            <div class="peraturan-item">
+                <span>Link Grup WhatsApp</span>
+                <button id="editWhatsappLinkBtn" class="edit-btn-small">
+                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
+                    Edit
+                </button>
+            </div>
+            <div class="peraturan-item">
+                <span>Tag Clan CoC</span>
+                <button id="editCocLinkBtn" class="edit-btn-small">
+                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
+                    Edit
+                </button>
+            </div>
+            <div class="peraturan-item">
+                <span>Link Supercell Store</span>
+                <button id="editSupercellStoreLinkBtn" class="edit-btn-small">
+                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
+                    Edit
+                </button>
+            </div>
+        </div>
+
         <div class="copyright">
             <p>Copyright © 2025 Indo Ghost Clan.</p>
         </div>
@@ -607,17 +653,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const mainDescriptionElement = document.getElementById('mainDescription');
-            const editDescriptionBtn = document.getElementById('editDescriptionBtn');
             const announcementListElement = document.getElementById('announcementList');
             const addAnnouncementBtn = document.getElementById('addAnnouncementBtn');
             const clearAnnouncementsBtn = document.getElementById('clearAnnouncementsBtn');
             const whatsappButton = document.getElementById('whatsappButton');
-            const editWhatsappLinkBtn = document.getElementById('editWhatsappLinkBtn');
             const cocProfileButton = document.getElementById('cocProfileButton');
-            const editCocLinkBtn = document.getElementById('editCocLinkBtn');
-            const supercellStoreButton = document.getElementById('supercellStoreButton'); // New element
-            const editSupercellStoreLinkBtn = document.getElementById('editSupercellStoreLinkBtn'); // New element
+            const supercellStoreButton = document.getElementById('supercellStoreButton');
             const adminModeToggle = document.getElementById('adminModeToggle');
+
+            // Peraturan Section Elements
+            const peraturanSection = document.getElementById('peraturanSection');
+            const editDescriptionBtn = document.getElementById('editDescriptionBtn');
+            const editWhatsappLinkBtn = document.getElementById('editWhatsappLinkBtn');
+            const editCocLinkBtn = document.getElementById('editCocLinkBtn');
+            const editSupercellStoreLinkBtn = document.getElementById('editSupercellStoreLinkBtn');
 
             let isAdminMode = false;
             let announcements = [];
@@ -716,7 +765,7 @@
                 const savedMainDescription = localStorage.getItem('indoGhostMainDescription');
                 const savedWhatsappLink = localStorage.getItem('indoGhostWhatsappLink');
                 const savedCocTag = localStorage.getItem('indoGhostCocTag');
-                const savedSupercellStoreLink = localStorage.getItem('indoGhostSupercellStoreLink'); // New data
+                const savedSupercellStoreLink = localStorage.getItem('indoGhostSupercellStoreLink');
                 const savedAnnouncements = localStorage.getItem('indoGhostAnnouncements');
 
                 if (savedMainDescription) {
@@ -735,10 +784,10 @@
                 } else {
                     cocProfileButton.href = `https://link.clashofclans.com/id?action=OpenClanProfile&tag=%23YOUR_CLAN_TAG`;
                 }
-                if (savedSupercellStoreLink) { // Load Supercell Store link
+                if (savedSupercellStoreLink) {
                     supercellStoreButton.href = savedSupercellStoreLink;
                 } else {
-                    supercellStoreButton.href = 'https://store.supercell.com/'; // Default link
+                    supercellStoreButton.href = 'https://store.supercell.com/';
                 }
                 
                 if (savedAnnouncements) {
@@ -791,21 +840,15 @@
             function toggleAdminMode() {
                 isAdminMode = !isAdminMode;
                 if (isAdminMode) {
-                    editDescriptionBtn.classList.add('is-visible');
+                    peraturanSection.classList.add('is-visible'); // Show peraturan section
                     addAnnouncementBtn.classList.add('is-visible');
                     clearAnnouncementsBtn.classList.add('is-visible');
-                    editWhatsappLinkBtn.classList.add('is-visible');
-                    editCocLinkBtn.classList.add('is-visible');
-                    editSupercellStoreLinkBtn.classList.add('is-visible'); // Show Supercell Store edit button
                     adminModeToggle.textContent = 'Keluar Admin Mode';
                     adminModeToggle.style.backgroundColor = '#dc3545';
                 } else {
-                    editDescriptionBtn.classList.remove('is-visible');
+                    peraturanSection.classList.remove('is-visible'); // Hide peraturan section
                     addAnnouncementBtn.classList.remove('is-visible');
                     clearAnnouncementsBtn.classList.remove('is-visible');
-                    editWhatsappLinkBtn.classList.remove('is-visible');
-                    editCocLinkBtn.classList.remove('is-visible');
-                    editSupercellStoreLinkBtn.classList.remove('is-visible'); // Hide Supercell Store edit button
                     adminModeToggle.textContent = 'Admin Mode';
                     adminModeToggle.style.backgroundColor = '#6c757d';
                 }
