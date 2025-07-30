@@ -115,7 +115,8 @@
         }
         body.dark .modal-content input[type="text"],
         body.dark .modal-content textarea,
-        body.dark .modal-content input[type="url"] {
+        body.dark .modal-content input[type="url"],
+        body.dark .modal-content input[type="color"] {
             background-color: #4a5568;
             border-color: #6366f1;
             color: #e2e8f0;
@@ -418,8 +419,8 @@
             box-shadow: none;
         }
 
-        /* Styles for dynamically created edit/delete buttons on announcement items */
-        .announcement-item .edit-btn-item { /* New class for item-specific buttons */
+        /* Styles for dynamically created edit/delete/share buttons on announcement items */
+        .announcement-item .announcement-action-btn { /* New class for item-specific buttons */
             background-color: #ffc107; /* Default yellow, can be overridden */
             color: #333;
             border: none;
@@ -439,16 +440,16 @@
             pointer-events: auto;
             transform: none; /* No initial transform needed */
         }
-        .announcement-item .edit-btn-item:hover {
+        .announcement-item .announcement-action-btn:hover {
             background-color: #e0a800;
             transform: translateY(-2px);
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .announcement-item .edit-btn-item:active {
+        .announcement-item .announcement-action-btn:active {
             transform: translateY(0);
             box-shadow: none;
         }
-        .announcement-item .edit-btn-item .edit-icon {
+        .announcement-item .announcement-action-btn .edit-icon {
             width: 12px;
             height: 12px;
         }
@@ -1217,9 +1218,61 @@
         <span id="toast-message"></span>
     </div>
 
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <h3 id="confirmationModalTitle"></h3>
+            <p id="confirmationModalMessage" style="margin-bottom: 20px; color: #4a5568;"></p>
+            <div class="modal-buttons">
+                <button class="save-btn" id="confirmYesBtn">Ya</button>
+                <button class="cancel-btn" id="confirmNoBtn">Tidak</button>
+            </div>
+        </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // dark-mode-sync.js content integrated here for simplicity
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModeIcon = document.getElementById('darkModeIcon');
+            const darkModeText = document.getElementById('darkModeText');
 
+            // Function to apply dark mode based on preference
+            function applyDarkModePreference() {
+                const isDarkMode = localStorage.getItem('darkMode') === 'true';
+                if (isDarkMode) {
+                    body.classList.add('dark');
+                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/621/621303.png'; // Sun icon for light mode
+                    darkModeText.textContent = 'Light Mode';
+                } else {
+                    body.classList.remove('dark');
+                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/621/621303.png'; // Moon icon for dark mode
+                    darkModeText.textContent = 'Dark Mode';
+                }
+            }
+
+            // Initial application of dark mode preference
+            applyDarkModePreference();
+
+            // Toggle dark mode on button click
+            darkModeToggle.addEventListener('click', () => {
+                const isCurrentlyDarkMode = body.classList.contains('dark');
+                if (isCurrentlyDarkMode) {
+                    body.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/621/621303.png'; // Moon icon
+                    darkModeText.textContent = 'Dark Mode';
+                } else {
+                    body.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/621/621303.png'; // Sun icon
+                    darkModeText.textContent = 'Light Mode';
+                }
+            });
+        });
+    </script> 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const body = document.body;
@@ -1231,16 +1284,13 @@
             const cocProfileButton = document.getElementById('cocProfileButton');
             const supercellStoreButton = document.getElementById('supercellStoreButton');
             const adminModeToggle = document.getElementById('adminModeToggle');
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const darkModeIcon = document.getElementById('darkModeIcon');
-            const darkModeText = document.getElementById('darkModeText');
 
             // Peraturan Section Elements
             const peraturanSection = document.getElementById('peraturanSection');
             const editDescriptionBtn = document.getElementById('editDescriptionBtn');
             const editWhatsappLinkBtn = document.getElementById('editWhatsappLinkBtn');
             const editCocLinkBtn = document.getElementById('editCocLinkBtn');
-            const editSupercellStoreLinkBtn = document.getElementById('editSupercellStoreLinkBtn');
+            const editSupercellStoreLinkBtn = document.getElementById('editSupercellStoreLinkBtn'); // Corrected ID
             const editClanLogoUrlBtn = document.getElementById('editClanLogoUrlBtn'); // New element
             const editPrimaryColorBtn = document.getElementById('editPrimaryColorBtn'); // New element
             const editSecondaryColorBtn = document.getElementById('editSecondaryColorBtn'); // New element
@@ -1274,6 +1324,7 @@
             let currentEditingAnnouncementId = null; // To keep track of which announcement is being edited
 
             // Default & Stored Site Settings (for new features)
+            // Initializing with default values, these will be overwritten by loadData()
             let siteSettings = {
                 mainDescription: 'Jelajahi detail anggota perkasa kami dan kuasai strategi kemenangan War!',
                 whatsappLink: 'https://chat.whatsapp.com/defaultlinkanda',
@@ -1281,18 +1332,18 @@
                 supercellStoreLink: 'https://store.supercell.com/',
                 clanLogoUrl: '', // New setting for optional clan logo URL
                 primaryColor: '#3b82f6', // Default Tailwind blue-500
-                secondaryColor: '#6366f1', // Default Tailwind violet-500
-                darkMode: false // Default to light mode
+                secondaryColor: '#6366f1' // Default Tailwind violet-500
+                // darkMode is now handled by dark-mode-sync.js
             };
 
             // --- Icon URLs for Toast Notifications ---
             const TOAST_ICONS = {
-                success: './assets/icons/success.png', // Checkmark icon - Ganti dengan path lokal Anda!
-                error: './assets/icons/error.png', // X mark/Close icon - Ganti dengan path lokal Anda!
-                info: './assets/icons/info.png' // Info icon - Ganti dengan path lokal Anda!
+                success: 'https://cdn-icons-png.flaticon.com/512/190/190411.png', // Checkmark icon
+                error: 'https://cdn-icons-png.flaticon.com/512/1828/1828843.png', // X mark/Close icon
+                info: 'https://cdn-icons-png.flaticon.com/512/1176/1176523.png' // Info icon
             };
 
-            // --- Function to show toast notification ---
+            // --- Function to show toast notification (global for this page) ---
             function showToast(message, type = 'info') {
                 toastMessage.textContent = message;
                 toastNotification.className = ''; // Clear existing classes
@@ -1345,10 +1396,14 @@
             function applyDynamicStyles() {
                 document.documentElement.style.setProperty('--primary-color', siteSettings.primaryColor);
                 document.documentElement.style.setProperty('--secondary-color', siteSettings.secondaryColor);
-                
-                // Force re-render of elements that use these variables to ensure color change.
-                // This is often handled by CSS transitions but explicit refresh can help in some cases.
-                // No need for extra CSS rules here, as they are already in the <style> block using var(--color)
+                // Re-check and re-apply dark mode specific colors if dark mode is active
+                if (body.classList.contains('dark')) {
+                    document.documentElement.style.setProperty('--primary-color', siteSettings.primaryColor); // Lighter blue for dark mode
+                    document.documentElement.style.setProperty('--secondary-color', siteSettings.secondaryColor); // Lighter violet for dark mode
+                } else {
+                    document.documentElement.style.setProperty('--primary-color', siteSettings.primaryColor);
+                    document.documentElement.style.setProperty('--secondary-color', siteSettings.secondaryColor);
+                }
             }
 
             // --- Function to render announcements ---
@@ -1361,8 +1416,8 @@
                     noAnnLi.style.borderLeft = 'none';
                     noAnnLi.style.boxShadow = 'none';
                     noAnnLi.style.backgroundColor = 'transparent';
-                    // Apply dark mode styling if active
-                    if (siteSettings.darkMode) {
+                    // Apply dark mode styling if active - fetch from current body class
+                    if (body.classList.contains('dark')) {
                          noAnnLi.style.color = '#a0aec0'; // Lighter gray for copyright in dark mode
                     } else {
                         noAnnLi.style.color = '#718096'; // Default gray
@@ -1398,7 +1453,7 @@
                     // Add delete and edit buttons in admin mode
                     if (isAdminMode) {
                         const deleteBtn = document.createElement('button');
-                        deleteBtn.classList.add('edit-btn-item');
+                        deleteBtn.classList.add('announcement-action-btn'); // Use new generic class
                         deleteBtn.style.backgroundColor = '#dc3545';
                         deleteBtn.style.color = 'white';
                         deleteBtn.style.right = '10px';
@@ -1416,7 +1471,7 @@
                         listItem.appendChild(deleteBtn);
 
                         const editItemBtn = document.createElement('button');
-                        editItemBtn.classList.add('edit-btn-item');
+                        editItemBtn.classList.add('announcement-action-btn'); // Use new generic class
                         editItemBtn.style.backgroundColor = '#2196F3';
                         editItemBtn.style.color = 'white';
                         editItemBtn.style.right = '80px';
@@ -1430,6 +1485,21 @@
                             announcementModal.classList.add('show');
                         };
                         listItem.appendChild(editItemBtn);
+
+                        const shareWhatsappBtn = document.createElement('button');
+                        shareWhatsappBtn.classList.add('announcement-action-btn'); // Use new generic class
+                        shareWhatsappBtn.style.backgroundColor = '#28a745'; // WhatsApp green
+                        shareWhatsappBtn.style.color = 'white';
+                        shareWhatsappBtn.style.right = '150px'; // Position to the left of edit button
+                        shareWhatsappBtn.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Icon" class="edit-icon" style="filter: invert(100%);"> Bagikan`;
+                        shareWhatsappBtn.onclick = (event) => {
+                            event.stopPropagation();
+                            const whatsappMessage = `*Pengumuman Klan Indo Ghost:*\n\n*${ann.title}*\n${ann.content}\n\nBaca selengkapnya di situs kami: ${window.location.href}`;
+                            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+                            window.open(whatsappUrl, '_blank');
+                            showToast('Pengumuman siap dibagikan di WhatsApp!', 'info');
+                        };
+                        listItem.appendChild(shareWhatsappBtn);
                     }
                     announcementListElement.appendChild(listItem);
                 });
@@ -1455,24 +1525,7 @@
                     // document.getElementById('clanLogo').src = siteSettings.clanLogoUrl;
                 }
 
-                // Apply dark mode setting
-                if (siteSettings.darkMode) {
-                    body.classList.add('dark');
-                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/604/604810.png'; // Sun icon
-                    darkModeText.textContent = 'Light Mode';
-                    initializeParticles({
-                        "particles": { "color": { "value": "#63b3ed" }, "line_linked": { "color": "#4299e1" } }
-                    }); // Adjust particle color for dark mode
-                } else {
-                    body.classList.remove('dark');
-                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/621/621303.png'; // Moon icon
-                    darkModeText.textContent = 'Dark Mode';
-                    initializeParticles({
-                        "particles": { "color": { "value": "#cccccc" }, "line_linked": { "color": "#bbbbbb" } }
-                    }); // Default particle color for light mode
-                }
-                
-                // Apply colors (after dark mode is set, as dark mode changes the --primary-color variable)
+                // Apply colors (dark mode handled by dark-mode-sync.js)
                 applyDynamicStyles();
 
 
@@ -1532,21 +1585,7 @@
             }
 
             // --- Custom Confirmation Modal (replacing native confirm) ---
-            const confirmationModal = document.createElement('div');
-            confirmationModal.id = 'confirmationModal';
-            confirmationModal.classList.add('modal');
-            confirmationModal.innerHTML = `
-                <div class="modal-content">
-                    <h3 id="confirmationModalTitle"></h3>
-                    <p id="confirmationModalMessage" style="margin-bottom: 20px; color: #4a5568;"></p>
-                    <div class="modal-buttons">
-                        <button class="save-btn" id="confirmYesBtn">Ya</button>
-                        <button class="cancel-btn" id="confirmNoBtn">Tidak</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(confirmationModal);
-
+            const confirmationModal = document.getElementById('confirmationModal');
             const confirmModalTitle = document.getElementById('confirmationModalTitle');
             const confirmModalMessage = document.getElementById('confirmationModalMessage');
             const confirmYesBtn = document.getElementById('confirmYesBtn');
@@ -1623,7 +1662,6 @@
                 toggleSpinner(saveSettingsSpinner, true);
                 const newValue = settingsInputValueRef.value.trim();
                 
-                // No setTimeout here to make it instant
                 if (currentSettingsSaveCallback) {
                     currentSettingsSaveCallback(newValue);
                 }
@@ -1664,7 +1702,6 @@
                     return;
                 }
 
-                // No setTimeout here to make it instant
                 if (currentEditingAnnouncementId) {
                     const annIndex = announcements.findIndex(ann => ann.id === currentEditingAnnouncementId);
                     if (annIndex !== -1) {
@@ -1752,139 +1789,120 @@
             // --- Event listener for Admin Mode Toggle Button ---
             adminModeToggle.addEventListener('click', toggleAdminMode);
 
-            // --- Event listener for Dark Mode Toggle Button ---
-            darkModeToggle.addEventListener('click', () => {
-                siteSettings.darkMode = !siteSettings.darkMode;
-                saveSiteSettings();
-                loadData(); // Reload data to apply dark mode
-                if (siteSettings.darkMode) {
-                    showToast('Dark Mode diaktifkan!', 'info');
-                } else {
-                    showToast('Light Mode diaktifkan!', 'info');
-                }
-            });
-
-            // --- Particles.js Initialization ---
-            let pJSCurrentInstance = null; // To keep track of the current particles.js instance
-
-            function initializeParticles(particlesConfig) {
-                // Destroy existing instance if it exists
-                if (pJSCurrentInstance && window.pJSDom && window.pJSDom.length > 0) {
-                    window.pJSDom[0].pJS.fn.vendors.destroypJS();
-                    window.pJSDom = []; // Clear the pJSDom array
-                    pJSCurrentInstance = null;
-                }
-                
-                // Initialize new instance
-                particlesJS('particles-js', {
-                    "particles": {
-                        "number": {
-                            "value": 80,
-                            "density": {
-                                "enable": true,
-                                "value_area": 800
-                            }
-                        },
-                        "color": particlesConfig.particles.color, // Dynamic color
-                        "shape": {
-                            "type": "circle",
-                            "stroke": {
-                                "width": 0,
-                                "color": "#000000"
-                            },
-                            "polygon": {
-                                "nb_sides": 5
-                            }
-                        },
-                        "opacity": {
-                            "value": 0.5,
-                            "random": false,
-                            "anim": {
-                                "enable": false,
-                                "speed": 1,
-                                "opacity_min": 0.1,
-                                "sync": false
-                            }
-                        },
-                        "size": {
-                            "value": 3,
-                            "random": true,
-                            "anim": {
-                                "enable": false,
-                                "speed": 40,
-                                "size_min": 0.1,
-                                "sync": false
-                            }
-                        },
-                        "line_linked": {
-                            "enable": true,
-                            "distance": 150,
-                            "color": particlesConfig.particles.line_linked.color, // Dynamic color
-                            "opacity": 0.4,
-                            "width": 1
-                        },
-                        "move": {
-                            "enable": true,
-                            "speed": 2,
-                            "direction": "none",
-                            "random": false,
-                            "straight": false,
-                            "out_mode": "out",
-                            "bounce": false,
-                            "attract": {
-                                "enable": false,
-                                "rotateX": 600,
-                                "rotateY": 1200
-                            }
-                        }
-                    },
-                    "interactivity": {
-                        "detect_on": "canvas",
-                        "events": {
-                            "onhover": {
-                                "enable": true,
-                                "mode": "grab"
-                            },
-                            "onclick": {
-                                "enable": true,
-                                "mode": "push"
-                            },
-                            "resize": true
-                        },
-                        "modes": {
-                            "grab": {
-                                "distance": 140,
-                                "line_linked": {
-                                    "opacity": 1
-                                }
-                            },
-                            "bubble": {
-                                "distance": 400,
-                                "size": 40,
-                                "duration": 2,
-                                "opacity": 8,
-                                "speed": 3
-                            },
-                            "repulse": {
-                                "distance": 200,
-                                "duration": 0.4
-                            },
-                            "push": {
-                                "particles_nb": 4
-                            },
-                            "remove": {
-                                "particles_nb": 2
-                            }
-                        }
-                    },
-                    "retina_detect": true
-                });
-                // Store the reference to the new instance
-                pJSCurrentInstance = window.pJSDom[0].pJS;
-            }
-
             // --- Initial load ---
             loadData();
+
+            // Initialize Particles.js
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#cccccc" // Light gray particles
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        },
+                        "image": {
+                            "src": "img/github.svg",
+                            "width": 100,
+                            "height": 100
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#bbbbbb", // Slightly darker gray lines
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 6,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
         });
     </script>
 </body>
