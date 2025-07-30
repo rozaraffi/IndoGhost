@@ -7,46 +7,213 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Base Styles */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f8fafc; /* Light gray background */
             color: #333;
-            display: flex; /* Changed from display:flex for main content centering */
-            flex-direction: column; /* Allow content to stack vertically */
-            justify-content: flex-start; /* Align content from top */
-            align-items: center; /* Center horizontally */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
             min-height: 100vh;
-            overflow-y: auto; /* Allow vertical scrolling */
+            overflow-y: auto;
             position: relative;
-            padding-bottom: 80px; /* Space for admin toggle at the bottom */
+            padding-bottom: 80px;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for dark mode */
         }
 
-        /* Particles container for background */
+        /* Dark Mode Styles */
+        body.dark {
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+        }
+
+        body.dark .container {
+            background-color: #2d3748; /* Darker container */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); /* Stronger shadow in dark mode */
+        }
+
+        body.dark h1 {
+            color: #90cdf4; /* Lighter blue heading in dark mode */
+        }
+
+        body.dark .section-title {
+            color: #63b3ed; /* Lighter blue section title in dark mode */
+            border-bottom-color: #4a5568; /* Darker border */
+        }
+
+        body.dark .rules-content {
+            color: #cbd5e0; /* Lighter text for rules content */
+        }
+
+        body.dark .edit-btn {
+            background-color: #f6ad55; /* Slightly muted yellow for dark mode */
+            color: #1a202c;
+        }
+
+        body.dark .edit-btn:hover {
+            background-color: #ed8936; /* Darker yellow on hover */
+        }
+
+        body.dark .admin-toggle-button {
+            background-color: #4a5568; /* Darker gray for admin toggle */
+        }
+
+        body.dark .admin-toggle-button:hover {
+            background-color: #2d3748;
+        }
+
+        body.dark .back-button {
+            background-color: #4299e1; /* Lighter blue for back button */
+            box-shadow: 0 8px 25px rgba(66, 153, 225, 0.2);
+        }
+
+        body.dark .back-button:hover {
+            background-color: #3182ce;
+            box-shadow: 0 12px 35px rgba(66, 153, 225, 0.3);
+        }
+
+        body.dark .copyright {
+            color: #a0aec0;
+        }
+
+        /* Modal Dark Mode */
+        body.dark .modal-content {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+        }
+
+        body.dark .modal-header h2 {
+            color: #e2e8f0;
+        }
+
+        body.dark .close-button {
+            color: #cbd5e0;
+        }
+
+        body.dark .close-button:hover {
+            color: #a0aec0;
+        }
+
+        body.dark .form-group label {
+            color: #e2e8f0;
+        }
+
+        body.dark .modal-rule-input,
+        body.dark .rule-type-select {
+            background-color: #4a5568;
+            border-color: #636b6f;
+            color: #e2e8f0;
+        }
+
+        body.dark .modal-rule-input:focus {
+            border-color: #63b3ed;
+            box-shadow: 0 0 0 4px rgba(99, 179, 237, 0.3);
+            background-color: #4a5568;
+        }
+
+        body.dark .modal-footer {
+            border-top-color: #4a5568;
+        }
+
+        body.dark .modal-button.save-btn {
+            background-color: #48bb78;
+        }
+
+        body.dark .modal-button.save-btn:hover {
+            background-color: #38a169;
+        }
+
+        body.dark .modal-button.cancel-btn {
+            background-color: #ef4444;
+        }
+
+        body.dark .modal-button.cancel-btn:hover {
+            background-color: #dc2626;
+        }
+
+        body.dark .modal-button.reset-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        body.dark .modal-button.reset-btn:hover {
+            background-color: #5a6268;
+        }
+
+        body.dark .add-rule-btn {
+            background-color: #38a169; /* Darker green for add button in dark mode */
+        }
+        body.dark .add-rule-btn:hover {
+            background-color: #2f855a;
+        }
+
+        body.dark .delete-rule-btn {
+            background-color: #e53e3e; /* Darker red for delete button in dark mode */
+        }
+        body.dark .delete-rule-btn:hover {
+            background-color: #c53030;
+        }
+
+
+        /* Notification styles */
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast-notification.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-notification.error {
+            background-color: #f44336; /* Red for errors */
+        }
+
+        /* Common Layout and Component Styles */
         #particles-js {
-            position: fixed; /* Use fixed to stay in place during scroll */
+            position: fixed;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
-            z-index: 0; /* Behind other content */
+            z-index: 0;
         }
 
         .container {
-            max-width: 900px; /* Wider container for rules */
-            width: 95%; /* Make it more responsive */
+            max-width: 900px;
+            width: 95%;
             margin: 40px auto;
             background-color: #ffffff;
-            border-radius: 16px; /* More rounded corners */
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08); /* Softer, larger shadow */
-            padding: 50px; /* More padding */
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+            padding: 50px;
             text-align: center;
             animation: fadeInScale 1s ease-out forwards;
             position: relative;
-            z-index: 1; /* Above particles */
+            z-index: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            flex-shrink: 0; /* Prevent shrinking if content is large */
+            flex-shrink: 0;
         }
 
         @keyframes fadeInScale {
@@ -61,56 +228,55 @@
         }
 
         h1 {
-            font-size: 3.5rem; /* Larger, consistent with index.html */
+            font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 25px;
             letter-spacing: 1px;
-            color: #1e3a8a; /* Darker blue heading */
+            color: #1e3a8a;
             line-height: 1.2;
         }
 
         .section-title {
-            font-size: 2rem; /* Consistent with sub-headings in index.html concept */
+            font-size: 2rem;
             font-weight: 600;
-            color: #2a69b9; /* A shade of blue */
-            margin-top: 40px; /* More space */
-            margin-bottom: 20px; /* More space */
+            color: #2a69b9;
+            margin-top: 40px;
+            margin-bottom: 20px;
             border-bottom: 2px solid #e0f2fe;
             padding-bottom: 10px;
             width: 100%;
             text-align: left;
-            position: relative; /* For potential future icons */
+            position: relative;
         }
 
         .rules-content {
-            font-size: 1.15rem; /* Slightly larger for readability */
-            line-height: 1.7; /* Slightly tighter line height */
+            font-size: 1.15rem;
+            line-height: 1.7;
             color: #4a5568;
             text-align: left;
             width: 100%;
-            min-height: 100px; /* Allow content to dictate height, less fixed */
-            padding-bottom: 20px; /* Space at bottom of content */
+            min-height: 100px; /* Ensures space even if no rules yet */
+            padding-bottom: 20px;
         }
 
         .rules-content p {
-            margin-bottom: 1.2em; /* More space between paragraphs */
+            margin-bottom: 1.2em;
         }
 
         .rules-content ul {
             list-style-type: disc;
-            margin-left: 30px; /* More indent */
+            margin-left: 30px;
             margin-bottom: 1.2em;
         }
 
         .rules-content ol {
             list-style-type: decimal;
-            margin-left: 30px; /* More indent */
+            margin-left: 30px;
             margin-bottom: 1.2em;
         }
 
-        /* Edit button styles */
         .edit-btn {
-            background-color: #ffc107; /* Warning yellow */
+            background-color: #ffc107;
             color: #333;
             border: none;
             padding: 8px 15px;
@@ -118,18 +284,18 @@
             cursor: pointer;
             font-size: 0.9rem;
             font-weight: 500;
-            transition: all 0.3s ease; /* Smoother transition */
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 5px;
-            opacity: 0; /* Hidden by default */
-            visibility: hidden; /* Hidden by default */
-            transform: translateY(5px); /* Slightly off-set */
-            pointer-events: none; /* Make it unclickable when hidden */
-            position: absolute; /* Position relative to parent container */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(5px);
+            pointer-events: none;
+            position: absolute;
             top: 15px;
             right: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Softer shadow */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .edit-btn.is-visible {
@@ -142,8 +308,8 @@
 
         .edit-btn:hover {
             background-color: #e0a800;
-            transform: translateY(-2px); /* Slight lift */
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15); /* Enhanced shadow on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
         }
 
         .edit-icon {
@@ -151,33 +317,32 @@
             height: 16px;
         }
 
-        /* Admin Mode Toggle Button */
         .admin-toggle-wrapper {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 1000;
-            opacity: 0.005; /* EXTREMELY Transparent - almost invisible */
-            transition: opacity 0.4s ease; /* Slower transition for subtle fade-in */
+            opacity: 0.005;
+            transition: opacity 0.4s ease;
         }
 
         .admin-toggle-wrapper:hover {
-            opacity: 1; /* Fully visible on hover */
+            opacity: 1;
         }
 
         .admin-toggle-button {
-            background-color: #6c757d; /* Dark gray */
+            background-color: #6c757d;
             color: white;
             border: none;
-            padding: 12px 18px; /* Consistent with index.html */
-            border-radius: 10px; /* Consistent with index.html */
+            padding: 12px 18px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 0.9rem; /* Consistent with index.html */
+            font-size: 0.9rem;
             font-weight: 500;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Consistent with index.html */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             display: flex;
             align-items: center;
-            gap: 8px; /* Consistent with index.html */
+            gap: 8px;
             transition: background-color 0.2s ease;
         }
 
@@ -186,13 +351,13 @@
         }
 
         .admin-icon {
-            width: 20px; /* Consistent with index.html */
-            height: 20px; /* Consistent with index.html */
-            filter: invert(100%); /* Make icon white */
+            width: 20px;
+            height: 20px;
+            filter: invert(100%);
         }
 
         .back-button-wrapper {
-            margin-top: 50px; /* More space from content */
+            margin-top: 50px;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -201,59 +366,58 @@
         .back-button {
             display: inline-flex;
             align-items: center;
-            padding: 15px 30px; /* Larger padding */
-            border-radius: 12px; /* More rounded */
+            padding: 15px 30px;
+            border-radius: 12px;
             font-family: 'Poppins', sans-serif;
-            font-size: 1.1rem; /* Slightly larger font */
+            font-size: 1.1rem;
             font-weight: 600;
             color: #ffffff;
-            background-color: #3b82f6; /* Tailwind blue-500, consistent with primary button */
+            background-color: #3b82f6;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2); /* Softer shadow */
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
         }
 
         .back-button:hover {
-            background-color: #2563eb; /* Tailwind blue-600 */
-            transform: translateY(-3px); /* Lighter lift effect */
-            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.3); /* Enhanced shadow on hover */
+            background-color: #2563eb;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.3);
         }
 
         .back-button-icon {
-            width: 24px; /* Larger icon */
+            width: 24px;
             height: 24px;
             margin-right: 12px;
             filter: invert(100%);
         }
 
-        /* Copyright text style */
         .copyright {
-            margin-top: 60px; /* Space from the back button or content above */
+            margin-top: 60px;
             font-size: 0.95rem;
-            color: #718096; /* Slightly darker gray for better readability */
+            color: #718096;
             text-align: center;
-            width: 100%; /* Ensure it spans the full width of its parent */
+            width: 100%;
         }
 
         /* --- Modal Styles --- */
         .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1001; /* Sit on top */
+            display: none;
+            position: fixed;
+            z-index: 1001;
             left: 0;
             top: 0;
-            width: 100%; /* Full width */
+            width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.7); /* Darker overlay for better focus */
+            background-color: rgba(0,0,0,0.7);
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
 
         .modal-content {
-            background-color: #ffffff; /* White background */
+            background-color: #ffffff;
             margin: auto;
             padding: 40px;
             border-radius: 16px;
@@ -317,25 +481,72 @@
             font-size: 1.1rem;
         }
 
-        .form-group textarea {
-            width: 100%;
-            padding: 15px;
+        /* Rule input and management within modal */
+        .modal-rule-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .modal-rule-input {
+            flex-grow: 1;
+            padding: 8px 12px;
             border: 1px solid #cbd5e0;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 1rem;
             font-family: 'Poppins', sans-serif;
-            resize: vertical;
-            min-height: 180px;
-            box-sizing: border-box;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
             background-color: #f8fafc;
         }
 
-        .form-group textarea:focus {
+        .modal-rule-input:focus {
             outline: none;
             border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
-            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .add-rule-btn, .delete-rule-btn {
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+            flex-shrink: 0; /* Prevent shrinking on small screens */
+        }
+        .add-rule-btn {
+            background-color: #48bb78; /* Green for add */
+        }
+        .add-rule-btn:hover {
+            background-color: #38a169;
+        }
+
+        .delete-rule-btn {
+            background-color: #ef4444; /* Red for delete */
+            padding: 8px 10px;
+        }
+        .delete-rule-btn:hover {
+            background-color: #dc2626;
+        }
+
+        .rule-type-select {
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e0;
+            background-color: #f8fafc;
+            font-family: 'Poppins', sans-serif;
+            margin-right: 5px;
+            flex-shrink: 0;
+        }
+
+        .add-rule-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            align-items: center;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
         }
 
         .modal-footer {
@@ -359,25 +570,37 @@
         }
 
         .modal-button.save-btn {
-            background-color: #48bb78; /* Tailwind green-500 */
+            background-color: #48bb78;
             color: white;
         }
 
         .modal-button.save-btn:hover {
-            background-color: #38a169; /* Tailwind green-600 */
+            background-color: #38a169;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(72, 187, 120, 0.3);
         }
 
         .modal-button.cancel-btn {
-            background-color: #ef4444; /* Tailwind red-500 */
+            background-color: #ef4444;
             color: white;
         }
 
         .modal-button.cancel-btn:hover {
-            background-color: #dc2626; /* Tailwind red-600 */
+            background-color: #dc2626;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .modal-button.reset-btn {
+            background-color: #6c757d;
+            color: white;
+            margin-right: auto; /* Push to the left */
+        }
+
+        .modal-button.reset-btn:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
         }
 
         /* Responsive adjustments */
@@ -397,7 +620,6 @@
             .modal-header h2 { font-size: 2rem; }
             .close-button { font-size: 32px; }
             .form-group label { font-size: 1rem; }
-            .form-group textarea { min-height: 150px; padding: 12px; }
             .modal-button { padding: 12px 25px; font-size: 1rem; }
             .copyright { margin-top: 40px; font-size: 0.9rem; }
         }
@@ -426,10 +648,12 @@
             .modal-header h2 { font-size: 1.8rem; }
             .close-button { font-size: 28px; }
             .form-group label { font-size: 0.95rem; }
-            .form-group textarea { min-height: 120px; padding: 10px; }
             .modal-button { padding: 10px 20px; font-size: 0.95rem; }
             .modal-footer { gap: 10px; }
             .copyright { margin-top: 30px; font-size: 0.85rem; }
+            .modal-rule-item { flex-wrap: wrap; }
+            .rule-type-select { margin-bottom: 5px; }
+            .add-rule-container { flex-direction: column; align-items: stretch; }
         }
 
         @media (max-width: 480px) {
@@ -455,11 +679,14 @@
             .modal-header h2 { font-size: 1.5rem; }
             .close-button { font-size: 24px; }
             .form-group label { font-size: 0.9rem; }
-            .form-group textarea { min-height: 100px; padding: 8px; font-size: 0.9rem; }
             .modal-button { padding: 8px 15px; font-size: 0.85rem; }
             .modal-footer { flex-direction: column; }
             .modal-button { width: 100%; }
-            .copyright { margin-top: 25px; font-size: 0.8rem; }
+            .modal-button.reset-btn { margin-right: 0; } /* Reset positioning for full width */
+            .modal-rule-item { flex-direction: column; align-items: stretch; }
+            .modal-rule-input { width: 100%; margin-bottom: 5px; }
+            .delete-rule-btn { width: 100%; }
+            .rule-type-select { width: 100%; margin-right: 0; margin-bottom: 10px;}
         }
     </style>
 </head>
@@ -475,33 +702,11 @@
 
         <h2 class="section-title">Strategi Umum</h2>
         <div id="generalRulesContent" class="rules-content">
-            <p><strong>Sebelum War:</strong></p>
-            <ul>
-                <li>Pastikan hero aktif.</li>
-                <li>Request troops sesuai war base.</li>
-                <li>Koordinasi serangan dengan co-leader atau teman.</li>
-            </ul>
-            <p><strong>Saat War:</strong></p>
-            <ol>
-                <li>Serang sesuai nomor atau target yang diinstruksikan.</li>
-                <li>Gunakan kedua serangan.</li>
-                <li>Prioritaskan 3 bintang.</li>
-            </ol>
-            <p><strong>Setelah War:</strong></p>
-            <ul>
-                <li>Kirim replay serangan terbaik.</li>
-                <li>Evaluasi serangan yang gagal untuk perbaikan.</li>
-                <li>Selalu belajar dari kesalahan dan pengalaman.</li>
-            </ul>
-        </div>
+            </div>
 
         <h2 class="section-title">Aturan Tambahan</h2>
         <div id="additionalRulesContent" class="rules-content">
-            <p>War adalah prioritas utama. Pemain yang tidak aktif atau sering melanggar aturan akan dikeluarkan dari war.</p>
-            <p>Setiap anggota wajib berpartisipasi dalam diskusi strategi war di grup WhatsApp.</p>
-            <p>Selalu berikan dukungan troops kepada teman klan.</p>
-            <p>Jaga kekompakan dan sportifitas dalam klan.</p>
-        </div>
+            </div>
 
         <div class="back-button-wrapper">
             <a href="index.html" class="back-button">
@@ -518,7 +723,7 @@
     <div class="admin-toggle-wrapper">
         <button id="adminModeToggle" class="admin-toggle-button">
             <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Admin Icon" class="admin-icon">
-            Admin Mode
+            Mode Admin
         </button>
     </div>
 
@@ -530,19 +735,64 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="editGeneralRules">Strategi Umum (Gunakan enter untuk paragraf baru. Untuk daftar, gunakan tanda bintang (*) atau angka (1.) di awal baris.)</label>
-                    <textarea id="editGeneralRules" rows="10"></textarea>
+                    <label>Strategi Umum - Sebelum War:</label>
+                    <div id="editGeneralBeforeWarRules"></div>
+                    <div class="add-rule-container">
+                        <select class="rule-type-select" data-target="editGeneralBeforeWarRules">
+                            <option value="p">Paragraf</option>
+                            <option value="li">List Item</option>
+                        </select>
+                        <button type="button" class="add-rule-btn" data-target="editGeneralBeforeWarRules">Tambah Aturan</button>
+                    </div>
                 </div>
+
                 <div class="form-group">
-                    <label for="editAdditionalRules">Aturan Tambahan (Gunakan enter untuk paragraf baru. Untuk daftar, gunakan tanda bintang (*) atau angka (1.) di awal baris.)</label>
-                    <textarea id="editAdditionalRules" rows="10"></textarea>
+                    <label>Strategi Umum - Saat War:</label>
+                    <div id="editGeneralDuringWarRules"></div>
+                    <div class="add-rule-container">
+                        <select class="rule-type-select" data-target="editGeneralDuringWarRules">
+                            <option value="p">Paragraf</option>
+                            <option value="li">List Item</option>
+                        </select>
+                        <button type="button" class="add-rule-btn" data-target="editGeneralDuringWarRules">Tambah Aturan</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Strategi Umum - Setelah War:</label>
+                    <div id="editGeneralAfterWarRules"></div>
+                    <div class="add-rule-container">
+                        <select class="rule-type-select" data-target="editGeneralAfterWarRules">
+                            <option value="p">Paragraf</option>
+                            <option value="li">List Item</option>
+                        </select>
+                        <button type="button" class="add-rule-btn" data-target="editGeneralAfterWarRules">Tambah Aturan</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Aturan Tambahan:</label>
+                    <div id="editAdditionalRules"></div>
+                    <div class="add-rule-container">
+                        <select class="rule-type-select" data-target="editAdditionalRules">
+                            <option value="p">Paragraf</option>
+                            <option value="li">List Item</option>
+                        </select>
+                        <button type="button" class="add-rule-btn" data-target="editAdditionalRules">Tambah Aturan</button>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
+                <button id="resetRulesBtn" class="modal-button reset-btn">Reset ke Default</button>
                 <button id="saveRulesBtn" class="modal-button save-btn">Simpan Perubahan</button>
                 <button id="cancelRulesBtn" class="modal-button cancel-btn">Batal</button>
             </div>
         </div>
+    </div>
+
+    <div id="toastNotification" class="toast-notification">
+        <span id="toastIcon"></span>
+        <span id="toastMessage"></span>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -555,202 +805,425 @@
 
             const editRulesModal = document.getElementById('editRulesModal');
             const closeButton = editRulesModal.querySelector('.close-button');
-            const editGeneralRulesTextarea = document.getElementById('editGeneralRules');
-            const editAdditionalRulesTextarea = document.getElementById('editAdditionalRules');
             const saveRulesBtn = document.getElementById('saveRulesBtn');
             const cancelRulesBtn = document.getElementById('cancelRulesBtn');
+            const resetRulesBtn = document.getElementById('resetRulesBtn');
 
-            let isAdminMode = false; // Initial state
+            const editGeneralBeforeWarRulesDiv = document.getElementById('editGeneralBeforeWarRules');
+            const editGeneralDuringWarRulesDiv = document.getElementById('editGeneralDuringWarRules');
+            const editGeneralAfterWarRulesDiv = document.getElementById('editGeneralAfterWarRules');
+            const editAdditionalRulesDiv = document.getElementById('editAdditionalRules');
 
-            // --- Conversion Functions (Text to HTML and HTML to Text) ---
+            let isAdminMode = false;
 
-            // Converts plain text (with newlines, * for ul, 1. for ol) to basic HTML
-            function convertTextToHtml(text) {
-                let html = [];
-                const lines = text.split('\n');
-                let inUl = false;
-                let inOl = false;
+            // Default content (sebagai objek untuk manajemen yang lebih mudah)
+            const defaultRules = {
+                general: {
+                    beforeWar: [
+                        { type: 'li', content: 'Pastikan hero aktif.' },
+                        { type: 'li', content: 'Request troops sesuai war base.' },
+                        { type: 'li', content: 'Koordinasi serangan dengan co-leader atau teman.' }
+                    ],
+                    duringWar: [
+                        { type: 'li', content: 'Serang sesuai nomor atau target yang diinstruksikan.' },
+                        { type: 'li', content: 'Gunakan kedua serangan.' },
+                        { type: 'li', content: 'Prioritaskan 3 bintang.' }
+                    ],
+                    afterWar: [
+                        { type: 'li', content: 'Kirim replay serangan terbaik.' },
+                        { type: 'li', content: 'Evaluasi serangan yang gagal untuk perbaikan.' },
+                        { type: 'li', content: 'Selalu belajar dari kesalahan dan pengalaman.' }
+                    ]
+                },
+                additional: [
+                    { type: 'p', content: 'War adalah prioritas utama. Pemain yang tidak aktif atau sering melanggar aturan akan dikeluarkan dari war.' },
+                    { type: 'p', content: 'Setiap anggota wajib berpartisipasi dalam diskusi strategi war di grup WhatsApp.' },
+                    { type: 'p', content: 'Selalu berikan dukungan troops kepada teman klan.' },
+                    { type: 'p', content: 'Jaga kekompakan dan sportifitas dalam klan.' }
+                ]
+            };
 
-                lines.forEach(line => {
-                    line = line.trim();
-                    if (line.length === 0) { // Handle empty lines as paragraph breaks
-                        if (inUl) { html.push('</ul>'); inUl = false; }
-                        if (inOl) { html.push('</ol>'); inOl = false; }
-                        // Ensure we don't add multiple empty paragraphs for consecutive blank lines
-                        if (html.length > 0 && html[html.length - 1] !== '<p></p>') {
-                            html.push('<p></p>'); // Add empty paragraph for spacing
-                        }
-                        return;
-                    }
-
-                    if (line.startsWith('* ')) {
-                        if (inOl) { html.push('</ol>'); inOl = false; }
-                        if (!inUl) { html.push('<ul>'); inUl = true; }
-                        html.push(`<li>${line.substring(2)}</li>`);
-                    } else if (line.match(/^\d+\.\s/)) {
-                        if (inUl) { html.push('</ul>'); inUl = false; }
-                        if (!inOl) { html.push('<ol>'); inOl = true; }
-                        html.push(`<li>${line.substring(line.indexOf('.') + 1).trim()}</li>`);
-                    } else {
-                        if (inUl) { html.push('</ul>'); inUl = false; }
-                        if (inOl) { html.push('</ol>'); inOl = false; }
-                        html.push(`<p>${line}</p>`);
-                    }
-                });
-
-                // Close any open lists at the end
-                if (inUl) { html.push('</ul>'); }
-                if (inOl) { html.push('</ol>'); }
-
-                // Remove consecutive empty paragraphs
-                return html.join('\n').replace(/<p><\/p>\n<p><\/p>/g, '<p></p>');
+            // --- Inisialisasi Dark Mode ---
+            function applyDarkMode(isDark) {
+                if (isDark) {
+                    document.body.classList.add('dark');
+                } else {
+                    document.body.classList.remove('dark');
+                }
             }
 
-            // Converts HTML content to plain text for textarea editing
-            function convertHtmlToText(html) {
-                // Create a temporary div to parse HTML
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-                let textContent = '';
-
-                Array.from(tempDiv.childNodes).forEach(node => {
-                    if (node.nodeType === Node.ELEMENT_NODE) {
-                        if (node.tagName === 'P') {
-                            // If the paragraph has content, add it with two newlines
-                            if (node.textContent.trim().length > 0) {
-                                textContent += node.textContent.trim() + '\n\n';
-                            } else {
-                                // If it's an empty paragraph, add one newline for spacing
-                                textContent += '\n';
-                            }
-                        } else if (node.tagName === 'UL' || node.tagName === 'OL') {
-                            Array.from(node.children).forEach((li, index) => {
-                                if (node.tagName === 'UL') {
-                                    textContent += `* ${li.textContent.trim()}\n`;
-                                } else if (node.tagName === 'OL') {
-                                    textContent += `${index + 1}. ${li.textContent.trim()}\n`; // Preserve numbering
-                                }
-                            });
-                            textContent += '\n'; // Add a newline after each list
-                        } else if (node.tagName === 'STRONG' || node.tagName === 'B') {
-                             textContent += node.textContent.trim(); // Just add the text, strip bolding for editor
-                        }
-                    } else if (node.nodeType === Node.TEXT_NODE) {
-                        const trimmedText = node.textContent.trim();
-                        if (trimmedText.length > 0) {
-                             textContent += trimmedText + '\n\n';
-                        }
-                    }
-                });
-
-                // Clean up multiple newlines and trim final result
-                return textContent.replace(/\n\n+/g, '\n\n').trim();
+            // Periksa preferensi dark mode dari localStorage saat halaman dimuat
+            const savedDarkMode = localStorage.getItem('darkMode');
+            if (savedDarkMode === 'true') {
+                applyDarkMode(true);
+            } else {
+                applyDarkMode(false);
             }
 
+            // Dengarkan perubahan di localStorage dari tab/jendela lain (misalnya, index.html)
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'darkMode') {
+                    applyDarkMode(event.newValue === 'true');
+                }
+            });
 
-            // --- Function to load data from Local Storage ---
+            // --- Fungsi Notifikasi Toast ---
+            function showToast(message, isError = false) {
+                const toast = document.getElementById('toastNotification');
+                const toastMessage = document.getElementById('toastMessage');
+                const toastIcon = document.getElementById('toastIcon');
+
+                toastMessage.textContent = message;
+                toast.classList.remove('error');
+                toastIcon.innerHTML = ''; // Hapus ikon sebelumnya
+
+                if (isError) {
+                    toast.classList.add('error');
+                    toastIcon.innerHTML = '&#x2716;'; // Ikon X Merah
+                } else {
+                    toastIcon.innerHTML = '&#x2714;'; // Ikon centang hijau
+                }
+
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000); // Sembunyikan setelah 3 detik
+            }
+
+            // --- Fungsi Pembantu untuk Merender Aturan di Area Edit Modal ---
+            function renderRulesInModal(rulesArray, targetElement) {
+                targetElement.innerHTML = ''; // Hapus konten sebelumnya
+                rulesArray.forEach((rule, index) => {
+                    const ruleItemDiv = document.createElement('div');
+                    ruleItemDiv.classList.add('modal-rule-item');
+
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.classList.add('modal-rule-input');
+                    input.value = rule.content;
+                    input.dataset.index = index; // Simpan indeks untuk pembaruan nanti
+                    input.dataset.type = rule.type; // Simpan tipe (p atau li)
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('delete-rule-btn');
+                    deleteButton.textContent = 'Hapus';
+                    // Tidak perlu dataset.index di sini, kita akan menghapus elemen div langsung
+
+                    ruleItemDiv.appendChild(input);
+                    ruleItemDiv.appendChild(deleteButton);
+                    targetElement.appendChild(ruleItemDiv);
+
+                    // Tambahkan event listener untuk penghapusan aturan yang baru ditambahkan
+                    deleteButton.addEventListener('click', () => {
+                        const allInputsInTarget = Array.from(targetElement.querySelectorAll('.modal-rule-item input'));
+                        const currentIndex = allInputsInTarget.indexOf(input); // Dapatkan indeks input yang akan dihapus
+                        
+                        let currentRulesArray;
+                        const parentDivId = targetElement.id;
+
+                        if (parentDivId === 'editGeneralBeforeWarRules') {
+                            currentRulesArray = defaultRules.general.beforeWar;
+                        } else if (parentDivId === 'editGeneralDuringWarRules') {
+                            currentRulesArray = defaultRules.general.duringWar;
+                        } else if (parentDivId === 'editGeneralAfterWarRules') {
+                            currentRulesArray = defaultRules.general.afterWar;
+                        } else if (parentDivId === 'editAdditionalRules') {
+                            currentRulesArray = defaultRules.additional;
+                        }
+                        
+                        if (currentRulesArray && currentIndex !== -1) {
+                            currentRulesArray.splice(currentIndex, 1); // Hapus dari objek defaultRules
+                        }
+                        
+                        ruleItemDiv.remove(); // Hapus elemen dari DOM
+                        showToast("Aturan dihapus!");
+                        // Tidak perlu render ulang seluruh bagian, karena sudah dihapus dari DOM.
+                        // Data di defaultRules akan dikumpulkan ulang saat Save.
+                    });
+
+                    // Event listener untuk memperbarui konten aturan secara real-time di objek defaultRules
+                    input.addEventListener('input', (e) => {
+                        const allInputsInTarget = Array.from(targetElement.querySelectorAll('.modal-rule-item input'));
+                        const currentIndex = allInputsInTarget.indexOf(e.target);
+                        
+                        let currentRulesArray;
+                        const parentDivId = targetElement.id;
+
+                        if (parentDivId === 'editGeneralBeforeWarRules') {
+                            currentRulesArray = defaultRules.general.beforeWar;
+                        } else if (parentDivId === 'editGeneralDuringWarRules') {
+                            currentRulesArray = defaultRules.general.duringWar;
+                        } else if (parentDivId === 'editGeneralAfterWarRules') {
+                            currentRulesArray = defaultRules.general.afterWar;
+                        } else if (parentDivId === 'editAdditionalRules') {
+                            currentRulesArray = defaultRules.additional;
+                        }
+
+                        if (currentRulesArray && currentRulesArray[currentIndex]) {
+                            currentRulesArray[currentIndex].content = e.target.value.trim();
+                        }
+                    });
+                });
+            }
+
+            // --- Fungsi untuk menambahkan input aturan baru ke modal ---
+            function addNewRuleInput(targetDivId, type) {
+                const targetElement = document.getElementById(targetDivId);
+                const ruleItemDiv = document.createElement('div');
+                ruleItemDiv.classList.add('modal-rule-item');
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.classList.add('modal-rule-input');
+                input.placeholder = type === 'p' ? 'Masukkan paragraf baru' : 'Masukkan list item baru';
+                input.dataset.type = type; // Simpan tipe untuk nanti saat disimpan
+
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-rule-btn');
+                deleteButton.textContent = 'Hapus';
+
+                ruleItemDiv.appendChild(input);
+                ruleItemDiv.appendChild(deleteButton);
+                targetElement.appendChild(ruleItemDiv);
+
+                // Tambahkan event listener untuk penghapusan aturan yang baru ditambahkan
+                deleteButton.addEventListener('click', () => {
+                    ruleItemDiv.remove();
+                    showToast("Aturan dihapus!");
+                });
+                showToast("Berhasil ditambahkan!");
+            }
+
+            // Event listener untuk Tombol Tambah Aturan
+            document.querySelectorAll('.add-rule-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const targetDivId = e.target.dataset.target;
+                    const selectElement = e.target.closest('.add-rule-container').querySelector('.rule-type-select');
+                    const ruleType = selectElement.value;
+                    addNewRuleInput(targetDivId, ruleType);
+                });
+            });
+
+
+            // --- Fungsi untuk memuat data dari Local Storage ---
             function loadWarRules() {
                 const savedGeneralRules = localStorage.getItem('indoGhostGeneralWarRules');
                 const savedAdditionalRules = localStorage.getItem('indoGhostAdditionalWarRules');
 
-                // Default content if nothing is saved
-                const defaultGeneralRulesHtml = `
-                    <p><strong>Sebelum War:</strong></p>
-                    <ul>
-                        <li>Pastikan hero aktif.</li>
-                        <li>Request troops sesuai war base.</li>
-                        <li>Koordinasi serangan dengan co-leader atau teman.</li>
-                    </ul>
-                    <p><strong>Saat War:</strong></p>
-                    <ol>
-                        <li>Serang sesuai nomor atau target yang diinstruksikan.</li>
-                        <li>Gunakan kedua serangan.</li>
-                        <li>Prioritaskan 3 bintang.</li>
-                    </ol>
-                    <p><strong>Setelah War:</strong></p>
-                    <ul>
-                        <li>Kirim replay serangan terbaik.</li>
-                        <li>Evaluasi serangan yang gagal untuk perbaikan.</li>
-                        <li>Selalu belajar dari kesalahan dan pengalaman.</li>
-                    </ul>
-                `;
+                let currentGeneralRules;
+                let currentAdditionalRules;
 
-                const defaultAdditionalRulesHtml = `
-                    <p>War adalah prioritas utama. Pemain yang tidak aktif atau sering melanggar aturan akan dikeluarkan dari war.</p>
-                    <p>Setiap anggota wajib berpartisipasi dalam diskusi strategi war di grup WhatsApp.</p>
-                    <p>Selalu berikan dukungan troops kepada teman klan.</p>
-                    <p>Jaga kekompakan dan sportifitas dalam klan.</p>
-                `;
+                try {
+                    currentGeneralRules = savedGeneralRules ? JSON.parse(savedGeneralRules) : null;
+                } catch (e) {
+                    console.error("Gagal memparsing aturan umum dari localStorage:", e);
+                    currentGeneralRules = null;
+                }
 
-                generalRulesContentElement.innerHTML = savedGeneralRules || defaultGeneralRulesHtml;
-                additionalRulesContentElement.innerHTML = savedAdditionalRules || defaultAdditionalRulesHtml;
+                try {
+                    currentAdditionalRules = savedAdditionalRules ? JSON.parse(savedAdditionalRules) : null;
+                } catch (e) {
+                    console.error("Gagal memparsing aturan tambahan dari localStorage:", e);
+                    currentAdditionalRules = null;
+                }
+                
+                // Pastikan struktur objek ada sebelum mengakses properti
+                if (!currentGeneralRules || !currentGeneralRules.beforeWar || !currentGeneralRules.duringWar || !currentGeneralRules.afterWar) {
+                    currentGeneralRules = JSON.parse(JSON.stringify(defaultRules.general)); // Deep copy default
+                }
+                if (!currentAdditionalRules) {
+                    currentAdditionalRules = JSON.parse(JSON.stringify(defaultRules.additional)); // Deep copy default
+                }
+
+                // Perbarui objek 'defaultRules' di memori dengan data yang dimuat
+                defaultRules.general.beforeWar = currentGeneralRules.beforeWar;
+                defaultRules.general.duringWar = currentGeneralRules.duringWar;
+                defaultRules.general.afterWar = currentGeneralRules.afterWar;
+                defaultRules.additional = currentAdditionalRules;
+
+                // Render konten untuk tampilan
+                renderDisplayRules(defaultRules.general.beforeWar, defaultRules.general.duringWar, defaultRules.general.afterWar, generalRulesContentElement, null);
+                renderDisplayRules(null, null, null, additionalRulesContentElement, defaultRules.additional);
             }
 
-            // --- Function to save war rules ---
-            function saveWarRules(generalContentHtml, additionalContentHtml) {
-                localStorage.setItem('indoGhostGeneralWarRules', generalContentHtml);
-                localStorage.setItem('indoGhostAdditionalWarRules', additionalContentHtml);
-                generalRulesContentElement.innerHTML = generalContentHtml;
-                additionalRulesContentElement.innerHTML = additionalContentHtml;
+            // --- Fungsi Pembantu untuk Merender Aturan untuk Tampilan di Halaman Utama ---
+            function renderDisplayRules(beforeWarRules, duringWarRules, afterWarRules, targetElement, additionalRules = null) {
+                let html = '';
+
+                if (additionalRules) { // Untuk bagian "Aturan Tambahan"
+                    additionalRules.forEach(rule => {
+                        if (rule.type === 'p') {
+                            html += `<p>${rule.content}</p>`;
+                        } else if (rule.type === 'li') {
+                            // Untuk daftar di Aturan Tambahan, akan dirender sebagai paragraf atau list tunggal jika hanya ada satu
+                            html += `<p>${rule.content}</p>`; 
+                        }
+                    });
+                } else { // Untuk bagian "Strategi Umum"
+                    if (beforeWarRules && beforeWarRules.length > 0) {
+                        html += '<p><strong>Sebelum War:</strong></p>';
+                        html += '<ul>';
+                        beforeWarRules.forEach(rule => {
+                            if (rule.type === 'li') {
+                                html += `<li>${rule.content}</li>`;
+                            } else if (rule.type === 'p') {
+                                // Jika ada paragraf di sini, bisa tampilkan sebagai item daftar
+                                html += `<li>${rule.content}</li>`;
+                            }
+                        });
+                        html += '</ul>';
+                    }
+
+                    if (duringWarRules && duringWarRules.length > 0) {
+                        html += '<p><strong>Saat War:</strong></p>';
+                        html += '<ol>';
+                        duringWarRules.forEach(rule => {
+                            if (rule.type === 'li') {
+                                html += `<li>${rule.content}</li>`;
+                            } else if (rule.type === 'p') {
+                                html += `<li>${rule.content}</li>`;
+                            }
+                        });
+                        html += '</ol>';
+                    }
+
+                    if (afterWarRules && afterWarRules.length > 0) {
+                        html += '<p><strong>Setelah War:</strong></p>';
+                        html += '<ul>';
+                        afterWarRules.forEach(rule => {
+                            if (rule.type === 'li') {
+                                html += `<li>${rule.content}</li>`;
+                            } else if (rule.type === 'p') {
+                                html += `<li>${rule.content}</li>`;
+                            }
+                        });
+                        html += '</ul>';
+                    }
+                }
+                targetElement.innerHTML = html;
             }
 
-            // --- Function to toggle admin mode ---
+
+            // --- Fungsi untuk menyimpan aturan war ---
+            function saveWarRulesToLocalStorage() {
+                const currentGeneralRules = {
+                    beforeWar: [],
+                    duringWar: [],
+                    afterWar: []
+                };
+                const currentAdditionalRules = [];
+
+                // Kumpulkan data dari input modal untuk Aturan Umum - Sebelum War
+                Array.from(editGeneralBeforeWarRulesDiv.querySelectorAll('.modal-rule-item input')).forEach(input => {
+                    if (input.value.trim() !== '') {
+                        currentGeneralRules.beforeWar.push({
+                            type: input.dataset.type || 'p', // Default to paragraph if type is not set
+                            content: input.value.trim()
+                        });
+                    }
+                });
+
+                // Kumpulkan data dari input modal untuk Aturan Umum - Saat War
+                Array.from(editGeneralDuringWarRulesDiv.querySelectorAll('.modal-rule-item input')).forEach(input => {
+                    if (input.value.trim() !== '') {
+                        currentGeneralRules.duringWar.push({
+                            type: input.dataset.type || 'p',
+                            content: input.value.trim()
+                        });
+                    }
+                });
+
+                // Kumpulkan data dari input modal untuk Aturan Umum - Setelah War
+                Array.from(editGeneralAfterWarRulesDiv.querySelectorAll('.modal-rule-item input')).forEach(input => {
+                    if (input.value.trim() !== '') {
+                        currentGeneralRules.afterWar.push({
+                            type: input.dataset.type || 'p',
+                            content: input.value.trim()
+                        });
+                    }
+                });
+
+                // Kumpulkan data dari input modal untuk Aturan Tambahan
+                Array.from(editAdditionalRulesDiv.querySelectorAll('.modal-rule-item input')).forEach(input => {
+                    if (input.value.trim() !== '') {
+                        currentAdditionalRules.push({
+                            type: input.dataset.type || 'p',
+                            content: input.value.trim()
+                        });
+                    }
+                });
+
+                localStorage.setItem('indoGhostGeneralWarRules', JSON.stringify(currentGeneralRules));
+                localStorage.setItem('indoGhostAdditionalWarRules', JSON.stringify(currentAdditionalRules));
+                loadWarRules(); // Render ulang tampilan dengan data yang disimpan
+                showToast("Perubahan disimpan!");
+            }
+
+            // --- Fungsi untuk mengaktifkan/menonaktifkan mode admin ---
             function toggleAdminMode() {
                 isAdminMode = !isAdminMode;
                 if (isAdminMode) {
                     editWarRulesBtn.classList.add('is-visible');
-                    adminModeToggle.textContent = 'Exit Admin Mode';
-                    adminModeToggle.style.backgroundColor = '#dc3545'; // Red for exit
+                    adminModeToggle.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Admin Icon" class="admin-icon"> Keluar Mode Admin';
+                    adminModeToggle.style.backgroundColor = '#dc3545'; // Merah untuk keluar
                 } else {
                     editWarRulesBtn.classList.remove('is-visible');
-                    adminModeToggle.textContent = 'Admin Mode';
-                    adminModeToggle.style.backgroundColor = '#6c757d'; // Gray for normal
+                    adminModeToggle.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Admin Icon" class="admin-icon"> Mode Admin';
+                    adminModeToggle.style.backgroundColor = '#6c757d'; // Abu-abu untuk normal
                 }
             }
 
-            // --- Open Modal Function ---
+            // --- Fungsi Buka Modal ---
             function openEditModal() {
-                // Convert current HTML content to plain text before loading into textarea
-                editGeneralRulesTextarea.value = convertHtmlToText(generalRulesContentElement.innerHTML);
-                editAdditionalRulesTextarea.value = convertHtmlToText(additionalRulesContentElement.innerHTML);
-                editRulesModal.style.display = 'flex'; // Use flex to center content
+                // Isi modal dengan aturan saat ini (dari objek defaultRules yang sudah dimuat dari localStorage)
+                renderRulesInModal(defaultRules.general.beforeWar, editGeneralBeforeWarRulesDiv);
+                renderRulesInModal(defaultRules.general.duringWar, editGeneralDuringWarRulesDiv);
+                renderRulesInModal(defaultRules.general.afterWar, editGeneralAfterWarRulesDiv);
+                renderRulesInModal(defaultRules.additional, editAdditionalRulesDiv);
+                
+                editRulesModal.style.display = 'flex';
             }
 
-            // --- Close Modal Function ---
+            // --- Fungsi Tutup Modal ---
             function closeEditModal() {
                 editRulesModal.style.display = 'none';
+                // Muat ulang aturan dari local storage untuk membuang perubahan yang tidak disimpan
+                loadWarRules();
             }
 
-            // --- Event listener for editing war rules (open modal) ---
+            // --- Event listener untuk mengedit aturan war (buka modal) ---
             editWarRulesBtn.addEventListener('click', openEditModal);
 
-            // --- Event listeners for modal buttons ---
+            // --- Event listener untuk tombol modal ---
             closeButton.addEventListener('click', closeEditModal);
             cancelRulesBtn.addEventListener('click', closeEditModal);
 
             saveRulesBtn.addEventListener('click', () => {
-                const newGeneralRulesText = editGeneralRulesTextarea.value;
-                const newAdditionalRulesText = editAdditionalRulesTextarea.value;
-                
-                // Convert text from textarea back to HTML for display and storage
-                const newGeneralRulesHtml = convertTextToHtml(newGeneralRulesText);
-                const newAdditionalRulesHtml = convertTextToHtml(newAdditionalRulesText);
-
-                saveWarRules(newGeneralRulesHtml, newAdditionalRulesHtml);
+                saveWarRulesToLocalStorage();
                 closeEditModal();
             });
 
-            // Close modal if clicked outside modal content
+            resetRulesBtn.addEventListener('click', () => {
+                if (confirm('Anda yakin ingin mereset semua aturan ke default? Tindakan ini tidak bisa dibatalkan.')) {
+                    localStorage.removeItem('indoGhostGeneralWarRules');
+                    localStorage.removeItem('indoGhostAdditionalWarRules');
+                    loadWarRules(); // Muat ulang dari default
+                    closeEditModal();
+                    showToast("Aturan telah direset ke default!");
+                }
+            });
+
+            // Tutup modal jika diklik di luar konten modal
             editRulesModal.addEventListener('click', (e) => {
                 if (e.target === editRulesModal) {
                     closeEditModal();
                 }
             });
 
-            // --- Event listener for Admin Mode Toggle Button ---
+            // --- Event listener untuk Tombol Toggle Mode Admin ---
             adminModeToggle.addEventListener('click', toggleAdminMode);
 
-            // --- Particles.js Initialization ---
+            // --- Inisialisasi Particles.js ---
             particlesJS('particles-js', {
                 "particles": {
                     "number": {
@@ -857,7 +1330,7 @@
                 "retina_detect": true
             });
 
-            // --- Initial load ---
+            // --- Pemuatan Awal ---
             loadWarRules();
         });
     </script>
