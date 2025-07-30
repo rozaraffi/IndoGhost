@@ -277,7 +277,7 @@
             transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
         }
 
-        /* Styles for dynamically created edit/delete buttons on announcement items */
+        /* Styles for dynamically created edit/delete/share buttons on announcement items */
         .announcement-item .edit-btn-item { /* New class for item-specific buttons */
             background-color: #ffc107; /* Default yellow, can be overridden */
             color: #333;
@@ -504,7 +504,7 @@
             .copyright { margin-top: 30px; font-size: 0.85rem; }
             /* Peraturan Section adjustments */
             .peraturan-section { padding: 15px; margin-top: 25px; }
-            .peraturan-section h3 { font-size: 1rem; margin-bottom: 12px; }
+            .peraturan-section h3 { font-size: 1 remunerate; margin-bottom: 12px; }
             .peraturan-item { padding: 8px 10px; margin-bottom: 8px; }
             .peraturan-item span { font-size: 0.9rem; }
             .peraturan-item .edit-btn-small { padding: 6px 10px; font-size: 0.8rem; }
@@ -755,6 +755,38 @@
                             renderAnnouncements();
                         };
                         listItem.appendChild(editItemBtn);
+
+                        // NEW: Share to WhatsApp Button
+                        const shareWhatsappBtn = document.createElement('button');
+                        shareWhatsappBtn.classList.add('edit-btn-item');
+                        shareWhatsappBtn.style.backgroundColor = '#28a745'; // WhatsApp green
+                        shareWhatsappBtn.style.color = 'white';
+                        shareWhatsappBtn.style.right = '150px'; // Position next to edit
+                        shareWhatsappBtn.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Icon" class="edit-icon" style="filter: invert(100%);"> Bagikan`;
+                        shareWhatsappBtn.onclick = (event) => {
+                            event.stopPropagation();
+                            const whatsappGroupLink = localStorage.getItem('indoGhostWhatsappLink');
+                            if (!whatsappGroupLink || whatsappGroupLink.includes('defaultlinkanda')) {
+                                alert('Harap atur "Link Grup WhatsApp" di Pengaturan Situs terlebih dahulu.');
+                                return;
+                            }
+                            
+                            // Updated message with the call to action
+                            const message = `*Pengumuman Klan Indo Ghost:*\n\n*${ann.title}*\n${ann.content}\n\nTanggal: ${formatDate(ann.date)}\n\nJangan lupa kunjungi website Indo Ghost untuk mendapatkan informasi lebih lanjut: ${window.location.href}`;
+                            
+                            const encodedMessage = encodeURIComponent(message);
+                            const finalWhatsappLink = `https://api.whatsapp.com/send?text=${encodedMessage}`; 
+                            
+                            if (confirm(`Pengumuman ini akan disalin dan Anda akan diarahkan ke WhatsApp. Tempelkan pesan ini ke grup Anda:\n\n${message}`)) {
+                                navigator.clipboard.writeText(message).then(() => {
+                                    window.open(whatsappGroupLink, '_blank'); // Open the group link
+                                }).catch(err => {
+                                    console.error('Failed to copy text: ', err);
+                                    window.open(finalWhatsappLink, '_blank'); // Fallback if copy fails
+                                });
+                            }
+                        };
+                        listItem.appendChild(shareWhatsappBtn);
                     }
                     announcementListElement.appendChild(listItem);
                 });
