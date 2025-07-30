@@ -6,7 +6,25 @@
     <title>Indo Ghost Clan - Gerbang Utama</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
     <style>
+        /* Define CSS Variables for Dynamic Colors */
+        :root {
+            --primary-color: #3b82f6; /* Default Tailwind blue-500 */
+            --secondary-color: #6366f1; /* Default Tailwind violet-500 */
+        }
+        /* Override primary/secondary colors in dark mode for a better contrast */
+        body.dark {
+            --primary-color: #63b3ed; /* Lighter blue for dark mode */
+            --secondary-color: #a78bfa; /* Lighter violet for dark mode */
+        }
+
+
         html, body {
             height: 100%; /* Ensure html and body take full height */
         }
@@ -22,7 +40,94 @@
             min-height: 100vh;
             position: relative;
             padding-bottom: 80px; /* Add padding for the copyright at the bottom */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for dark mode */
         }
+
+        /* Dark Mode Styles */
+        body.dark {
+            background-color: #1a202c; /* Darker background */
+            color: #e2e8f0; /* Lighter text */
+        }
+        body.dark .container {
+            background-color: #2d3748; /* Darker container */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+        body.dark h1 {
+            color: var(--primary-color); /* Use var for dynamic color */
+        }
+        body.dark p {
+            color: #cbd5e0; /* Lighter gray for description in dark mode */
+        }
+        body.dark .announcement-section {
+            background-color: #2c5282; /* Darker blue background for announcement */
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.15);
+        }
+        body.dark .announcement-section h3 {
+            color: var(--primary-color); /* Use var for dynamic color */
+        }
+        body.dark .announcement-item {
+            background-color: #4a5568; /* Darker item background */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left-color: var(--primary-color); /* Use var for dynamic color */
+        }
+        body.dark .announcement-item h4 {
+            color: #e2e8f0; /* Lighter text for title */
+        }
+        body.dark .announcement-item p {
+            color: #cbd5e0; /* Lighter text for content */
+        }
+        body.dark .announcement-item .announcement-date {
+            color: #a0aec0; /* Lighter gray for date */
+        }
+        body.dark .announcement-item p a {
+            color: var(--primary-color); /* Use var for dynamic color */
+        }
+        body.dark .announcement-item p a:hover {
+            color: color-mix(in srgb, var(--primary-color) 80%, black);
+        }
+        body.dark .peraturan-section {
+            background-color: #4a443a; /* Darker yellow-brown for rules */
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.15);
+        }
+        body.dark .peraturan-section h3 {
+            color: #d6bc70; /* Lighter brown for rules heading */
+        }
+        body.dark .peraturan-item {
+            background-color: #5a544a; /* Darker item background */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left-color: #d6bc70; /* Lighter accent */
+        }
+        body.dark .peraturan-item span {
+            color: #e2e8f0; /* Lighter text */
+        }
+        body.dark .copyright {
+            color: #a0aec0; /* Lighter gray for copyright */
+        }
+        body.dark .modal-content {
+            background-color: #2d3748;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        body.dark .modal-content h3 {
+            color: #e2e8f0;
+        }
+        body.dark .modal-content label {
+            color: #cbd5e0;
+        }
+        body.dark .modal-content input[type="text"],
+        body.dark .modal-content textarea,
+        body.dark .modal-content input[type="url"] {
+            background-color: #4a5568;
+            border-color: #6366f1;
+            color: #e2e8f0;
+        }
+        body.dark #toast-notification {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+        body.dark #toast-notification.success { background-color: #2f855a; }
+        body.dark #toast-notification.error { background-color: #c53030; }
+        body.dark #toast-notification.info { background-color: #3182ce; }
 
         /* Particles container for background */
         #particles-js {
@@ -46,6 +151,7 @@
             position: relative;
             z-index: 1; /* Above particles */
             flex-shrink: 0; /* Prevent container from shrinking */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for dark mode */
         }
 
         @keyframes fadeInScale {
@@ -64,8 +170,9 @@
             font-weight: 700;
             margin-bottom: 25px;
             letter-spacing: 1px; /* Less harsh letter spacing */
-            color: #1e3a8a; /* Darker blue heading */
+            color: var(--primary-color); /* Use variable for dynamic color */
             line-height: 1.2;
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
         }
 
         p {
@@ -74,6 +181,7 @@
             color: #4a5568; /* Darker gray for description */
             margin-bottom: 40px;
             line-height: 1.6;
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
         }
 
         .button-group {
@@ -107,19 +215,25 @@
             transform: translateY(-3px); /* Lighter lift effect */
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
         }
+        /* Added animation on click */
+        .utility-btn:active {
+            transform: translateY(-1px) scale(0.98);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
 
         .btn-primary {
-            background-color: #3b82f6; /* Tailwind blue-500 */
+            background-color: var(--primary-color); /* Use variable for dynamic color */
         }
         .btn-primary:hover {
-            background-color: #2563eb; /* Tailwind blue-600 */
+            background-color: color-mix(in srgb, var(--primary-color) 80%, black); /* Darken dynamically */
         }
 
         .btn-secondary {
-            background-color: #6366f1; /* Tailwind violet-500 */
+            background-color: var(--secondary-color); /* Use variable for dynamic color */
         }
         .btn-secondary:hover {
-            background-color: #4f46e5; /* Tailwind violet-600 */
+            background-color: color-mix(in srgb, var(--secondary-color) 80%, black); /* Darken dynamically */
         }
         
         /* New button style for COC Profile */
@@ -165,16 +279,18 @@
             box-shadow: inset 0 3px 8px rgba(0,0,0,0.05);
             text-align: left; /* Align text to left inside the box */
             position: relative;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for dark mode */
         }
 
         .announcement-section h3 {
             font-size: 1.15rem;
             font-weight: 600;
-            color: #1c4a8a;
+            color: var(--primary-color); /* Use variable for dynamic color */
             margin-bottom: 15px; /* Increased margin for better spacing */
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
         }
 
         .announcement-list {
@@ -195,11 +311,25 @@
             margin-bottom: 12px; /* Space between items */
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             position: relative;
-            border-left: 5px solid #3b82f6; /* Accent border */
+            border-left: 5px solid var(--primary-color); /* Accent border, use variable */
             opacity: 0; /* Hidden by default for fade-in effect */
             transform: translateY(10px); /* Slightly moved down for fade-in */
             animation: fadeInItem 0.5s ease-out forwards;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for dark mode */
         }
+
+        /* Style for clickable links within announcement content */
+        .announcement-item p a {
+            color: var(--primary-color); /* Blue for links, use variable */
+            text-decoration: underline;
+            word-break: break-all; /* Ensure long links wrap */
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
+        }
+
+        .announcement-item p a:hover {
+            color: color-mix(in srgb, var(--primary-color) 80%, black); /* Darken dynamically */
+        }
+
 
         @keyframes fadeInItem {
             to {
@@ -234,6 +364,7 @@
             font-weight: 600;
             color: #1e40af; /* Darker blue for title */
             margin-bottom: 5px;
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
         }
 
         .announcement-item p {
@@ -241,12 +372,14 @@
             color: #4a5568;
             line-height: 1.4;
             margin-bottom: 8px;
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
         }
 
         .announcement-item .announcement-date {
             font-size: 0.8rem;
             color: #718096; /* Gray for date */
             font-style: italic;
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
         }
         
         /* Edit button styles (shared) */
@@ -276,9 +409,17 @@
             pointer-events: auto;
             transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
         }
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .edit-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
 
-        /* Styles for dynamically created edit/delete/share buttons on announcement items */
-        .announcement-item .action-btn-item { /* Renamed class for clarity: action buttons */
+        /* Styles for dynamically created edit/delete buttons on announcement items */
+        .announcement-item .edit-btn-item { /* New class for item-specific buttons */
             background-color: #ffc107; /* Default yellow, can be overridden */
             color: #333;
             border: none;
@@ -287,7 +428,7 @@
             cursor: pointer;
             font-size: 0.8rem;
             font-weight: 500;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -298,10 +439,16 @@
             pointer-events: auto;
             transform: none; /* No initial transform needed */
         }
-        .announcement-item .action-btn-item:hover {
+        .announcement-item .edit-btn-item:hover {
             background-color: #e0a800;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .announcement-item .action-btn-item .edit-icon { /* Reusing edit-icon for consistency */
+        .announcement-item .edit-btn-item:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .announcement-item .edit-btn-item .edit-icon {
             width: 12px;
             height: 12px;
         }
@@ -341,17 +488,59 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .admin-toggle-button:hover {
             background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+        }
+        .admin-toggle-button:active {
+            transform: translateY(0);
+            box-shadow: none;
         }
 
         .admin-icon {
             width: 20px;
             height: 20px;
             filter: invert(100%); /* Make icon white */
+        }
+
+        /* Dark Mode Toggle Button */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background-color: var(--primary-color); /* Use variable for dynamic color */
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            background-color: color-mix(in srgb, var(--primary-color) 80%, black); /* Darken dynamically */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+        }
+        .dark-mode-toggle:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .dark-mode-toggle .icon {
+            width: 20px;
+            height: 20px;
+            filter: invert(100%);
         }
 
         /* Copyright text style */
@@ -361,6 +550,7 @@
             color: #718096; /* Slightly darker gray for better readability */
             text-align: center;
             width: 100%; /* Ensure it spans the full width of its parent */
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
         }
 
         /* New: Peraturan Section */
@@ -374,7 +564,7 @@
             opacity: 0;
             visibility: hidden;
             transform: translateY(10px);
-            transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease, background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for dark mode */
             position: relative; /* For inner positioning */
         }
 
@@ -393,6 +583,7 @@
             align-items: center;
             gap: 8px;
             justify-content: center; /* Center the heading */
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
         }
 
         .peraturan-item {
@@ -405,6 +596,7 @@
             padding: 12px 15px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             border-left: 5px solid #ffbf00; /* Accent border */
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for dark mode */
         }
         
         .peraturan-item:last-child {
@@ -416,6 +608,7 @@
             color: #8B4513; /* SaddleBrown */
             flex-grow: 1; /* Allow text to take space */
             margin-right: 15px; /* Space between text and button */
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
         }
 
         .peraturan-item .edit-btn-small { /* Reusing the smaller edit button style */
@@ -429,6 +622,7 @@
             visibility: visible;
             transform: none; /* No initial transform needed */
             pointer-events: auto;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .peraturan-item .edit-btn-small:hover {
@@ -436,6 +630,222 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
+        .peraturan-item .edit-btn-small:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        /* MODAL STYLES */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for dark mode */
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-content h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-color); /* Use variable for dynamic color */
+            margin-bottom: 25px;
+            text-align: center;
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
+        }
+
+        .modal-content label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4a5568;
+            text-align: left;
+            transition: color 0.3s ease; /* Smooth transition for dark mode */
+        }
+
+        .modal-content input[type="text"],
+        .modal-content textarea,
+        .modal-content input[type="url"],
+        .modal-content input[type="color"] { /* Added color input type */
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; /* Smooth transition for dark mode */
+        }
+
+        .modal-content textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Specific style for color input to make it wider */
+        .modal-content input[type="color"] {
+            height: 48px; /* Make it more visually appealing */
+            padding: 5px; /* Adjust padding for color swatch */
+            -webkit-appearance: none; /* Remove default browser styling */
+            appearance: none;
+            cursor: pointer;
+            width: auto; /* Allow it to shrink */
+        }
+        .modal-content input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        .modal-content input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 6px; /* Match other inputs */
+        }
+        .modal-content input[type="color"]::-moz-color-swatch-wrapper {
+            padding: 0;
+        }
+        .modal-content input[type="color"]::-moz-color-swatch {
+            border: none;
+            border-radius: 6px;
+        }
+
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            border: none;
+        }
+
+        .modal-buttons .save-btn {
+            background-color: var(--primary-color); /* Use variable for dynamic color */
+            color: white;
+        }
+        .modal-buttons .save-btn:hover {
+            background-color: color-mix(in srgb, var(--primary-color) 80%, black); /* Darken dynamically */
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .modal-buttons .save-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .modal-buttons .cancel-btn {
+            background-color: #ef4444; /* Red */
+            color: white;
+        }
+        .modal-buttons .cancel-btn:hover {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .modal-buttons .cancel-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        /* LOADING SPINNER */
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary-color); /* Use variable for dynamic color */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block; /* Changed to inline-block for visibility */
+            vertical-align: middle; /* Align with text */
+            margin-left: 8px; /* Space from text */
+            visibility: hidden; /* Control visibility via JS */
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .loading-spinner.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* TOAST NOTIFICATION STYLES */
+        #toast-notification {
+            position: fixed;
+            bottom: 100px; /* Above the admin toggle button */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            z-index: 1100; /* Higher than modal */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #toast-notification.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #toast-notification.success {
+            background-color: #28a745; /* Green */
+        }
+        #toast-notification.error {
+            background-color: #dc3545; /* Red */
+        }
+        #toast-notification.info {
+            background-color: #17a2b8; /* Blue-green */
+        }
+        
+        #toast-notification .toast-icon {
+            width: 20px;
+            height: 20px;
+            filter: invert(100%); /* Make icon white */
+        }
+
 
         /* Responsive adjustments */
         @media (max-width: 1024px) {
@@ -449,11 +859,13 @@
             .announcement-item h4 { font-size: 1rem; }
             .announcement-item p { font-size: 0.9rem; }
             .announcement-item .announcement-date { font-size: 0.75rem; }
-            .action-btn-item { padding: 7px 12px; font-size: 0.85rem; } /* Use new class */
+            .edit-btn { padding: 7px 12px; font-size: 0.85rem; }
             .edit-icon { width: 14px; height: 14px; }
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 10px; }
             .admin-toggle-button { padding: 10px 15px; font-size: 0.85rem; }
             .admin-icon { width: 18px; height: 18px; }
+            .dark-mode-toggle { padding: 10px 15px; font-size: 0.85rem; }
+            .dark-mode-toggle .icon { width: 18px; height: 18px; }
             .copyright { margin-top: 40px; font-size: 0.9rem; }
             /* Peraturan Section adjustments */
             .peraturan-section { padding: 18px; margin-top: 30px; }
@@ -461,6 +873,33 @@
             .peraturan-item { padding: 10px 12px; margin-bottom: 10px; }
             .peraturan-item span { font-size: 0.95rem; }
             .peraturan-item .edit-btn-small { padding: 7px 12px; font-size: 0.85rem; }
+
+            /* Modal adjustments */
+            .modal-content {
+                padding: 25px;
+            }
+            .modal-content h3 {
+                font-size: 1.5rem;
+            }
+            .modal-content input[type="text"],
+            .modal-content textarea,
+            .modal-content input[type="url"],
+            .modal-content input[type="color"] {
+                padding: 10px;
+                margin-bottom: 15px;
+            }
+            .modal-buttons button {
+                padding: 8px 15px;
+            }
+            #toast-notification {
+                bottom: 80px;
+                font-size: 0.9rem;
+                padding: 10px 18px;
+            }
+            #toast-notification .toast-icon {
+                width: 18px;
+                height: 18px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -495,19 +934,53 @@
             .announcement-item h4 { font-size: 0.95rem; }
             .announcement-item p { font-size: 0.85rem; }
             .announcement-item .announcement-date { font-size: 0.7rem; }
-            .action-btn-item { padding: 6px 10px; font-size: 0.8rem; } /* Use new class */
+            .edit-btn { padding: 6px 10px; font-size: 0.8rem; }
             .edit-icon { width: 12px; height: 12px; }
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 10px; }
             .admin-toggle-wrapper { bottom: 15px; right: 15px; }
             .admin-toggle-button { padding: 8px 12px; font-size: 0.85rem; }
             .admin-icon { width: 16px; height: 16px; }
+            .dark-mode-toggle { bottom: 15px; left: 15px; padding: 8px 12px; font-size: 0.85rem; }
+            .dark-mode-toggle .icon { width: 16px; height: 16px; }
             .copyright { margin-top: 30px; font-size: 0.85rem; }
             /* Peraturan Section adjustments */
             .peraturan-section { padding: 15px; margin-top: 25px; }
-            .peraturan-section h3 { font-size: 1rem; margin-bottom: 12px; }
+            .peraturan-section h3 { font-size: 1.05rem; margin-bottom: 12px; }
             .peraturan-item { padding: 8px 10px; margin-bottom: 8px; }
             .peraturan-item span { font-size: 0.9rem; }
             .peraturan-item .edit-btn-small { padding: 6px 10px; font-size: 0.8rem; }
+
+            /* Modal adjustments */
+            .modal-content {
+                padding: 20px;
+            }
+            .modal-content h3 {
+                font-size: 1.3rem;
+            }
+            .modal-content input[type="text"],
+            .modal-content textarea,
+            .modal-content input[type="url"],
+            .modal-content input[type="color"] {
+                padding: 8px;
+                margin-bottom: 12px;
+                font-size: 0.95rem;
+            }
+            .modal-buttons {
+                gap: 10px;
+            }
+            .modal-buttons button {
+                padding: 7px 12px;
+                font-size: 0.9rem;
+            }
+            #toast-notification {
+                bottom: 70px;
+                font-size: 0.85rem;
+                padding: 8px 15px;
+            }
+            #toast-notification .toast-icon {
+                width: 18px;
+                height: 18px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -537,12 +1010,14 @@
             .announcement-item h4 { font-size: 0.9rem; }
             .announcement-item p { font-size: 0.8rem; }
             .announcement-item .announcement-date { font-size: 0.65rem; }
-            .action-btn-item { padding: 5px 8px; font-size: 0.75rem; } /* Use new class */
+            .edit-btn { padding: 5px 8px; font-size: 0.75rem; }
             .edit-icon { width: 10px; height: 10px; }
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 5px; }
             .admin-toggle-wrapper { bottom: 10px; right: 10px; }
             .admin-toggle-button { padding: 7px 10px; font-size: 0.75rem; }
             .admin-icon { width: 14px; height: 14px; }
+            .dark-mode-toggle { bottom: 10px; left: 10px; padding: 7px 10px; font-size: 0.75rem; }
+            .dark-mode-toggle .icon { width: 14px; height: 14px; }
             .copyright { margin-top: 25px; font-size: 0.8rem; }
             /* Peraturan Section adjustments */
             .peraturan-section { padding: 12px; margin-top: 20px; }
@@ -550,7 +1025,41 @@
             .peraturan-item { padding: 6px 8px; margin-bottom: 6px; }
             .peraturan-item span { font-size: 0.85rem; }
             .peraturan-item .edit-btn-small { padding: 5px 8px; font-size: 0.75rem; }
-        </style>
+
+            /* Modal adjustments */
+            .modal-content {
+                padding: 15px;
+            }
+            .modal-content h3 {
+                font-size: 1.1rem;
+            }
+            .modal-content input[type="text"],
+            .modal-content textarea,
+            .modal-content input[type="url"],
+            .modal-content input[type="color"] {
+                padding: 7px;
+                margin-bottom: 10px;
+                font-size: 0.9rem;
+            }
+            .modal-buttons {
+                flex-direction: column-reverse;
+                gap: 8px;
+            }
+            .modal-buttons button {
+                width: 100%;
+                padding: 8px;
+            }
+            #toast-notification {
+                bottom: 60px;
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            #toast-notification .toast-icon {
+                width: 14px;
+                height: 14px;
+            }
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <div id="particles-js"></div> 
@@ -596,7 +1105,7 @@
                 Tambah Pengumuman
             </button>
             <button id="clearAnnouncementsBtn" class="edit-btn" style="background-color: #dc3545; color: white;">
-                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Clear Icon" style="filter: invert(100%);" class="edit-icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Clear Icon" class="edit-icon" style="filter: invert(100%);">
                 Bersihkan Semua
             </button>
         </div>
@@ -634,6 +1143,27 @@
                     Edit
                 </button>
             </div>
+            <div class="peraturan-item">
+                <span>URL Logo Clan (Opsional)</span>
+                <button id="editClanLogoUrlBtn" class="edit-btn-small">
+                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
+                    Edit
+                </button>
+            </div>
+            <div class="peraturan-item">
+                <span>Warna Primer (Tombol Utama)</span>
+                <button id="editPrimaryColorBtn" class="edit-btn-small">
+                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
+                    Edit
+                </button>
+            </div>
+            <div class="peraturan-item">
+                <span>Warna Sekunder (Tombol Sekunder)</span>
+                <button id="editSecondaryColorBtn" class="edit-btn-small">
+                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
+                    Edit
+                </button>
+            </div>
         </div>
 
         <div class="copyright">
@@ -648,10 +1178,51 @@
         </button>
     </div>
 
+    <button id="darkModeToggle" class="dark-mode-toggle">
+        <img id="darkModeIcon" src="https://cdn-icons-png.flaticon.com/512/621/621303.png" alt="Dark Mode Icon" class="icon">
+        <span id="darkModeText">Dark Mode</span>
+    </button>
+
+    <div id="announcementModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Tambah Pengumuman</h3>
+            <label for="announcementTitle">Judul Pengumuman:</label>
+            <input type="text" id="announcementTitle" placeholder="Masukkan judul">
+            
+            <label for="announcementContent">Isi Pengumuman:</label>
+            <textarea id="announcementContent" placeholder="Masukkan isi pengumuman"></textarea>
+
+            <div class="modal-buttons">
+                <button class="save-btn" id="saveAnnouncementBtn">Simpan <span class="loading-spinner" id="saveAnnounceSpinner"></span></button>
+                <button class="cancel-btn" id="cancelAnnouncementBtn">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h3 id="settingsModalTitle">Edit Pengaturan</h3>
+            <label for="settingsInputValue" id="settingsInputLabel">Nilai:</label>
+            <input type="text" id="settingsInputValue" placeholder="Masukkan nilai">
+            
+            <div class="modal-buttons">
+                <button class="save-btn" id="saveSettingsBtn">Simpan <span class="loading-spinner" id="saveSettingsSpinner"></span></button>
+                <button class="cancel-btn" id="cancelSettingsBtn">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-notification">
+        <img id="toast-icon" src="" alt="icon" class="toast-icon">
+        <span id="toast-message"></span>
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
             const mainDescriptionElement = document.getElementById('mainDescription');
             const announcementListElement = document.getElementById('announcementList');
             const addAnnouncementBtn = document.getElementById('addAnnouncementBtn');
@@ -660,6 +1231,9 @@
             const cocProfileButton = document.getElementById('cocProfileButton');
             const supercellStoreButton = document.getElementById('supercellStoreButton');
             const adminModeToggle = document.getElementById('adminModeToggle');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModeIcon = document.getElementById('darkModeIcon');
+            const darkModeText = document.getElementById('darkModeText');
 
             // Peraturan Section Elements
             const peraturanSection = document.getElementById('peraturanSection');
@@ -667,18 +1241,114 @@
             const editWhatsappLinkBtn = document.getElementById('editWhatsappLinkBtn');
             const editCocLinkBtn = document.getElementById('editCocLinkBtn');
             const editSupercellStoreLinkBtn = document.getElementById('editSupercellStoreLinkBtn');
+            const editClanLogoUrlBtn = document.getElementById('editClanLogoUrlBtn'); // New element
+            const editPrimaryColorBtn = document.getElementById('editPrimaryColorBtn'); // New element
+            const editSecondaryColorBtn = document.getElementById('editSecondaryColorBtn'); // New element
+
+            // Announcement Modal Elements
+            const announcementModal = document.getElementById('announcementModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const announcementTitleInput = document.getElementById('announcementTitle');
+            const announcementContentInput = document.getElementById('announcementContent');
+            const saveAnnouncementBtn = document.getElementById('saveAnnouncementBtn');
+            const cancelAnnouncementBtn = document.getElementById('cancelAnnouncementBtn');
+            const saveAnnounceSpinner = document.getElementById('saveAnnounceSpinner'); // Spinner for Announce Modal
+
+            // Generic Settings Modal Elements
+            const settingsModal = document.getElementById('settingsModal');
+            const settingsModalTitle = document.getElementById('settingsModalTitle');
+            const settingsInputLabel = document.getElementById('settingsInputLabel');
+            let settingsInputValueRef = document.getElementById('settingsInputValue'); // Initial ref
+            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+            const cancelSettingsBtn = document.getElementById('cancelSettingsBtn');
+            const saveSettingsSpinner = document.getElementById('saveSettingsSpinner'); // Spinner for Settings Modal
+            let currentSettingsSaveCallback = null; // Function to call when saving generic settings
+
+            // Toast Notification Elements
+            const toastNotification = document.getElementById('toast-notification');
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
 
             let isAdminMode = false;
             let announcements = [];
+            let currentEditingAnnouncementId = null; // To keep track of which announcement is being edited
 
-            // --- Function to format date ---
-            function formatDate(dateString) {
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            // Default & Stored Site Settings (for new features)
+            let siteSettings = {
+                mainDescription: 'Jelajahi detail anggota perkasa kami dan kuasai strategi kemenangan War!',
+                whatsappLink: 'https://chat.whatsapp.com/defaultlinkanda',
+                cocTag: 'YOUR_CLAN_TAG',
+                supercellStoreLink: 'https://store.supercell.com/',
+                clanLogoUrl: '', // New setting for optional clan logo URL
+                primaryColor: '#3b82f6', // Default Tailwind blue-500
+                secondaryColor: '#6366f1', // Default Tailwind violet-500
+                darkMode: false // Default to light mode
+            };
+
+            // --- Icon URLs for Toast Notifications ---
+            const TOAST_ICONS = {
+                success: './assets/icons/success.png', // Checkmark icon - Ganti dengan path lokal Anda!
+                error: './assets/icons/error.png', // X mark/Close icon - Ganti dengan path lokal Anda!
+                info: './assets/icons/info.png' // Info icon - Ganti dengan path lokal Anda!
+            };
+
+            // --- Function to show toast notification ---
+            function showToast(message, type = 'info') {
+                toastMessage.textContent = message;
+                toastNotification.className = ''; // Clear existing classes
+                toastNotification.classList.add('show', type);
+                
+                // Set icon based on type
+                toastIcon.src = TOAST_ICONS[type] || TOAST_ICONS.info;
+                toastIcon.style.display = 'inline-block';
+
+                setTimeout(() => {
+                    toastNotification.classList.remove('show');
+                }, 3000); // Notification disappears after 3 seconds
+            }
+
+            // --- Function to show/hide spinner ---
+            function toggleSpinner(spinnerElement, show) {
+                if (show) {
+                    spinnerElement.classList.add('show');
+                } else {
+                    spinnerElement.classList.remove('show');
+                }
+            }
+
+            // --- Function to format date for display ---
+            function formatDateForDisplay(dateString) {
+                const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
                 try {
                     return new Date(dateString).toLocaleDateString('id-ID', options);
                 } catch (e) {
-                    return new Date().toLocaleDateString('id-ID', options); // Fallback to current date
+                    console.error("Error parsing date:", dateString, e);
+                    return new Date().toLocaleDateString('id-ID', options); 
                 }
+            }
+
+            // --- Function to make URLs clickable in text ---
+            function makeUrlsClickable(text) {
+                const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])|(\bwww\.[\S]+?\b)|([\w-.]+?\.(com|net|org|id|co\.id|go\.id)(\/[\S]*)?\b)/igm;
+                return text.replace(urlRegex, (url) => {
+                    let fullUrl = url;
+                    if (!url.match(/^(https?|ftp|file):\/\//i) && !url.startsWith('www.')) {
+                        fullUrl = 'http://' + url;
+                    } else if (url.startsWith('www.')) {
+                        fullUrl = 'http://' + url;
+                    }
+                    return `<a href="${fullUrl}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+                });
+            }
+
+            // --- Function to apply dynamic styles ---
+            function applyDynamicStyles() {
+                document.documentElement.style.setProperty('--primary-color', siteSettings.primaryColor);
+                document.documentElement.style.setProperty('--secondary-color', siteSettings.secondaryColor);
+                
+                // Force re-render of elements that use these variables to ensure color change.
+                // This is often handled by CSS transitions but explicit refresh can help in some cases.
+                // No need for extra CSS rules here, as they are already in the <style> block using var(--color)
             }
 
             // --- Function to render announcements ---
@@ -691,8 +1361,14 @@
                     noAnnLi.style.borderLeft = 'none';
                     noAnnLi.style.boxShadow = 'none';
                     noAnnLi.style.backgroundColor = 'transparent';
+                    // Apply dark mode styling if active
+                    if (siteSettings.darkMode) {
+                         noAnnLi.style.color = '#a0aec0'; // Lighter gray for copyright in dark mode
+                    } else {
+                        noAnnLi.style.color = '#718096'; // Default gray
+                    }
                     noAnnLi.innerHTML = `
-                        <p style="text-align: center; color: #718096;">Tidak ada pengumuman saat ini.</p>
+                        <p style="text-align: center;">Tidak ada pengumuman saat ini.</p>
                     `;
                     announcementListElement.appendChild(noAnnLi);
                     return;
@@ -711,80 +1387,49 @@
                     }
                     listItem.style.animationDelay = `${index * 0.1}s`;
 
+                    const processedContent = makeUrlsClickable(ann.content);
+
                     listItem.innerHTML = `
                         <h4>${ann.title}</h4>
-                        <p>${ann.content}</p>
-                        <span class="announcement-date">${formatDate(ann.date)}</span>
+                        <p>${processedContent}</p>
+                        <span class="announcement-date">${formatDateForDisplay(ann.date)}</span>
                     `;
 
-                    // Always add the Share to WhatsApp Button
-                    const shareWhatsappBtn = document.createElement('button');
-                    shareWhatsappBtn.classList.add('action-btn-item'); // Changed class for broader use
-                    shareWhatsappBtn.style.backgroundColor = '#28a745'; // WhatsApp green
-                    shareWhatsappBtn.style.color = 'white';
-                    shareWhatsappBtn.style.right = '10px'; // Positioning for non-admin mode
-                    shareWhatsappBtn.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Icon" class="edit-icon" style="filter: invert(100%);"> Bagikan`;
-                    shareWhatsappBtn.onclick = (event) => {
-                        event.stopPropagation();
-                        
-                        const message = `*Pengumuman Klan Indo Ghost:*\n\n*${ann.title}*\n${ann.content}\n\nTanggal: ${formatDate(ann.date)}\n\nJangan lupa kunjungi website Indo Ghost untuk mendapatkan informasi lebih lanjut: ${window.location.href}`;
-                        
-                        const encodedMessage = encodeURIComponent(message);
-                        const whatsappShareLink = `https://api.whatsapp.com/send?text=${encodedMessage}`; 
-                        
-                        if (confirm(`Pengumuman ini akan disalin dan Anda akan diarahkan ke WhatsApp. Tempelkan pesan ini ke chat Anda:\n\n${message}`)) {
-                            navigator.clipboard.writeText(message).then(() => {
-                                window.open(whatsappShareLink, '_blank');
-                            }).catch(err => {
-                                console.error('Failed to copy text: ', err);
-                                window.open(whatsappShareLink, '_blank');
-                            });
-                        }
-                    };
-                    listItem.appendChild(shareWhatsappBtn);
-
-
-                    // Add delete and edit buttons ONLY in admin mode
+                    // Add delete and edit buttons in admin mode
                     if (isAdminMode) {
                         const deleteBtn = document.createElement('button');
-                        deleteBtn.classList.add('action-btn-item'); // Changed class for broader use
-                        deleteBtn.style.backgroundColor = '#dc3545'; // Red for delete
+                        deleteBtn.classList.add('edit-btn-item');
+                        deleteBtn.style.backgroundColor = '#dc3545';
                         deleteBtn.style.color = 'white';
-                        deleteBtn.style.right = '80px'; // Positioning
+                        deleteBtn.style.right = '10px';
                         deleteBtn.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Delete Icon" class="edit-icon" style="filter: invert(100%);"> Hapus`;
                         deleteBtn.onclick = (event) => {
                             event.stopPropagation();
-                            if (confirm('Anda yakin ingin menghapus pengumuman ini?')) {
+                            // Use custom confirmation modal instead of alert/confirm
+                            openConfirmationModal('Hapus Pengumuman', 'Anda yakin ingin menghapus pengumuman ini?', () => {
                                 announcements = announcements.filter(item => item.id !== ann.id);
                                 saveAnnouncements();
                                 renderAnnouncements();
-                            }
+                                showToast('Pengumuman berhasil dihapus!', 'success');
+                            });
                         };
                         listItem.appendChild(deleteBtn);
 
                         const editItemBtn = document.createElement('button');
-                        editItemBtn.classList.add('action-btn-item'); // Changed class for broader use
-                        editItemBtn.style.backgroundColor = '#2196F3'; // Blue for edit
+                        editItemBtn.classList.add('edit-btn-item');
+                        editItemBtn.style.backgroundColor = '#2196F3';
                         editItemBtn.style.color = 'white';
-                        editItemBtn.style.right = '150px'; // Position next to delete
+                        editItemBtn.style.right = '80px';
                         editItemBtn.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon" style="filter: invert(100%);"> Edit`;
                         editItemBtn.onclick = (event) => {
                             event.stopPropagation();
-                            const newTitle = prompt('Edit judul pengumuman:', ann.title);
-                            if (newTitle === null) return;
-                            const newContent = prompt('Edit isi pengumuman:', ann.content);
-                            if (newContent === null) return;
-
-                            ann.title = newTitle.trim() || 'Tanpa Judul';
-                            ann.content = newContent.trim() || 'Tidak ada isi.';
-                            ann.isNew = false; // Mark as read/edited
-                            saveAnnouncements();
-                            renderAnnouncements();
+                            currentEditingAnnouncementId = ann.id;
+                            modalTitle.textContent = 'Edit Pengumuman';
+                            announcementTitleInput.value = ann.title;
+                            announcementContentInput.value = ann.content;
+                            announcementModal.classList.add('show');
                         };
                         listItem.appendChild(editItemBtn);
-
-                        // Adjust position of shareWhatsappBtn when admin buttons are present
-                        shareWhatsappBtn.style.right = '220px'; // Push it further left
                     }
                     announcementListElement.appendChild(listItem);
                 });
@@ -792,291 +1437,451 @@
 
             // --- Function to load data from Local Storage ---
             function loadData() {
-                const savedMainDescription = localStorage.getItem('indoGhostMainDescription');
-                const savedWhatsappLink = localStorage.getItem('indoGhostWhatsappLink');
-                const savedCocTag = localStorage.getItem('indoGhostCocTag');
-                const savedSupercellStoreLink = localStorage.getItem('indoGhostSupercellStoreLink');
-                const savedAnnouncements = localStorage.getItem('indoGhostAnnouncements');
+                const savedSiteSettings = localStorage.getItem('indoGhostSiteSettings');
+                if (savedSiteSettings) {
+                    siteSettings = JSON.parse(savedSiteSettings);
+                }
 
-                if (savedMainDescription) {
-                    mainDescriptionElement.textContent = savedMainDescription;
-                } else {
-                    mainDescriptionElement.textContent = 'Jelajahi detail anggota perkasa kami dan kuasai strategi kemenangan War!';
+                mainDescriptionElement.textContent = siteSettings.mainDescription;
+                whatsappButton.href = siteSettings.whatsappLink;
+                const formattedCocTag = siteSettings.cocTag.replace(/#/g, '');
+                cocProfileButton.href = `https://link.clashofclans.com/id?action=OpenClanProfile&tag=%23${formattedCocTag}`;
+                supercellStoreButton.href = siteSettings.supercellStoreLink;
+
+                // Apply clan logo if available
+                if (siteSettings.clanLogoUrl) {
+                    // This is a placeholder; you'd need to target an image element if you add one.
+                    // For example, if you have <img id="clanLogo" src="" alt="Clan Logo"> in your HTML
+                    // document.getElementById('clanLogo').src = siteSettings.clanLogoUrl;
                 }
-                if (savedWhatsappLink) {
-                    whatsappButton.href = savedWhatsappLink;
+
+                // Apply dark mode setting
+                if (siteSettings.darkMode) {
+                    body.classList.add('dark');
+                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/604/604810.png'; // Sun icon
+                    darkModeText.textContent = 'Light Mode';
+                    initializeParticles({
+                        "particles": { "color": { "value": "#63b3ed" }, "line_linked": { "color": "#4299e1" } }
+                    }); // Adjust particle color for dark mode
                 } else {
-                    whatsappButton.href = 'https://chat.whatsapp.com/defaultlinkanda';
-                }
-                if (savedCocTag) {
-                    const formattedTag = savedCocTag.replace(/#/g, '');
-                    cocProfileButton.href = `https://link.clashofclans.com/id?action=OpenClanProfile&tag=%23${formattedTag}`;
-                } else {
-                    cocProfileButton.href = `https://link.clashofclans.com/id?action=OpenClanProfile&tag=%23YOUR_CLAN_TAG`;
-                }
-                if (savedSupercellStoreLink) {
-                    supercellStoreButton.href = savedSupercellStoreLink;
-                } else {
-                    supercellStoreButton.href = 'https://store.supercell.com/';
+                    body.classList.remove('dark');
+                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/621/621303.png'; // Moon icon
+                    darkModeText.textContent = 'Dark Mode';
+                    initializeParticles({
+                        "particles": { "color": { "value": "#cccccc" }, "line_linked": { "color": "#bbbbbb" } }
+                    }); // Default particle color for light mode
                 }
                 
+                // Apply colors (after dark mode is set, as dark mode changes the --primary-color variable)
+                applyDynamicStyles();
+
+
+                const savedAnnouncements = localStorage.getItem('indoGhostAnnouncements');
                 if (savedAnnouncements) {
                     announcements = JSON.parse(savedAnnouncements);
                 } else {
-                    // Default announcements if none exist (for testing scroll)
                     const today = new Date();
-                    announcements.push({ id: Date.now() + 1, title: 'Selamat Datang!', content: 'Selamat datang di halaman utama Klan Indo Ghost! Tetap pantau pengumuman penting di sini.', date: today.toISOString(), isNew: true });
-                    announcements.push({ id: Date.now() + 2, title: 'Jadwal War Mendatang', content: 'War berikutnya akan dimulai pada hari Rabu pukul 20:00 WIB. Pastikan semua hero siap!', date: new Date(today.getTime() - 86400000).toISOString(), isNew: false }); // 1 day ago
-                    announcements.push({ id: Date.now() + 3, title: 'Donasi Troops', content: 'Mohon perhatikan rasio donasi. Prioritaskan troop war yang diminta.', date: new Date(today.getTime() - 2 * 86400000).toISOString(), isNew: false }); // 2 days ago
-                    announcements.push({ id: Date.now() + 4, title: 'Event Clan: Friendly Challenge', content: 'Akan ada friendly challenge internal pada akhir pekan ini. Siapkan base terbaikmu!', date: new Date(today.getTime() - 3 * 86400000).toISOString(), isNew: false }); // 3 days ago
-                    announcements.push({ id: Date.now() + 5, title: 'Pembaruan Aturan', content: 'Beberapa aturan war telah diperbarui. Harap baca kembali di halaman Aturan War Clan.', date: new Date(today.getTime() - 4 * 86400000).toISOString(), isNew: false }); // 4 days ago
-                    announcements.push({ id: Date.now() + 6, title: 'Rekrutmen Member Baru', content: 'Kami membuka pendaftaran untuk member TH10+ yang aktif dan loyal. Ajak temanmu bergabung!', date: new Date(today.getTime() - 5 * 86400000).toISOString(), isNew: false }); // 5 days ago
+                    announcements.push({ id: Date.now() + 1, title: 'Selamat Datang!', content: 'Selamat datang di halaman utama Klan Indo Ghost! Kunjungi YouTube kami: https://www.youtube.com/0 atau TikTok: https://www.tiktok.com/@indoghostclan', date: today.toISOString(), isNew: true });
+                    announcements.push({ id: Date.now() + 2, title: 'Jadwal War Mendatang', content: 'War berikutnya akan dimulai pada hari Rabu pukul 20:00 WIB. Pastikan semua hero siap! Info lebih lanjut di www.ourclansite.com/war-schedule', date: new Date(today.getTime() - 86400000).toISOString(), isNew: false });
+                    announcements.push({ id: Date.now() + 3, title: 'Donasi Troops', content: 'Mohon perhatikan rasio donasi. Prioritaskan troop war yang diminta. Cek kebijakan kami: https://policies.clashofclans.com/en', date: new Date(today.getTime() - 2 * 86400000).toISOString(), isNew: false });
+                    announcements.push({ id: Date.now() + 4, title: 'Event Clan: Friendly Challenge', content: 'Akan ada friendly challenge internal pada akhir pekan ini. Siapkan base terbaikmu! Gabung Discord kami: discord.gg/exampleclan', date: new Date(today.getTime() - 3 * 86400000).toISOString(), isNew: false });
+                    announcements.push({ id: Date.now() + 5, title: 'Pembaruan Aturan', content: 'Beberapa aturan war telah diperbarui. Harap baca kembali di halaman Aturan War Clan. Contoh link singkat: google.com', date: new Date(today.getTime() - 4 * 86400000).toISOString(), isNew: false });
+                    announcements.push({ id: Date.now() + 6, title: 'Rekrutmen Member Baru', content: 'Kami membuka pendaftaran untuk member TH10+ yang aktif dan loyal. Ajak temanmu bergabung! Hubungi admin di 081234567890', date: new Date(today.getTime() - 5 * 86400000).toISOString(), isNew: false });
                     saveAnnouncements();
                 }
                 renderAnnouncements();
             }
 
             // --- Function to save data to Local Storage ---
+            function saveSiteSettings() {
+                localStorage.setItem('indoGhostSiteSettings', JSON.stringify(siteSettings));
+            }
+
+            // --- Function to save announcements ---
             function saveAnnouncements() {
                 localStorage.setItem('indoGhostAnnouncements', JSON.stringify(announcements));
             }
 
-            // --- Function to save main description ---
-            function saveMainDescription(newContent) {
-                localStorage.setItem('indoGhostMainDescription', newContent);
-                mainDescriptionElement.textContent = newContent;
-            }
-
-            // --- Function to save WhatsApp link ---
-            function saveWhatsappLink(newLink) {
-                localStorage.setItem('indoGhostWhatsappLink', newLink);
-                whatsappButton.href = newLink;
-            }
-
-            // --- Function to save CoC Tag ---
-            function saveCocTag(newTag) {
-                localStorage.setItem('indoGhostCocTag', newTag);
-                const formattedTag = newTag.startsWith('#') ? newTag.replace(/#/g, '') : newTag;
-                cocProfileButton.href = `https://link.clashofclans.com/id?action=OpenClanProfile&tag=%23${formattedTag}`;
-            }
-
-            // --- Function to save Supercell Store Link ---
-            function saveSupercellStoreLink(newLink) {
-                localStorage.setItem('indoGhostSupercellStoreLink', newLink);
-                supercellStoreButton.href = newLink;
+            // --- Function to update settings and save ---
+            function updateSettingAndSave(key, newValue, successMessage) {
+                siteSettings[key] = newValue;
+                saveSiteSettings();
+                loadData(); // Reload all data to ensure consistent updates and apply colors
+                showToast(successMessage, 'success');
             }
 
             // --- Function to toggle admin mode ---
             function toggleAdminMode() {
                 isAdminMode = !isAdminMode;
                 if (isAdminMode) {
-                    peraturanSection.classList.add('is-visible'); // Show peraturan section
+                    peraturanSection.classList.add('is-visible');
                     addAnnouncementBtn.classList.add('is-visible');
                     clearAnnouncementsBtn.classList.add('is-visible');
-                    adminModeToggle.textContent = 'Keluar Admin Mode';
+                    adminModeToggle.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Admin Icon" class="admin-icon" style="filter: invert(100%);"> Keluar Admin Mode`;
                     adminModeToggle.style.backgroundColor = '#dc3545';
+                    showToast('Admin Mode DIaktifkan!', 'info');
                 } else {
-                    peraturanSection.classList.remove('is-visible'); // Hide peraturan section
+                    peraturanSection.classList.remove('is-visible');
                     addAnnouncementBtn.classList.remove('is-visible');
                     clearAnnouncementsBtn.classList.remove('is-visible');
-                    adminModeToggle.textContent = 'Admin Mode';
+                    adminModeToggle.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Admin Icon" class="admin-icon" style="filter: invert(100%);"> Admin Mode`;
                     adminModeToggle.style.backgroundColor = '#6c757d';
+                    showToast('Admin Mode DINONAKTIFKAN!', 'info');
                 }
                 renderAnnouncements(); // Re-render to show/hide edit/delete buttons on announcements
             }
 
-            // --- Event listener for editing main description ---
-            editDescriptionBtn.addEventListener('click', () => {
-                const currentContent = mainDescriptionElement.textContent;
-                const newContent = prompt("Masukkan deskripsi utama:", currentContent);
+            // --- Custom Confirmation Modal (replacing native confirm) ---
+            const confirmationModal = document.createElement('div');
+            confirmationModal.id = 'confirmationModal';
+            confirmationModal.classList.add('modal');
+            confirmationModal.innerHTML = `
+                <div class="modal-content">
+                    <h3 id="confirmationModalTitle"></h3>
+                    <p id="confirmationModalMessage" style="margin-bottom: 20px; color: #4a5568;"></p>
+                    <div class="modal-buttons">
+                        <button class="save-btn" id="confirmYesBtn">Ya</button>
+                        <button class="cancel-btn" id="confirmNoBtn">Tidak</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(confirmationModal);
 
-                if (newContent !== null) {
-                    saveMainDescription(newContent.trim());
+            const confirmModalTitle = document.getElementById('confirmationModalTitle');
+            const confirmModalMessage = document.getElementById('confirmationModalMessage');
+            const confirmYesBtn = document.getElementById('confirmYesBtn');
+            const confirmNoBtn = document.getElementById('confirmNoBtn');
+            let confirmCallback = null;
+
+            function openConfirmationModal(title, message, onConfirm) {
+                confirmModalTitle.textContent = title;
+                confirmModalMessage.textContent = message;
+                confirmCallback = onConfirm;
+                confirmationModal.classList.add('show');
+            }
+
+            confirmYesBtn.addEventListener('click', () => {
+                if (confirmCallback) {
+                    confirmCallback();
                 }
+                confirmationModal.classList.remove('show');
             });
 
-            // --- Event listener for adding announcement ---
-            addAnnouncementBtn.addEventListener('click', () => {
-                const title = prompt('Masukkan judul pengumuman:');
-                if (title === null) return;
-                const content = prompt('Masukkan isi pengumuman:');
-                if (content === null) return;
+            confirmNoBtn.addEventListener('click', () => {
+                confirmationModal.classList.remove('show');
+            });
 
-                const newAnnouncement = {
-                    id: Date.now(),
-                    title: title.trim() || 'Tanpa Judul',
-                    content: content.trim() || 'Tidak ada isi.',
-                    date: new Date().toISOString(),
-                    isNew: true
-                };
-                announcements.push(newAnnouncement);
+
+            // --- Generic Settings Modal Logic ---
+            function openSettingsModal(title, label, currentValue, saveCallback, inputType = 'text') {
+                settingsModalTitle.textContent = title;
+                settingsInputLabel.textContent = label;
+
+                const currentInputOrTextarea = document.getElementById('settingsInputValue');
+                let newElement;
+
+                // Determine the correct tag and type based on inputType
+                let targetTagName = 'INPUT';
+                let targetInputType = 'text';
+
+                if (inputType === 'textarea') {
+                    targetTagName = 'TEXTAREA';
+                } else if (inputType === 'color') {
+                    targetInputType = 'color';
+                } else if (inputType === 'url') {
+                    targetInputType = 'url';
+                }
+
+                // Check if the current element needs to be replaced
+                if (currentInputOrTextarea.tagName !== targetTagName || 
+                    (currentInputOrTextarea.tagName === 'INPUT' && currentInputOrTextarea.type !== targetInputType)) {
+                    
+                    newElement = document.createElement(targetTagName);
+                    if (targetTagName === 'INPUT') {
+                        newElement.type = targetInputType;
+                    } else if (targetTagName === 'TEXTAREA') {
+                        newElement.rows = 5;
+                    }
+
+                    newElement.id = 'settingsInputValue';
+                    newElement.className = currentInputOrTextarea.className; 
+                    currentInputOrTextarea.parentNode.replaceChild(newElement, currentInputOrTextarea);
+                    settingsInputValueRef = newElement; // Update the reference
+                } else {
+                    // If element type matches, just use the existing one
+                    settingsInputValueRef = currentInputOrTextarea;
+                }
+                
+                settingsInputValueRef.value = currentValue;
+                settingsInputValueRef.placeholder = `Masukkan ${label.toLowerCase()}`;
+                
+                currentSettingsSaveCallback = saveCallback;
+                settingsModal.classList.add('show');
+            }
+
+            saveSettingsBtn.addEventListener('click', () => {
+                toggleSpinner(saveSettingsSpinner, true);
+                const newValue = settingsInputValueRef.value.trim();
+                
+                // No setTimeout here to make it instant
+                if (currentSettingsSaveCallback) {
+                    currentSettingsSaveCallback(newValue);
+                }
+                settingsModal.classList.remove('show');
+                toggleSpinner(saveSettingsSpinner, false);
+            });
+
+            cancelSettingsBtn.addEventListener('click', () => {
+                settingsModal.classList.remove('show');
+            });
+
+
+            // --- Event listener for editing main description ---
+            editDescriptionBtn.addEventListener('click', () => {
+                openSettingsModal('Edit Deskripsi Utama', 'Deskripsi Situs:', siteSettings.mainDescription, (newValue) => {
+                    updateSettingAndSave('mainDescription', newValue, 'Deskripsi utama berhasil diperbarui!');
+                }, 'textarea');
+            });
+
+            // --- Event listener for adding announcement (opens modal) ---
+            addAnnouncementBtn.addEventListener('click', () => {
+                currentEditingAnnouncementId = null;
+                modalTitle.textContent = 'Tambah Pengumuman';
+                announcementTitleInput.value = '';
+                announcementContentInput.value = '';
+                announcementModal.classList.add('show');
+            });
+
+            // --- Event listener for saving announcement from modal ---
+            saveAnnouncementBtn.addEventListener('click', () => {
+                toggleSpinner(saveAnnounceSpinner, true);
+                const title = announcementTitleInput.value.trim();
+                const content = announcementContentInput.value.trim();
+
+                if (!title || !content) {
+                    showToast('Harap isi judul dan isi pengumuman!', 'error');
+                    toggleSpinner(saveAnnounceSpinner, false);
+                    return;
+                }
+
+                // No setTimeout here to make it instant
+                if (currentEditingAnnouncementId) {
+                    const annIndex = announcements.findIndex(ann => ann.id === currentEditingAnnouncementId);
+                    if (annIndex !== -1) {
+                        announcements[annIndex].title = title;
+                        announcements[annIndex].content = content;
+                        announcements[annIndex].date = new Date().toISOString();
+                        announcements[annIndex].isNew = false;
+                        showToast('Pengumuman berhasil diperbarui!', 'success');
+                    }
+                } else {
+                    const newAnnouncement = {
+                        id: Date.now(),
+                        title: title,
+                        content: content,
+                        date: new Date().toISOString(),
+                        isNew: true
+                    };
+                    announcements.push(newAnnouncement);
+                    showToast('Pengumuman baru berhasil ditambahkan!', 'success');
+                }
+                
                 saveAnnouncements();
                 renderAnnouncements();
+                announcementModal.classList.remove('show');
+                toggleSpinner(saveAnnounceSpinner, false);
+            });
+
+            // --- Event listener for canceling announcement modal ---
+            cancelAnnouncementBtn.addEventListener('click', () => {
+                announcementModal.classList.remove('show');
             });
 
             // --- Event listener for clearing all announcements ---
             clearAnnouncementsBtn.addEventListener('click', () => {
-                if (confirm('Anda yakin ingin menghapus SEMUA pengumuman? Tindakan ini tidak bisa dibatalkan.')) {
+                openConfirmationModal('Bersihkan Semua Pengumuman', 'Anda yakin ingin menghapus SEMUA pengumuman? Tindakan ini tidak bisa dibatalkan.', () => {
                     announcements = [];
                     saveAnnouncements();
                     renderAnnouncements();
-                }
+                    showToast('Semua pengumuman telah dihapus!', 'info');
+                });
             });
 
             // --- Event listener for editing WhatsApp link ---
             editWhatsappLinkBtn.addEventListener('click', () => {
-                const currentWhatsappLink = localStorage.getItem('indoGhostWhatsappLink') || 'https://chat.whatsapp.com/defaultlinkanda';
-                const newWhatsappLink = prompt("Masukkan link Grup WhatsApp (misal: https://chat.whatsapp.com/abcde123):", currentWhatsappLink);
-
-                if (newWhatsappLink !== null) {
-                    if (newWhatsappLink.trim() === "") {
-                         localStorage.removeItem('indoGhostWhatsappLink');
-                         whatsappButton.href = 'https://chat.whatsapp.com/defaultlinkanda';
-                    } else {
-                        saveWhatsappLink(newWhatsappLink.trim());
-                    }
-                }
+                openSettingsModal('Edit Link Grup WhatsApp', 'Link URL WhatsApp:', siteSettings.whatsappLink, (newValue) => {
+                    updateSettingAndSave('whatsappLink', newValue, 'Link WhatsApp berhasil diperbarui!');
+                }, 'url');
             });
 
             // --- Event listener for editing CoC Tag ---
             editCocLinkBtn.addEventListener('click', () => {
-                const currentCocTag = localStorage.getItem('indoGhostCocTag') || 'YOUR_CLAN_TAG';
-                const newCocTag = prompt("Masukkan Tag Klan Clash of Clans Anda (contoh: #2Y9Y2Q2J):", currentCocTag);
-
-                if (newCocTag !== null) {
-                    if (newCocTag.trim() === "") {
-                        localStorage.removeItem('indoGhostCocTag');
-                        cocProfileButton.href = `https://link.clashofclans.com/id?action=OpenClanProfile&tag=%23YOUR_CLAN_TAG`;
-                    } else {
-                        saveCocTag(newCocTag.trim());
-                    }
-                }
+                openSettingsModal('Edit Tag Clan CoC', 'Tag Clan CoC (tanpa #):', siteSettings.cocTag, (newValue) => {
+                    updateSettingAndSave('cocTag', newValue, 'Tag Clan CoC berhasil diperbarui!');
+                });
             });
 
             // --- Event listener for editing Supercell Store link ---
             editSupercellStoreLinkBtn.addEventListener('click', () => {
-                const currentSupercellStoreLink = localStorage.getItem('indoGhostSupercellStoreLink') || 'https://store.supercell.com/';
-                const newSupercellStoreLink = prompt("Masukkan link Supercell Store:", currentSupercellStoreLink);
+                openSettingsModal('Edit Link Supercell Store', 'Link URL Supercell Store:', siteSettings.supercellStoreLink, (newValue) => {
+                    updateSettingAndSave('supercellStoreLink', newValue, 'Link Supercell Store berhasil diperbarui!');
+                }, 'url');
+            });
 
-                if (newSupercellStoreLink !== null) {
-                    if (newSupercellStoreLink.trim() === "") {
-                        localStorage.removeItem('indoGhostSupercellStoreLink');
-                        supercellStoreButton.href = 'https://store.supercell.com/';
-                    } else {
-                        saveSupercellStoreLink(newSupercellStoreLink.trim());
-                    }
-                }
+            // --- Event listener for editing Clan Logo URL ---
+            editClanLogoUrlBtn.addEventListener('click', () => {
+                openSettingsModal('Edit URL Logo Clan', 'URL Logo Clan:', siteSettings.clanLogoUrl, (newValue) => {
+                    updateSettingAndSave('clanLogoUrl', newValue, 'URL Logo Clan berhasil diperbarui!');
+                }, 'url');
+            });
+
+            // --- Event listener for editing Primary Color ---
+            editPrimaryColorBtn.addEventListener('click', () => {
+                openSettingsModal('Edit Warna Primer', 'Warna Hex/RGB:', siteSettings.primaryColor, (newValue) => {
+                    updateSettingAndSave('primaryColor', newValue, 'Warna primer berhasil diperbarui!');
+                }, 'color'); // Use 'color' input type
+            });
+
+            // --- Event listener for editing Secondary Color ---
+            editSecondaryColorBtn.addEventListener('click', () => {
+                openSettingsModal('Edit Warna Sekunder', 'Warna Hex/RGB:', siteSettings.secondaryColor, (newValue) => {
+                    updateSettingAndSave('secondaryColor', newValue, 'Warna sekunder berhasil diperbarui!');
+                }, 'color'); // Use 'color' input type
             });
 
             // --- Event listener for Admin Mode Toggle Button ---
             adminModeToggle.addEventListener('click', toggleAdminMode);
 
+            // --- Event listener for Dark Mode Toggle Button ---
+            darkModeToggle.addEventListener('click', () => {
+                siteSettings.darkMode = !siteSettings.darkMode;
+                saveSiteSettings();
+                loadData(); // Reload data to apply dark mode
+                if (siteSettings.darkMode) {
+                    showToast('Dark Mode diaktifkan!', 'info');
+                } else {
+                    showToast('Light Mode diaktifkan!', 'info');
+                }
+            });
+
             // --- Particles.js Initialization ---
-            particlesJS('particles-js', {
-                "particles": {
-                    "number": {
-                        "value": 80,
-                        "density": {
-                            "enable": true,
-                            "value_area": 800
-                        }
-                    },
-                    "color": {
-                        "value": "#cccccc"
-                    },
-                    "shape": {
-                        "type": "circle",
-                        "stroke": {
-                            "width": 0,
-                            "color": "#000000"
-                        },
-                        "polygon": {
-                            "nb_sides": 5
-                        }
-                    },
-                    "opacity": {
-                        "value": 0.5,
-                        "random": false,
-                        "anim": {
-                            "enable": false,
-                            "speed": 1,
-                            "opacity_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "size": {
-                        "value": 3,
-                        "random": true,
-                        "anim": {
-                            "enable": false,
-                            "speed": 40,
-                            "size_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "line_linked": {
-                        "enable": true,
-                        "distance": 150,
-                        "color": "#bbbbbb",
-                        "opacity": 0.4,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 2,
-                        "direction": "none",
-                        "random": false,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false,
-                        "attract": {
-                            "enable": false,
-                            "rotateX": 600,
-                            "rotateY": 1200
-                        }
-                    }
-                },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "grab"
-                        },
-                        "onclick": {
-                            "enable": true,
-                            "mode": "push"
-                        },
-                        "resize": true
-                    },
-                    "modes": {
-                        "grab": {
-                            "distance": 140,
-                            "line_linked": {
-                                "opacity": 1
+            let pJSCurrentInstance = null; // To keep track of the current particles.js instance
+
+            function initializeParticles(particlesConfig) {
+                // Destroy existing instance if it exists
+                if (pJSCurrentInstance && window.pJSDom && window.pJSDom.length > 0) {
+                    window.pJSDom[0].pJS.fn.vendors.destroypJS();
+                    window.pJSDom = []; // Clear the pJSDom array
+                    pJSCurrentInstance = null;
+                }
+                
+                // Initialize new instance
+                particlesJS('particles-js', {
+                    "particles": {
+                        "number": {
+                            "value": 80,
+                            "density": {
+                                "enable": true,
+                                "value_area": 800
                             }
                         },
-                        "bubble": {
-                            "distance": 400,
-                            "size": 40,
-                            "duration": 2,
-                            "opacity": 8,
-                            "speed": 3
+                        "color": particlesConfig.particles.color, // Dynamic color
+                        "shape": {
+                            "type": "circle",
+                            "stroke": {
+                                "width": 0,
+                                "color": "#000000"
+                            },
+                            "polygon": {
+                                "nb_sides": 5
+                            }
                         },
-                        "repulse": {
-                            "distance": 200,
-                            "duration": 0.4
+                        "opacity": {
+                            "value": 0.5,
+                            "random": false,
+                            "anim": {
+                                "enable": false,
+                                "speed": 1,
+                                "opacity_min": 0.1,
+                                "sync": false
+                            }
                         },
-                        "push": {
-                            "particles_nb": 4
+                        "size": {
+                            "value": 3,
+                            "random": true,
+                            "anim": {
+                                "enable": false,
+                                "speed": 40,
+                                "size_min": 0.1,
+                                "sync": false
+                            }
                         },
-                        "remove": {
-                            "particles_nb": 2
+                        "line_linked": {
+                            "enable": true,
+                            "distance": 150,
+                            "color": particlesConfig.particles.line_linked.color, // Dynamic color
+                            "opacity": 0.4,
+                            "width": 1
+                        },
+                        "move": {
+                            "enable": true,
+                            "speed": 2,
+                            "direction": "none",
+                            "random": false,
+                            "straight": false,
+                            "out_mode": "out",
+                            "bounce": false,
+                            "attract": {
+                                "enable": false,
+                                "rotateX": 600,
+                                "rotateY": 1200
+                            }
                         }
-                    }
-                },
-                "retina_detect": true
-            });
+                    },
+                    "interactivity": {
+                        "detect_on": "canvas",
+                        "events": {
+                            "onhover": {
+                                "enable": true,
+                                "mode": "grab"
+                            },
+                            "onclick": {
+                                "enable": true,
+                                "mode": "push"
+                            },
+                            "resize": true
+                        },
+                        "modes": {
+                            "grab": {
+                                "distance": 140,
+                                "line_linked": {
+                                    "opacity": 1
+                                }
+                            },
+                            "bubble": {
+                                "distance": 400,
+                                "size": 40,
+                                "duration": 2,
+                                "opacity": 8,
+                                "speed": 3
+                            },
+                            "repulse": {
+                                "distance": 200,
+                                "duration": 0.4
+                            },
+                            "push": {
+                                "particles_nb": 4
+                            },
+                            "remove": {
+                                "particles_nb": 2
+                            }
+                        }
+                    },
+                    "retina_detect": true
+                });
+                // Store the reference to the new instance
+                pJSCurrentInstance = window.pJSDom[0].pJS;
+            }
 
             // --- Initial load ---
             loadData();
