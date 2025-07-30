@@ -278,7 +278,7 @@
         }
 
         /* Styles for dynamically created edit/delete/share buttons on announcement items */
-        .announcement-item .edit-btn-item { /* New class for item-specific buttons */
+        .announcement-item .action-btn-item { /* Renamed class for clarity: action buttons */
             background-color: #ffc107; /* Default yellow, can be overridden */
             color: #333;
             border: none;
@@ -298,10 +298,10 @@
             pointer-events: auto;
             transform: none; /* No initial transform needed */
         }
-        .announcement-item .edit-btn-item:hover {
+        .announcement-item .action-btn-item:hover {
             background-color: #e0a800;
         }
-        .announcement-item .edit-btn-item .edit-icon {
+        .announcement-item .action-btn-item .edit-icon { /* Reusing edit-icon for consistency */
             width: 12px;
             height: 12px;
         }
@@ -449,7 +449,7 @@
             .announcement-item h4 { font-size: 1rem; }
             .announcement-item p { font-size: 0.9rem; }
             .announcement-item .announcement-date { font-size: 0.75rem; }
-            .edit-btn { padding: 7px 12px; font-size: 0.85rem; }
+            .action-btn-item { padding: 7px 12px; font-size: 0.85rem; } /* Use new class */
             .edit-icon { width: 14px; height: 14px; }
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 10px; }
             .admin-toggle-button { padding: 10px 15px; font-size: 0.85rem; }
@@ -495,7 +495,7 @@
             .announcement-item h4 { font-size: 0.95rem; }
             .announcement-item p { font-size: 0.85rem; }
             .announcement-item .announcement-date { font-size: 0.7rem; }
-            .edit-btn { padding: 6px 10px; font-size: 0.8rem; }
+            .action-btn-item { padding: 6px 10px; font-size: 0.8rem; } /* Use new class */
             .edit-icon { width: 12px; height: 12px; }
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 10px; }
             .admin-toggle-wrapper { bottom: 15px; right: 15px; }
@@ -504,7 +504,7 @@
             .copyright { margin-top: 30px; font-size: 0.85rem; }
             /* Peraturan Section adjustments */
             .peraturan-section { padding: 15px; margin-top: 25px; }
-            .peraturan-section h3 { font-size: 1 remunerate; margin-bottom: 12px; }
+            .peraturan-section h3 { font-size: 1rem; margin-bottom: 12px; }
             .peraturan-item { padding: 8px 10px; margin-bottom: 8px; }
             .peraturan-item span { font-size: 0.9rem; }
             .peraturan-item .edit-btn-small { padding: 6px 10px; font-size: 0.8rem; }
@@ -537,7 +537,7 @@
             .announcement-item h4 { font-size: 0.9rem; }
             .announcement-item p { font-size: 0.8rem; }
             .announcement-item .announcement-date { font-size: 0.65rem; }
-            .edit-btn { padding: 5px 8px; font-size: 0.75rem; }
+            .action-btn-item { padding: 5px 8px; font-size: 0.75rem; } /* Use new class */
             .edit-icon { width: 10px; height: 10px; }
             #addAnnouncementBtn, #clearAnnouncementsBtn { margin-top: 5px; }
             .admin-toggle-wrapper { bottom: 10px; right: 10px; }
@@ -596,7 +596,7 @@
                 Tambah Pengumuman
             </button>
             <button id="clearAnnouncementsBtn" class="edit-btn" style="background-color: #dc3545; color: white;">
-                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Clear Icon" class="edit-icon" style="filter: invert(100%);">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Clear Icon" style="filter: invert(100%);" class="edit-icon">
                 Bersihkan Semua
             </button>
         </div>
@@ -717,13 +717,40 @@
                         <span class="announcement-date">${formatDate(ann.date)}</span>
                     `;
 
-                    // Add delete and edit buttons in admin mode
+                    // Always add the Share to WhatsApp Button
+                    const shareWhatsappBtn = document.createElement('button');
+                    shareWhatsappBtn.classList.add('action-btn-item'); // Changed class for broader use
+                    shareWhatsappBtn.style.backgroundColor = '#28a745'; // WhatsApp green
+                    shareWhatsappBtn.style.color = 'white';
+                    shareWhatsappBtn.style.right = '10px'; // Positioning for non-admin mode
+                    shareWhatsappBtn.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Icon" class="edit-icon" style="filter: invert(100%);"> Bagikan`;
+                    shareWhatsappBtn.onclick = (event) => {
+                        event.stopPropagation();
+                        
+                        const message = `*Pengumuman Klan Indo Ghost:*\n\n*${ann.title}*\n${ann.content}\n\nTanggal: ${formatDate(ann.date)}\n\nJangan lupa kunjungi website Indo Ghost untuk mendapatkan informasi lebih lanjut: ${window.location.href}`;
+                        
+                        const encodedMessage = encodeURIComponent(message);
+                        const whatsappShareLink = `https://api.whatsapp.com/send?text=${encodedMessage}`; 
+                        
+                        if (confirm(`Pengumuman ini akan disalin dan Anda akan diarahkan ke WhatsApp. Tempelkan pesan ini ke chat Anda:\n\n${message}`)) {
+                            navigator.clipboard.writeText(message).then(() => {
+                                window.open(whatsappShareLink, '_blank');
+                            }).catch(err => {
+                                console.error('Failed to copy text: ', err);
+                                window.open(whatsappShareLink, '_blank');
+                            });
+                        }
+                    };
+                    listItem.appendChild(shareWhatsappBtn);
+
+
+                    // Add delete and edit buttons ONLY in admin mode
                     if (isAdminMode) {
                         const deleteBtn = document.createElement('button');
-                        deleteBtn.classList.add('edit-btn-item'); // Use new class for item-specific buttons
+                        deleteBtn.classList.add('action-btn-item'); // Changed class for broader use
                         deleteBtn.style.backgroundColor = '#dc3545'; // Red for delete
                         deleteBtn.style.color = 'white';
-                        deleteBtn.style.right = '10px'; // Positioning
+                        deleteBtn.style.right = '80px'; // Positioning
                         deleteBtn.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Delete Icon" class="edit-icon" style="filter: invert(100%);"> Hapus`;
                         deleteBtn.onclick = (event) => {
                             event.stopPropagation();
@@ -736,10 +763,10 @@
                         listItem.appendChild(deleteBtn);
 
                         const editItemBtn = document.createElement('button');
-                        editItemBtn.classList.add('edit-btn-item'); // Use new class for item-specific buttons
+                        editItemBtn.classList.add('action-btn-item'); // Changed class for broader use
                         editItemBtn.style.backgroundColor = '#2196F3'; // Blue for edit
                         editItemBtn.style.color = 'white';
-                        editItemBtn.style.right = '80px'; // Position next to delete
+                        editItemBtn.style.right = '150px'; // Position next to delete
                         editItemBtn.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon" style="filter: invert(100%);"> Edit`;
                         editItemBtn.onclick = (event) => {
                             event.stopPropagation();
@@ -756,37 +783,8 @@
                         };
                         listItem.appendChild(editItemBtn);
 
-                        // NEW: Share to WhatsApp Button
-                        const shareWhatsappBtn = document.createElement('button');
-                        shareWhatsappBtn.classList.add('edit-btn-item');
-                        shareWhatsappBtn.style.backgroundColor = '#28a745'; // WhatsApp green
-                        shareWhatsappBtn.style.color = 'white';
-                        shareWhatsappBtn.style.right = '150px'; // Position next to edit
-                        shareWhatsappBtn.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Icon" class="edit-icon" style="filter: invert(100%);"> Bagikan`;
-                        shareWhatsappBtn.onclick = (event) => {
-                            event.stopPropagation();
-                            const whatsappGroupLink = localStorage.getItem('indoGhostWhatsappLink');
-                            if (!whatsappGroupLink || whatsappGroupLink.includes('defaultlinkanda')) {
-                                alert('Harap atur "Link Grup WhatsApp" di Pengaturan Situs terlebih dahulu.');
-                                return;
-                            }
-                            
-                            // Updated message with the call to action
-                            const message = `*Pengumuman Klan Indo Ghost:*\n\n*${ann.title}*\n${ann.content}\n\nTanggal: ${formatDate(ann.date)}\n\nJangan lupa kunjungi website Indo Ghost untuk mendapatkan informasi lebih lanjut: ${window.location.href}`;
-                            
-                            const encodedMessage = encodeURIComponent(message);
-                            const finalWhatsappLink = `https://api.whatsapp.com/send?text=${encodedMessage}`; 
-                            
-                            if (confirm(`Pengumuman ini akan disalin dan Anda akan diarahkan ke WhatsApp. Tempelkan pesan ini ke grup Anda:\n\n${message}`)) {
-                                navigator.clipboard.writeText(message).then(() => {
-                                    window.open(whatsappGroupLink, '_blank'); // Open the group link
-                                }).catch(err => {
-                                    console.error('Failed to copy text: ', err);
-                                    window.open(finalWhatsappLink, '_blank'); // Fallback if copy fails
-                                });
-                            }
-                        };
-                        listItem.appendChild(shareWhatsappBtn);
+                        // Adjust position of shareWhatsappBtn when admin buttons are present
+                        shareWhatsappBtn.style.right = '220px'; // Push it further left
                     }
                     announcementListElement.appendChild(listItem);
                 });
@@ -838,7 +836,7 @@
                 renderAnnouncements();
             }
 
-            // --- Function to save announcements ---
+            // --- Function to save data to Local Storage ---
             function saveAnnouncements() {
                 localStorage.setItem('indoGhostAnnouncements', JSON.stringify(announcements));
             }
