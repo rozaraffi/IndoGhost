@@ -6,7 +6,7 @@
     <title>Indo Ghost Clan - Gerbang Utama</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <link rel="icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
@@ -85,6 +85,12 @@
         body.dark .announcement-item p a:hover {
             color: color-mix(in srgb, var(--primary-color) 80%, black);
         }
+        /* Added for new image in dark mode */
+        body.dark .announcement-item .announcement-image {
+            background-color: #2d3748; /* Darker background for image frame */
+            border: 1px solid #4a5568;
+        }
+
         body.dark .peraturan-section {
             background-color: #4a443a; /* Darker yellow-brown for rules */
             box-shadow: inset 0 3px 8px rgba(0,0,0,0.15);
@@ -236,7 +242,7 @@
         .btn-secondary:hover {
             background-color: color-mix(in srgb, var(--secondary-color) 80%, black); /* Darken dynamically */
         }
-        
+
         /* New button style for COC Profile */
         .btn-coc {
             background-color: #fd7e14; /* Orange/Gold for Clash of Clans */
@@ -319,6 +325,18 @@
             transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for dark mode */
         }
 
+        /* Styles for the image within announcement items */
+        .announcement-item .announcement-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: block; /* Ensures it takes its own line */
+            border: 1px solid #e2e8f0; /* Light border */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
         /* Style for clickable links within announcement content */
         .announcement-item p a {
             color: var(--primary-color); /* Blue for links, use variable */
@@ -382,7 +400,7 @@
             font-style: italic;
             transition: color 0.3s ease; /* Smooth transition for dark mode */
         }
-        
+
         /* Edit button styles (shared) */
         .edit-btn {
             background-color: #ffc107; /* Warning yellow */
@@ -461,7 +479,7 @@
             display: inline-flex; /* To align buttons next to each other */
             margin-right: 10px; /* Space between add and clear button */
         }
-        
+
         /* Admin Mode Toggle Button */
         .admin-toggle-wrapper {
             position: fixed;
@@ -599,7 +617,7 @@
             border-left: 5px solid #ffbf00; /* Accent border */
             transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for dark mode */
         }
-        
+
         .peraturan-item:last-child {
             margin-bottom: 0; /* No margin for the last item */
         }
@@ -840,7 +858,7 @@
         #toast-notification.info {
             background-color: #17a2b8; /* Blue-green */
         }
-        
+
         #toast-notification .toast-icon {
             width: 20px;
             height: 20px;
@@ -1063,11 +1081,11 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <div id="particles-js"></div> 
+    <div id="particles-js"></div>
     <div class="container">
         <h1>Selamat Datang di <br>Klan Indo Ghost</h1>
         <p id="mainDescription">Jelajahi detail anggota perkasa kami dan kuasai strategi kemenangan War!</p>
-        
+
         <div class="button-group">
             <a href="detail-member.html" class="utility-btn btn-primary">
                 <img src="https://raw.githubusercontent.com/Clash-of-Clans-API/clash-of-clans-assets/main/other/armycamp/armycamp_1.png" alt="Member Icon" class="btn-icon">
@@ -1077,7 +1095,7 @@
                 <img src="https://raw.githubusercontent.com/Clash-of-Clans-API/clash-of-clans-assets/main/other/war/warbase_1.png" alt="War Icon" class="btn-icon">
                 Aturan War Clan
             </a>
-            
+
             <a id="cocProfileButton" href="#" target="_blank" class="utility-btn btn-coc">
                 <img src="https://raw.githubusercontent.com/Clash-of-Clans-API/clash-of-clans-assets/main/other/builderbase/builderbase_1.png" alt="CoC Icon" class="btn-icon">
                 Lihat Profil Clan CoC
@@ -1189,9 +1207,12 @@
             <h3 id="modalTitle">Tambah Pengumuman</h3>
             <label for="announcementTitle">Judul Pengumuman:</label>
             <input type="text" id="announcementTitle" placeholder="Masukkan judul">
-            
+
             <label for="announcementContent">Isi Pengumuman:</label>
             <textarea id="announcementContent" placeholder="Masukkan isi pengumuman"></textarea>
+
+            <label for="announcementImageUrl">URL Gambar (Opsional):</label>
+            <input type="url" id="announcementImageUrl" placeholder="https://example.com/gambar.jpg">
 
             <div class="modal-buttons">
                 <button class="save-btn" id="saveAnnouncementBtn">Simpan <span class="loading-spinner" id="saveAnnounceSpinner"></span></button>
@@ -1205,7 +1226,7 @@
             <h3 id="settingsModalTitle">Edit Pengaturan</h3>
             <label for="settingsInputValue" id="settingsInputLabel">Nilai:</label>
             <input type="text" id="settingsInputValue" placeholder="Masukkan nilai">
-            
+
             <div class="modal-buttons">
                 <button class="save-btn" id="saveSettingsBtn">Simpan <span class="loading-spinner" id="saveSettingsSpinner"></span></button>
                 <button class="cancel-btn" id="cancelSettingsBtn">Batal</button>
@@ -1244,11 +1265,11 @@
                 const isDarkMode = localStorage.getItem('darkMode') === 'true';
                 if (isDarkMode) {
                     body.classList.add('dark');
-                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/621/621303.png'; // Sun icon for light mode
+                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/621/621303.png'; // Sun icon for light mode (as provided)
                     darkModeText.textContent = 'Light Mode';
                 } else {
                     body.classList.remove('dark');
-                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/621/621303.png'; // Moon icon for dark mode
+                    darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/621/621303.png'; // Moon icon for dark mode (as provided)
                     darkModeText.textContent = 'Dark Mode';
                 }
             }
@@ -1270,9 +1291,20 @@
                     darkModeIcon.src = 'https://cdn-icons-png.flaticon.com/512/621/621303.png'; // Sun icon
                     darkModeText.textContent = 'Light Mode';
                 }
+                // Re-apply dynamic styles after dark mode toggle to ensure correct color variables are used
+                const root = document.documentElement;
+                if (body.classList.contains('dark')) {
+                    // These should ideally be set in the CSS :root.dark block,
+                    // but if you want immediate JS control:
+                    // root.style.setProperty('--primary-color', '#63b3ed');
+                    // root.style.setProperty('--secondary-color', '#a78bfa');
+                } else {
+                    // root.style.setProperty('--primary-color', '#3b82f6');
+                    // root.style.setProperty('--secondary-color', '#6366f1');
+                }
             });
         });
-    </script> 
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const body = document.body;
@@ -1300,6 +1332,7 @@
             const modalTitle = document.getElementById('modalTitle');
             const announcementTitleInput = document.getElementById('announcementTitle');
             const announcementContentInput = document.getElementById('announcementContent');
+            const announcementImageUrlInput = document.getElementById('announcementImageUrl'); // NEW: Image URL Input
             const saveAnnouncementBtn = document.getElementById('saveAnnouncementBtn');
             const cancelAnnouncementBtn = document.getElementById('cancelAnnouncementBtn');
             const saveAnnounceSpinner = document.getElementById('saveAnnounceSpinner'); // Spinner for Announce Modal
@@ -1348,7 +1381,7 @@
                 toastMessage.textContent = message;
                 toastNotification.className = ''; // Clear existing classes
                 toastNotification.classList.add('show', type);
-                
+
                 // Set icon based on type
                 toastIcon.src = TOAST_ICONS[type] || TOAST_ICONS.info;
                 toastIcon.style.display = 'inline-block';
@@ -1374,7 +1407,7 @@
                     return new Date(dateString).toLocaleDateString('id-ID', options);
                 } catch (e) {
                     console.error("Error parsing date:", dateString, e);
-                    return new Date().toLocaleDateString('id-ID', options); 
+                    return new Date().toLocaleDateString('id-ID', options);
                 }
             }
 
@@ -1396,20 +1429,14 @@
             function applyDynamicStyles() {
                 document.documentElement.style.setProperty('--primary-color', siteSettings.primaryColor);
                 document.documentElement.style.setProperty('--secondary-color', siteSettings.secondaryColor);
-                // Re-check and re-apply dark mode specific colors if dark mode is active
-                if (body.classList.contains('dark')) {
-                    document.documentElement.style.setProperty('--primary-color', siteSettings.primaryColor); // Lighter blue for dark mode
-                    document.documentElement.style.setProperty('--secondary-color', siteSettings.secondaryColor); // Lighter violet for dark mode
-                } else {
-                    document.documentElement.style.setProperty('--primary-color', siteSettings.primaryColor);
-                    document.documentElement.style.setProperty('--secondary-color', siteSettings.secondaryColor);
-                }
+                // The dark mode specific colors are already defined in the CSS :root.dark block
+                // and will be applied automatically when the 'dark' class is toggled on body.
             }
 
             // --- Function to render announcements ---
             function renderAnnouncements() {
                 announcementListElement.innerHTML = ''; // Clear existing list
-                
+
                 if (announcements.length === 0) {
                     const noAnnLi = document.createElement('li');
                     noAnnLi.classList.add('announcement-item');
@@ -1434,9 +1461,9 @@
                 announcements.forEach((ann, index) => {
                     const listItem = document.createElement('li');
                     listItem.classList.add('announcement-item');
-                    
+
                     const oneDayAgo = new Date();
-                    oneDayAgo.setDate(oneDayAgo.getDate() - 1); 
+                    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
                     if (ann.isNew && new Date(ann.date) > oneDayAgo) {
                         listItem.classList.add('new-badge');
                     }
@@ -1444,9 +1471,14 @@
 
                     const processedContent = makeUrlsClickable(ann.content);
 
+                    let imageHtml = '';
+                    if (ann.imageUrl && ann.imageUrl.trim() !== '') {
+                        imageHtml = `<img src="${ann.imageUrl}" alt="${ann.title}" class="announcement-image">`;
+                    }
+
                     listItem.innerHTML = `
                         <h4>${ann.title}</h4>
-                        <p>${processedContent}</p>
+                        ${imageHtml} <p>${processedContent}</p>
                         <span class="announcement-date">${formatDateForDisplay(ann.date)}</span>
                     `;
 
@@ -1482,6 +1514,7 @@
                             modalTitle.textContent = 'Edit Pengumuman';
                             announcementTitleInput.value = ann.title;
                             announcementContentInput.value = ann.content;
+                            announcementImageUrlInput.value = ann.imageUrl || ''; // Populate image URL
                             announcementModal.classList.add('show');
                         };
                         listItem.appendChild(editItemBtn);
@@ -1494,7 +1527,11 @@
                         shareWhatsappBtn.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Icon" class="edit-icon" style="filter: invert(100%);"> Bagikan`;
                         shareWhatsappBtn.onclick = (event) => {
                             event.stopPropagation();
-                            const whatsappMessage = `*Pengumuman Klan Indo Ghost:*\n\n*${ann.title}*\n${ann.content}\n\nBaca selengkapnya di situs kami: ${window.location.href}`;
+                            let whatsappMessage = `*Pengumuman Klan Indo Ghost:*\n\n*${ann.title}*\n${ann.content}`;
+                            if (ann.imageUrl) {
+                                whatsappMessage += `\n\nGambar: ${ann.imageUrl}`;
+                            }
+                            whatsappMessage += `\n\nBaca selengkapnya di situs kami: ${window.location.href}`;
                             const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
                             window.open(whatsappUrl, '_blank');
                             showToast('Pengumuman siap dibagikan di WhatsApp!', 'info');
@@ -1534,12 +1571,12 @@
                     announcements = JSON.parse(savedAnnouncements);
                 } else {
                     const today = new Date();
-                    announcements.push({ id: Date.now() + 1, title: 'Selamat Datang!', content: 'Selamat datang di halaman utama Klan Indo Ghost! Kunjungi YouTube kami: https://www.youtube.com/0 atau TikTok: https://www.tiktok.com/@indoghostclan', date: today.toISOString(), isNew: true });
-                    announcements.push({ id: Date.now() + 2, title: 'Jadwal War Mendatang', content: 'War berikutnya akan dimulai pada hari Rabu pukul 20:00 WIB. Pastikan semua hero siap! Info lebih lanjut di www.ourclansite.com/war-schedule', date: new Date(today.getTime() - 86400000).toISOString(), isNew: false });
-                    announcements.push({ id: Date.now() + 3, title: 'Donasi Troops', content: 'Mohon perhatikan rasio donasi. Prioritaskan troop war yang diminta. Cek kebijakan kami: https://policies.clashofclans.com/en', date: new Date(today.getTime() - 2 * 86400000).toISOString(), isNew: false });
-                    announcements.push({ id: Date.now() + 4, title: 'Event Clan: Friendly Challenge', content: 'Akan ada friendly challenge internal pada akhir pekan ini. Siapkan base terbaikmu! Gabung Discord kami: discord.gg/exampleclan', date: new Date(today.getTime() - 3 * 86400000).toISOString(), isNew: false });
-                    announcements.push({ id: Date.now() + 5, title: 'Pembaruan Aturan', content: 'Beberapa aturan war telah diperbarui. Harap baca kembali di halaman Aturan War Clan. Contoh link singkat: google.com', date: new Date(today.getTime() - 4 * 86400000).toISOString(), isNew: false });
-                    announcements.push({ id: Date.now() + 6, title: 'Rekrutmen Member Baru', content: 'Kami membuka pendaftaran untuk member TH10+ yang aktif dan loyal. Ajak temanmu bergabung! Hubungi admin di 081234567890', date: new Date(today.getTime() - 5 * 86400000).toISOString(), isNew: false });
+                    announcements.push({ id: Date.now() + 1, title: 'Selamat Datang!', content: 'Selamat datang di halaman utama Klan Indo Ghost! Kunjungi YouTube kami: https://www.youtube.com/0 atau TikTok: https://www.tiktok.com/@indoghostclan', date: today.toISOString(), isNew: true, imageUrl: '' }); // Added imageUrl
+                    announcements.push({ id: Date.now() + 2, title: 'Jadwal War Mendatang', content: 'War berikutnya akan dimulai pada hari Rabu pukul 20:00 WIB. Pastikan semua hero siap! Info lebih lanjut di www.ourclansite.com/war-schedule', date: new Date(today.getTime() - 86400000).toISOString(), isNew: false, imageUrl: 'https://raw.githubusercontent.com/Clash-of-Clans-API/clash-of-clans-assets/main/other/war/warbase_1.png' }); // Added example imageUrl
+                    announcements.push({ id: Date.now() + 3, title: 'Donasi Troops', content: 'Mohon perhatikan rasio donasi. Prioritaskan troop war yang diminta. Cek kebijakan kami: https://policies.clashofclans.com/en', date: new Date(today.getTime() - 2 * 86400000).toISOString(), isNew: false, imageUrl: '' }); // Added imageUrl
+                    announcements.push({ id: Date.now() + 4, title: 'Event Clan: Friendly Challenge', content: 'Akan ada friendly challenge internal pada akhir pekan ini. Siapkan base terbaikmu! Gabung Discord kami: discord.gg/exampleclan', date: new Date(today.getTime() - 3 * 86400000).toISOString(), isNew: false, imageUrl: '' }); // Added imageUrl
+                    announcements.push({ id: Date.now() + 5, title: 'Pembaruan Aturan', content: 'Beberapa aturan war telah diperbarui. Harap baca kembali di halaman Aturan War Clan. Contoh link singkat: google.com', date: new Date(today.getTime() - 4 * 86400000).toISOString(), isNew: false, imageUrl: '' }); // Added imageUrl
+                    announcements.push({ id: Date.now() + 6, title: 'Rekrutmen Member Baru', content: 'Kami membuka pendaftaran untuk member TH10+ yang aktif dan loyal. Ajak temanmu bergabung! Hubungi admin di 081234567890', date: new Date(today.getTime() - 5 * 86400000).toISOString(), isNew: false, imageUrl: '' }); // Added imageUrl
                     saveAnnouncements();
                 }
                 renderAnnouncements();
@@ -1632,9 +1669,9 @@
                 }
 
                 // Check if the current element needs to be replaced
-                if (currentInputOrTextarea.tagName !== targetTagName || 
+                if (currentInputOrTextarea.tagName !== targetTagName ||
                     (currentInputOrTextarea.tagName === 'INPUT' && currentInputOrTextarea.type !== targetInputType)) {
-                    
+
                     newElement = document.createElement(targetTagName);
                     if (targetTagName === 'INPUT') {
                         newElement.type = targetInputType;
@@ -1643,17 +1680,17 @@
                     }
 
                     newElement.id = 'settingsInputValue';
-                    newElement.className = currentInputOrTextarea.className; 
+                    newElement.className = currentInputOrTextarea.className;
                     currentInputOrTextarea.parentNode.replaceChild(newElement, currentInputOrTextarea);
                     settingsInputValueRef = newElement; // Update the reference
                 } else {
                     // If element type matches, just use the existing one
                     settingsInputValueRef = currentInputOrTextarea;
                 }
-                
+
                 settingsInputValueRef.value = currentValue;
                 settingsInputValueRef.placeholder = `Masukkan ${label.toLowerCase()}`;
-                
+
                 currentSettingsSaveCallback = saveCallback;
                 settingsModal.classList.add('show');
             }
@@ -1661,7 +1698,7 @@
             saveSettingsBtn.addEventListener('click', () => {
                 toggleSpinner(saveSettingsSpinner, true);
                 const newValue = settingsInputValueRef.value.trim();
-                
+
                 if (currentSettingsSaveCallback) {
                     currentSettingsSaveCallback(newValue);
                 }
@@ -1687,6 +1724,7 @@
                 modalTitle.textContent = 'Tambah Pengumuman';
                 announcementTitleInput.value = '';
                 announcementContentInput.value = '';
+                announcementImageUrlInput.value = ''; // Clear image URL input
                 announcementModal.classList.add('show');
             });
 
@@ -1695,6 +1733,7 @@
                 toggleSpinner(saveAnnounceSpinner, true);
                 const title = announcementTitleInput.value.trim();
                 const content = announcementContentInput.value.trim();
+                const imageUrl = announcementImageUrlInput.value.trim(); // Get image URL
 
                 if (!title || !content) {
                     showToast('Harap isi judul dan isi pengumuman!', 'error');
@@ -1707,6 +1746,7 @@
                     if (annIndex !== -1) {
                         announcements[annIndex].title = title;
                         announcements[annIndex].content = content;
+                        announcements[annIndex].imageUrl = imageUrl; // Save image URL
                         announcements[annIndex].date = new Date().toISOString();
                         announcements[annIndex].isNew = false;
                         showToast('Pengumuman berhasil diperbarui!', 'success');
@@ -1716,13 +1756,14 @@
                         id: Date.now(),
                         title: title,
                         content: content,
+                        imageUrl: imageUrl, // Save image URL for new announcement
                         date: new Date().toISOString(),
                         isNew: true
                     };
                     announcements.push(newAnnouncement);
                     showToast('Pengumuman baru berhasil ditambahkan!', 'success');
                 }
-                
+
                 saveAnnouncements();
                 renderAnnouncements();
                 announcementModal.classList.remove('show');
