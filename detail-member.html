@@ -8,10 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* --- Base Styles (Light Mode Default) --- */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f8fafc; /* Light gray background */
             color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
         }
         .container {
             max-width: 1200px;
@@ -20,15 +22,18 @@
             border-radius: 16px; /* More rounded corners */
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08); /* Softer, larger shadow */
             padding: 40px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
         h1, h2, h3 {
             color: #1e3a8a; /* Darker blue heading */
             font-weight: 700;
+            transition: color 0.3s ease;
         }
         .section-heading {
             border-bottom: 2px solid #e2e8f0; /* Lighter border */
             padding-bottom: 20px;
             margin-bottom: 40px;
+            transition: border-color 0.3s ease;
         }
         .org-structure-box {
             background-color: #e0f2fe; /* Lighter blue */
@@ -36,12 +41,14 @@
             padding: 30px;
             margin-bottom: 30px;
             box-shadow: inset 0 3px 8px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
         .org-position-title {
             font-weight: 600;
             color: #1c4a8a; /* Darker blue for titles */
             margin-bottom: 12px;
             font-size: 1.25rem;
+            transition: color 0.3s ease;
         }
         .org-member-list {
             list-style: none;
@@ -60,6 +67,7 @@
             color: #4a5568; /* Slightly darker text */
             font-weight: 500;
             border: 1px solid #ebf8ff; /* Subtle border */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
         .data-table {
             width: 100%;
@@ -73,12 +81,14 @@
             padding: 15px 20px;
             border-bottom: 1px solid #e2e8f0; /* Lighter border */
             text-align: left;
+            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
         }
         .data-table th {
             background-color: #f0f4f8; /* Light blueish gray */
             font-weight: 600;
             color: #4a5568;
             font-size: 0.95rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .data-table tbody tr:hover {
             background-color: #f5faff; /* Very light blue on hover */
@@ -121,6 +131,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
         .member-card-title {
             font-size: 1.3rem;
@@ -130,14 +141,17 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: color 0.3s ease;
         }
         .member-card p {
             font-size: 0.95rem;
             color: #4a5568;
             margin-bottom: 6px;
+            transition: color 0.3s ease;
         }
         .member-card strong {
             color: #2d3748;
+            transition: color 0.3s ease;
         }
 
         /* Responsive adjustments for member cards */
@@ -170,6 +184,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
         .chart-container canvas {
             max-height: 100%;
@@ -187,9 +202,10 @@
             padding: 10px 20px;
             border-radius: 8px;
             font-weight: 600;
-            transition: background-color 0.2s ease, transform 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             white-space: nowrap;
+            cursor: pointer; /* Add pointer cursor */
         }
         .utility-btn:hover {
             background-color: #138496;
@@ -218,7 +234,7 @@
             color: #333;
             cursor: pointer;
             outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236B7280'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 15px center;
@@ -235,7 +251,7 @@
             font-size: 1rem;
             width: 100%;
             max-width: 300px;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
         }
         .search-input:focus {
             border-color: #3b82f6;
@@ -283,6 +299,77 @@
         /* Hide specific elements that are only for editing/admin */
         .hide-for-view-only {
             display: none !important;
+        }
+
+        /* --- Dark Mode Styles --- */
+        body.dark-mode {
+            background-color: #1a202c; /* Dark charcoal */
+            color: #e2e8f0; /* Light text */
+        }
+        body.dark-mode .container {
+            background-color: #2d3748; /* Darker slate */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode h3,
+        body.dark-mode .member-card-title,
+        body.dark-mode .org-position-title {
+            color: #90cdf4; /* Lighter blue for headings */
+        }
+        body.dark-mode .section-heading {
+            border-color: #4a5568; /* Darker border */
+        }
+        body.dark-mode .org-structure-box {
+            background-color: #4a5568; /* Even darker blue for boxes */
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.2);
+        }
+        body.dark-mode .org-member-list li {
+            background-color: #2d3748; /* Darker background */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            color: #cbd5e0; /* Lighter text */
+            border-color: #4a5568; /* Darker border */
+        }
+        body.dark-mode .data-table th {
+            background-color: #4a5568; /* Darker table header */
+            color: #cbd5e0;
+        }
+        body.dark-mode .data-table td {
+            border-color: #4a5568;
+        }
+        body.dark-mode .data-table tbody tr:hover {
+            background-color: #4a5568; /* Darker hover */
+        }
+        body.dark-mode .member-card {
+            background-color: #4a5568; /* Darker card background */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        body.dark-mode .member-card p {
+            color: #cbd5e0;
+        }
+        body.dark-mode .member-card strong {
+            color: #e2e8f0;
+        }
+        body.dark-mode .chart-container {
+            background-color: #2d3748;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        body.dark-mode .utility-btn {
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+        body.dark-mode .search-input,
+        body.dark-mode .sort-dropdown-select {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-mode .search-input::placeholder {
+            color: #a0aec0;
+        }
+        body.dark-mode .search-input:focus,
+        body.dark-mode .sort-dropdown-select:focus {
+            border-color: #63b3ed;
+            box-shadow: 0 0 0 4px rgba(99, 179, 237, 0.25);
         }
     </style>
 </head>
@@ -410,6 +497,11 @@
     </div>
 
     <script>
+        // --- Debug Helper (Bisa dihapus nanti kalau sudah beres) ---
+        console.log("detail-member.html script mulai.");
+        console.log("Preferensi dark mode dari localStorage:", localStorage.getItem('darkMode')); // <-- Ubah ke 'darkMode'
+        // --- End Debug Helper ---
+
         // Global variables
         let members = JSON.parse(localStorage.getItem('familyOfIndoGhostMembers')) || [];
         let currentViewMode = localStorage.getItem('familyOfIndoGhostViewMode') || 'card'; // 'card' or 'table'
@@ -449,11 +541,46 @@
         const thLevelChartCanvas = document.getElementById('thLevelChart');
         const noChartDataMessage = document.getElementById('noChartDataMessage');
 
+        // --- Dark Mode Functionality ---
+        function applyDarkModePreference() {
+            console.log("applyDarkModePreference() dipanggil.");
+            // Ganti 'darkModeEnabled' menjadi 'darkMode' agar konsisten dengan index.html
+            const isDarkModeEnabled = localStorage.getItem('darkMode') === 'true'; 
+            console.log("isDarkModeEnabled:", isDarkModeEnabled);
+
+            if (isDarkModeEnabled) {
+                document.body.classList.add('dark-mode');
+                console.log("Kelas 'dark-mode' ditambahkan ke body.");
+            } else {
+                document.body.classList.remove('dark-mode');
+                console.log("Kelas 'dark-mode' dihapus dari body.");
+            }
+            // Panggil renderThLevelChart() setelah mode gelap diterapkan/dihapus
+            // agar warnanya menyesuaikan.
+            renderThLevelChart(); 
+        }
 
         // --- Initialize App ---
+        // Panggil applyDarkModePreference() secepat mungkin, sebelum DOMContentLoaded
+        applyDarkModePreference(); 
+
         document.addEventListener('DOMContentLoaded', () => {
-            renderAllContent(); // Initial render for all dynamic parts
+            console.log("DOMContentLoaded event terpicu.");
+            // Members data dan rendering konten lain setelah DOM siap
+            members = JSON.parse(localStorage.getItem('familyOfIndoGhostMembers')) || [];
+            renderAllContent();
         });
+
+        // Menambahkan event listener untuk storage changes
+        // Ini memastikan halaman ini update otomatis jika index.html mengubah preferensi dark mode
+        window.addEventListener('storage', (event) => {
+            // Ganti 'darkModeEnabled' menjadi 'darkMode' agar konsisten dengan index.html
+            if (event.key === 'darkMode') { 
+                console.log("Perubahan localStorage 'darkMode' terdeteksi.");
+                applyDarkModePreference();
+            }
+        });
+
 
         // --- Core Functions ---
 
@@ -473,21 +600,22 @@
                 let valA = a[sortBy];
                 let valB = b[sortBy];
 
-                if (valA === null || valA === undefined || valA === '') valA = order === 'asc' ? -Infinity : Infinity;
-                if (valB === null || valB === undefined || valB === '') valB = order === 'asc' ? -Infinity : Infinity; // Fixed to also handle empty/null for 'desc'
+                if (valA === null || valA === undefined || valA === '') {
+                    valA = (order === 'asc' || sortBy === 'joinTime') ? -Infinity : Infinity;
+                }
+                if (valB === null || valB === undefined || valB === '') {
+                    valB = (order === 'asc' || sortBy === 'joinTime') ? -Infinity : Infinity;
+                }
 
                 if (sortBy === 'joinTime') {
                     const dateA = new Date(valA);
                     const dateB = new Date(valB);
-                    // Handle invalid dates from null/empty strings
-                    if (isNaN(dateA.getTime())) valA = order === 'asc' ? -Infinity : Infinity;
-                    else valA = dateA.getFullYear() * 12 + dateA.getMonth();
+                    
+                    const timeA = isNaN(dateA.getTime()) ? (order === 'asc' ? -Infinity : Infinity) : dateA.getTime();
+                    const timeB = isNaN(dateB.getTime()) ? (order === 'asc' ? -Infinity : Infinity) : dateB.getTime();
 
-                    if (isNaN(dateB.getTime())) valB = order === 'asc' ? -Infinity : Infinity;
-                    else valB = dateB.getFullYear() * 12 + dateB.getMonth();
-
-                    if (valA < valB) return order === 'asc' ? -1 : 1;
-                    if (valA > valB) return order === 'asc' ? 1 : -1;
+                    if (timeA < timeB) return order === 'asc' ? -1 : 1;
+                    if (timeA > timeB) return order === 'asc' ? 1 : -1;
                     return 0;
                 }
 
@@ -497,7 +625,6 @@
                     return 0;
                 }
 
-                // Handle cases where values might be numbers or strings and need consistent comparison
                 const stringValA = String(valA).toLowerCase();
                 const stringValB = String(valB).toLowerCase();
 
@@ -513,15 +640,15 @@
         function renderAllContent() {
             members = JSON.parse(localStorage.getItem('familyOfIndoGhostMembers')) || []; // Refresh members data
             renderOrganizationStructure();
-            renderThLevelChart();
+            // renderThLevelChart() dipanggil oleh applyDarkModePreference()
             renderMembers();
             updateViewToggleButton();
             updateChartToggleButton();
+            console.log("renderAllContent() selesai.");
         }
 
         // --- Member Management ---
 
-        // Renders members in the Organization Structure (pills)
         function renderOrganizationStructure() {
             leaderList.innerHTML = '';
             coLeaderListOrg.innerHTML = '';
@@ -530,7 +657,6 @@
 
             let hasLeader = false;
 
-            // Sort members by position and then alphabetically for consistent display
             const sortedMembersForOrg = [...members].sort((a, b) => {
                 const positionOrder = { 'Leader': 1, 'Co Leader': 2, 'Elder': 3, 'Member': 4 };
                 const posA = positionOrder[a.position] || 99;
@@ -539,12 +665,12 @@
                 if (posA !== posB) {
                     return posA - posB;
                 }
-                return a.nickname.localeCompare(b.nickname);
+                return (a.nickname || '').localeCompare(b.nickname || '');
             });
 
             sortedMembersForOrg.forEach(member => {
                 const li = document.createElement('li');
-                li.textContent = member.nickname;
+                li.textContent = member.nickname || 'Unknown Member';
                 if (member.position === 'Leader') {
                     leaderList.appendChild(li);
                     hasLeader = true;
@@ -561,19 +687,17 @@
                 defaultLeaderMessage.classList.add('hidden');
             } else {
                 defaultLeaderMessage.classList.remove('hidden');
-                // Ensure the message is only appended if there's no leader and it's not already there
                 if (!leaderList.contains(defaultLeaderMessage)) {
                     leaderList.appendChild(defaultLeaderMessage);
                 }
             }
         }
 
-        // Renders members based on current view mode (cards or table)
         function renderMembers() {
             const searchTerm = searchInput.value.toLowerCase().trim();
             const filteredMembers = members.filter(member => {
-                const nicknameMatch = member.nickname ? member.nickname.toLowerCase().includes(searchTerm) : false;
-                const realnameMatch = member.realname ? member.realname.toLowerCase().includes(searchTerm) : false;
+                const nicknameMatch = (member.nickname || '').toLowerCase().includes(searchTerm);
+                const realnameMatch = (member.realname || '').toLowerCase().includes(searchTerm);
                 return nicknameMatch || realnameMatch;
             });
             const sortedMembers = applySort(filteredMembers, sortDropdown.value);
@@ -595,7 +719,6 @@
             }
         }
 
-        // Renders members in the Card View (grouped by position)
         function renderMembersInCards(membersToRender) {
             cardView.classList.remove('hidden');
             tableView.classList.add('hidden');
@@ -608,7 +731,6 @@
             let hasElders = false;
             let hasMembersInGroup = false;
 
-            // Filter out Leader for card view
             const membersForCards = membersToRender.filter(member => member.position !== 'Leader');
 
             membersForCards.forEach(member => {
@@ -629,13 +751,11 @@
             noEldersMessage.classList.toggle('hidden', hasElders);
             noMembersInGroupMessage.classList.toggle('hidden', hasMembersInGroup);
 
-            // Hide containers if no members in that group and no message
             document.getElementById('coLeaderCardsContainer').classList.toggle('hidden', !hasCoLeaders && noCoLeadersMessage.classList.contains('hidden'));
             document.getElementById('elderCardsContainer').classList.toggle('hidden', !hasElders && noEldersMessage.classList.contains('hidden'));
             document.getElementById('memberCardsContainer').classList.toggle('hidden', !hasMembersInGroup && noMembersInGroupMessage.classList.contains('hidden'));
         }
 
-        // Renders members in the Table View
         function renderMembersInTable(membersToRender) {
             cardView.classList.add('hidden');
             tableView.classList.remove('hidden');
@@ -648,7 +768,7 @@
 
             membersToRender.forEach(member => {
                 const row = document.createElement('tr');
-                const joinDateFormatted = member.joinTime ? new Date(member.joinTime).toLocaleString('id-ID', { year: 'numeric', month: 'long' }) : '-';
+                const joinDateFormatted = member.joinTime ? new Date(member.joinTime).toLocaleString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
                 row.innerHTML = `
                     <td>${member.nickname || '-'}</td>
                     <td>${member.realname || '-'}</td>
@@ -664,17 +784,16 @@
             });
         }
 
-        // Creates a single member card HTML element
         function createMemberCard(member) {
             const card = document.createElement('div');
             card.className = 'member-card';
-            const joinDateFormatted = member.joinTime ? new Date(member.joinTime).toLocaleString('id-ID', { year: 'numeric', month: 'long' }) : '-';
+            const joinDateFormatted = member.joinTime ? new Date(member.joinTime).toLocaleString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
 
             card.innerHTML = `
                 <div class="card-content">
                     <h3 class="member-card-title">
                         ${member.thLevel ? `<img src="${getThImage(member.thLevel)}" alt="TH ${member.thLevel}" class="th-level-icon" onerror="this.onerror=null;this.src='https://via.placeholder.com/28/cccccc/888888?text=TH';">` : ''}
-                        ${member.nickname}
+                        ${member.nickname || 'Unknown'}
                     </h3>
                     <p><strong>Nama Asli:</strong> ${member.realname || '-'}</p>
                     <p><strong>Asal:</strong> ${member.origin || '-'}</p>
@@ -689,8 +808,11 @@
         // --- Data Visualization (Chart.js) ---
 
         function renderThLevelChart() {
+            console.log("renderThLevelChart() dipanggil.");
             if (thChartInstance) {
                 thChartInstance.destroy();
+                thChartInstance = null;
+                console.log("Chart lama dihancurkan.");
             }
 
             const thLevels = members.map(m => m.thLevel).filter(th => th !== null && th !== undefined && th !== '');
@@ -699,24 +821,30 @@
                 thCounts[th] = (thCounts[th] || 0) + 1;
             });
 
-            const uniqueThLevels = Object.keys(thCounts).map(Number).sort((a, b) => a - b);
-            const labels = uniqueThLevels.map(th => `TH ${th}`);
-            const data = uniqueThLevels.map(th => thCounts[th]);
+            const uniqueThLevelsSorted = Object.keys(thCounts).map(Number).sort((a, b) => b - a);
+            const labels = uniqueThLevelsSorted.map(th => `TH ${th}`);
+            const data = uniqueThLevelsSorted.map(th => thCounts[th]);
 
-            const backgroundColors = [
+            // Dapatkan preferensi dark mode yang sebenarnya
+            const isDarkMode = document.body.classList.contains('dark-mode'); 
+            const textColor = isDarkMode ? '#e2e8f0' : '#333';
+            const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+            const barBackgroundColor = isDarkMode ? 'rgba(144, 205, 244, 0.7)' : 'rgba(59, 130, 246, 0.7)';
+            const barBorderColor = isDarkMode ? 'rgba(144, 205, 244, 1)' : 'rgba(59, 130, 246, 1)';
+
+
+            const pieColors = [
                 '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED',
                 '#A3E635', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#84CC16', '#EF4444',
-                '#3B82F6', '#F97316', '#A855F7'
+                '#3B82F6', '#F97316', '#A855F7', '#6EE7B7', '#FBBF24', '#7C3AED'
             ];
-            const borderColors = [
-                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED',
-                '#A3E635', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#84CC16', '#EF4444',
-                '#3B82F6', '#F97316', '#A855F7'
-            ];
+            
+            const hasValidChartData = data.some(count => count > 0);
 
-            if (members.length === 0 || uniqueThLevels.length === 0) {
+            if (members.length === 0 || !hasValidChartData) {
                 thLevelChartCanvas.style.display = 'none';
                 noChartDataMessage.classList.remove('hidden');
+                console.log("Tidak ada data chart.");
                 return;
             } else {
                 thLevelChartCanvas.style.display = 'block';
@@ -729,12 +857,12 @@
                 thChartInstance = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: labels.sort((a, b) => parseInt(b.replace('TH ', '')) - parseInt(a.replace('TH ', ''))),
+                        labels: labels,
                         datasets: [{
                             label: 'Jumlah Anggota',
-                            data: labels.sort((a, b) => parseInt(b.replace('TH ', '')) - parseInt(a.replace('TH ', ''))).map(label => thCounts[parseInt(label.replace('TH ', ''))] || 0),
-                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                            borderColor: 'rgba(59, 130, 246, 1)',
+                            data: data,
+                            backgroundColor: barBackgroundColor,
+                            borderColor: barBorderColor,
                             borderWidth: 1
                         }]
                     },
@@ -746,11 +874,14 @@
                         scales: {
                             x: {
                                 beginAtZero: true,
-                                ticks: { precision: 0 },
-                                title: { display: true, text: 'Jumlah Anggota', font: { size: 14, weight: 'bold' } }
+                                ticks: { precision: 0, color: textColor },
+                                grid: { color: gridColor },
+                                title: { display: true, text: 'Jumlah Anggota', font: { size: 14, weight: 'bold' }, color: textColor }
                             },
                             y: {
-                                title: { display: true, text: 'Level Town Hall (TH)', font: { size: 14, weight: 'bold' } }
+                                ticks: { color: textColor },
+                                grid: { color: gridColor },
+                                title: { display: true, text: 'Level Town Hall (TH)', font: { size: 14, weight: 'bold' }, color: textColor }
                             }
                         },
                         plugins: {
@@ -759,11 +890,12 @@
                                 display: true,
                                 text: 'Distribusi Level Town Hall Klan',
                                 font: { size: 18, weight: 'bold' },
-                                color: '#1e3a8a'
+                                color: textColor
                             }
                         }
                     }
                 });
+                console.log("Bar Chart dirender.");
             } else if (currentChartType === 'pie') {
                 thChartInstance = new Chart(ctx, {
                     type: 'pie',
@@ -771,8 +903,8 @@
                         labels: labels,
                         datasets: [{
                             data: data,
-                            backgroundColor: backgroundColors.slice(0, labels.length),
-                            borderColor: borderColors.slice(0, labels.length),
+                            backgroundColor: pieColors.slice(0, labels.length),
+                            borderColor: isDarkMode ? 'rgba(45, 55, 72, 1)' : 'rgba(255, 255, 255, 1)',
                             borderWidth: 2
                         }]
                     },
@@ -785,7 +917,9 @@
                                 position: 'right',
                                 labels: {
                                     font: {
-                                        size: 14
+                                        size: 14,
+                                        // Pastikan warna teks legenda mengikuti mode gelap
+                                        color: textColor 
                                     },
                                     generateLabels: function(chart) {
                                         const data = chart.data;
@@ -800,7 +934,9 @@
                                                     strokeStyle: data.datasets[0].borderColor[i],
                                                     lineWidth: data.datasets[0].borderWidth,
                                                     hidden: !chart.isDatasetVisible(0) || chart.getDatasetMeta(0).data[i].hidden,
-                                                    index: i
+                                                    index: i,
+                                                    // Pastikan fontColor mengikuti mode gelap
+                                                    fontColor: textColor 
                                                 };
                                             });
                                         }
@@ -821,6 +957,7 @@
                                             const percentage = ((currentValue / total) * 100).toFixed(1) + '%';
                                             label += `${currentValue} (${percentage})`;
                                         }
+                                        return label;
                                     }
                                 }
                             },
@@ -828,20 +965,23 @@
                                 display: true,
                                 text: 'Persentase Distribusi Level Town Hall Klan',
                                 font: { size: 18, weight: 'bold' },
-                                color: '#1e3a8a'
+                                // Pastikan warna teks judul mengikuti mode gelap
+                                color: textColor 
                             }
                         }
                     }
                 });
+                console.log("Pie Chart dirender.");
             }
         }
 
         // Toggle View Mode (Card vs Table)
         toggleViewBtn.addEventListener('click', () => {
             currentViewMode = currentViewMode === 'card' ? 'table' : 'card';
-            localStorage.setItem('familyOfIndoGhostViewMode', currentViewMode); // Save view mode for consistency
+            localStorage.setItem('familyOfIndoGhostViewMode', currentViewMode);
             renderMembers();
             updateViewToggleButton();
+            console.log("Mode tampilan diganti ke:", currentViewMode);
         });
 
         function updateViewToggleButton() {
@@ -855,9 +995,10 @@
         // Toggle Chart Type (Bar vs Pie)
         toggleChartTypeBtn.addEventListener('click', () => {
             currentChartType = currentChartType === 'bar' ? 'pie' : 'bar';
-            localStorage.setItem('familyOfIndoGhostChartType', currentChartType); // Save chart type for consistency
+            localStorage.setItem('familyOfIndoGhostChartType', currentChartType);
             renderThLevelChart();
             updateChartToggleButton();
+            console.log("Tipe chart diganti ke:", currentChartType);
         });
 
         function updateChartToggleButton() {
@@ -867,7 +1008,6 @@
                 toggleChartTypeBtn.textContent = 'Lihat Bar Chart';
             }
         }
-
     </script>
 </body>
 </html>
