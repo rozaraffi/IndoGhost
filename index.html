@@ -269,6 +269,17 @@
             background-color: #218838;
         }
 
+        /* New button style for Discord */
+        .btn-discord {
+            background-color: #7289DA; /* Discord purple-blue */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-discord:hover {
+            background-color: #677BC4;
+        }
+
         .btn-icon {
             width: 32px; /* Slightly smaller icon */
             height: 32px;
@@ -1106,6 +1117,10 @@
                 Gabung Grup WhatsApp
             </a>
 
+            <a id="discordButton" href="#" target="_blank" class="utility-btn btn-discord">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Discord_logo_black.svg/1200px-Discord_logo_black.svg.png" alt="Discord Icon" class="btn-icon" style="filter: invert(100%);">
+                Gabung Server Discord
+            </a>
             <a id="supercellStoreButton" href="#" target="_blank" class="utility-btn btn-supercell-store">
                 <img src="https://png.pngtree.com/png-vector/20230918/ourmid/pngtree-shopping-basket-icon-png-image_10123596.png" alt="Store Icon" class="btn-icon">
                 Kunjungi Supercell Store
@@ -1151,6 +1166,13 @@
             <div class="peraturan-item">
                 <span>Tag Clan CoC</span>
                 <button id="editCocLinkBtn" class="edit-btn-small">
+                    <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
+                    Edit
+                </button>
+            </div>
+            <div class="peraturan-item">
+                <span>Link Server Discord</span>
+                <button id="editDiscordLinkBtn" class="edit-btn-small">
                     <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Edit Icon" class="edit-icon">
                     Edit
                 </button>
@@ -1315,6 +1337,10 @@
             const whatsappButton = document.getElementById('whatsappButton');
             const cocProfileButton = document.getElementById('cocProfileButton');
             const supercellStoreButton = document.getElementById('supercellStoreButton');
+            // NEW DISCORD ELEMENTS
+            const discordButton = document.getElementById('discordButton');
+            const editDiscordLinkBtn = document.getElementById('editDiscordLinkBtn');
+            // END NEW DISCORD ELEMENTS
             const adminModeToggle = document.getElementById('adminModeToggle');
 
             // Peraturan Section Elements
@@ -1361,6 +1387,7 @@
             let siteSettings = {
                 mainDescription: 'Jelajahi detail anggota perkasa kami dan kuasai strategi kemenangan War!',
                 whatsappLink: 'https://chat.whatsapp.com/defaultlinkanda',
+                discordLink: 'https://discord.gg/defaultserver', // NEW DISCORD LINK DEFAULT
                 cocTag: 'YOUR_CLAN_TAG',
                 supercellStoreLink: 'https://store.supercell.com/',
                 clanLogoUrl: '', // New setting for optional clan logo URL
@@ -1551,6 +1578,7 @@
 
                 mainDescriptionElement.textContent = siteSettings.mainDescription;
                 whatsappButton.href = siteSettings.whatsappLink;
+                discordButton.href = siteSettings.discordLink; // Set Discord button link
                 const formattedCocTag = siteSettings.cocTag.replace(/#/g, '');
                 cocProfileButton.href = `https://link.clashofclans.com/id?action=OpenClanProfile&tag=%23${formattedCocTag}`;
                 supercellStoreButton.href = siteSettings.supercellStoreLink;
@@ -1789,6 +1817,13 @@
             editWhatsappLinkBtn.addEventListener('click', () => {
                 openSettingsModal('Edit Link Grup WhatsApp', 'Link URL WhatsApp:', siteSettings.whatsappLink, (newValue) => {
                     updateSettingAndSave('whatsappLink', newValue, 'Link WhatsApp berhasil diperbarui!');
+                }, 'url');
+            });
+
+            // --- Event listener for editing Discord link ---
+            editDiscordLinkBtn.addEventListener('click', () => {
+                openSettingsModal('Edit Link Server Discord', 'Link URL Discord:', siteSettings.discordLink, (newValue) => {
+                    updateSettingAndSave('discordLink', newValue, 'Link Discord berhasil diperbarui!');
                 }, 'url');
             });
 
